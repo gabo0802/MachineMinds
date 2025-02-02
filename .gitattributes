@@ -47,3 +47,9 @@
 *.lxo filter=lfs diff=lfs merge=lfs -text
 *.dylib filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/libburst-llvm-16.dylib filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/libburst-llvm-10.dylib filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/hostmac/dsymutil filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/libburst-llvm-16.so filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/burst-llvm-16.dll filter=lfs diff=lfs merge=lfs -text
+Senior[[:space:]]project/Library/PackageCache/com.unity.burst@616862665d8c/.Runtime/burst-llvm-16-arm64.dll filter=lfs diff=lfs merge=lfs -text
