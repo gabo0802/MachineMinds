@@ -21,14 +21,13 @@ public class BulletBehavior : MonoBehaviour
         //Object Hit Detection:
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 0.25F); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){
-            try{
-                hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
-                Destroy(gameObject);
-            }catch(System.Exception e){
-                Destroy(gameObject);
-                //could add bouncy behavior here since in theory the only objects where message could be sent would be player or enemy (will throw error if can't send message)
-                //only walls or other bullets remain for now (could add bullets destroying other bullets or bullets bouncing on bullets)
-            }
+            
+            hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
+            Destroy(gameObject);
+
+            //could add bouncy behavior here since in theory the only objects where message could be sent would be player or enemy (will throw error if can't send message)
+            //only walls or other bullets remain for now (could add bullets destroying other bullets or bullets bouncing on bullets)
+            
         }
 
         //Object Lifetime:
@@ -38,5 +37,8 @@ public class BulletBehavior : MonoBehaviour
             bulletLifeTimer += Time.deltaTime;
         }
 
+        
     }
+    void OnBulletHit(string bulletType){
+      }
 }

@@ -106,7 +106,7 @@ MonoBehaviour:
   enemyMoveSpeed: 1
   enemyBullet: {fileID: 8642936227962931598, guid: cd0fb3dc6ba48ef4b96f566d5e576c70, type: 3}
   enemyFireRate: 5
-  distanceToPlayer: 10
+  distanceToPlayer: 7
 --- !u!50 &8083092176484649802
 Rigidbody2D:
   serializedVersion: 5
