@@ -4,19 +4,23 @@ using UnityEngine.InputSystem;
 
 public class PlayerControls : MonoBehaviour
 {
+    //Movement
     private Rigidbody2D rb;
     public float playerRotateSpeed = 1f;
     public float playerMoveSpeed = 1f;
     
+    //Shooting
     public int totalBullets = 10;
     private int currentBullets;
     public GameObject playerBullet;
 
+    //Point Calculation
+    public float pointsPerEnemy = 1000;
+    public float difficultyMultiplier = 2f;
+
     //Possibly Useful Statistics
     private float playerLifeTimer = 0f;
     private int totalEnemiesKilled = 0;
-    public float pointsPerEnemy = 1000;
-    public float difficultyMultiplier = 2f;
     public int currentDifficulty = 0;
     private float totalPoints = 0f;
 

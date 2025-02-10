@@ -23,7 +23,7 @@ public class BulletBehavior : MonoBehaviour
         rb.linearVelocity = transform.up * bulletSpeed; 
 
         //Object Hit Detection:
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 0.25F); //in theory should work, if not need to change where looking (might be transform.up)
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 0.25f); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){       
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
             Destroy(gameObject); 
