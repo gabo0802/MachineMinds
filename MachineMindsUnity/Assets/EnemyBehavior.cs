@@ -12,12 +12,16 @@ public class EnemyBehavior : MonoBehaviour
     private float enemyFireTimer = 0f;
     public float distanceToPlayer = 5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
     void OnBulletHit(String bulletType){
         Debug.Log("Enemy Bullet Hit" + bulletType)
-    }
 
+        if(bulletType.toLowerCase().contains("player")){
+            targetPlayer.transform.SendMessageUpwards("OnEnemyDeath");
+            Destroy(gameObject);
+        }
+    }
+    
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         rb = GetComponent<Rigidbody2D>();
     }
@@ -36,8 +40,7 @@ public class EnemyBehavior : MonoBehaviour
         if(enemyFireTimer >= enemyFireRate){
             Instantiate(enemyBullet, transform.position + (transform.up * 1.1f), transform.rotation);
             enemyFireTimer = 0f;
-        }
-        else{
+        }else{
             enemyFireTimer += Time.deltaTime;
         }
     }

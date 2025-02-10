@@ -11,14 +11,33 @@ public class PlayerControls : MonoBehaviour
     public int totalBullets = 10;
     private int currentBullets;
     public GameObject playerBullet;
+
+    //Possibly Useful Statistics
+    private float playerLifeTimer = 0f;
+    private int totalEnemiesKilled = 0;
+    public float pointsPerEnemy = 1000;
+    public float difficultyMultiplier = 2f;
+    public int currentDifficulty = 0;
+    private float totalPoints = 0f;
+
+    void OnBulletHit(String bulletType){
+        Debug.Log("Player Bullet Hit" + bulletType)
+
+        if(bulletType.toLowerCase().contains("enemy")){
+            //restart level or go to main menu
+            Destroy(gameObject);
+        }
+    }
+
+    void OnEnemyDeath(){
+        totalEnemiesKilled += 1;
+        totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty))
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         rb = GetComponent<Rigidbody2D>();
         currentBullets = totalBullets;
-    }
-
-    void OnBulletHit(String bulletType){
-        Debug.Log("Player Bullet Hit" + bulletType)
     }
 
     // Update is called once per frame
@@ -45,5 +64,6 @@ public class PlayerControls : MonoBehaviour
             transform.Rotate(0, 0, -playerRotateSpeed);
         }
        
+        playerLifeTimer += Time.deltaTime;
     }
 }

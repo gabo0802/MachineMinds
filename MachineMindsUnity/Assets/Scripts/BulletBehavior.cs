@@ -4,6 +4,7 @@ public class BulletBehavior : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float bulletSpeed = 1f;
+    public float bulletBounceAngle = 45f; //do we really want to have bouncy bullets?
     public float bulletLifeTime = 10f;
     private float bulletLifeTimer = 0f;
 
@@ -18,7 +19,7 @@ public class BulletBehavior : MonoBehaviour
         rb.linearVelocity = transform.up * bulletSpeed; 
 
         //Object Hit Detection:
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up); //in theory should work, if not need to change where looking
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
             Destroy(gameObject);
