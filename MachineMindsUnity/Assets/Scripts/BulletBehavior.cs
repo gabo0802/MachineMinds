@@ -14,14 +14,20 @@ public class BulletBehavior : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        //Constantly move
         rb.linearVelocity = transform.up * bulletSpeed; 
 
-        
-
-        if(bulletLifeTimer >= bulletLifeTime){
+        //Object Hit Detection:
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up); //in theory should work, if not need to change where looking
+        if(hit){
+            hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
             Destroy(gameObject);
         }
-        else{
+
+        //Object Lifetime:
+        if(bulletLifeTimer >= bulletLifeTime){
+            Destroy(gameObject);
+        }else{
             bulletLifeTimer += Time.deltaTime;
         }
 

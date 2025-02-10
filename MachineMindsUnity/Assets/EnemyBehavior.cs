@@ -14,19 +14,17 @@ public class EnemyBehavior : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-
-    void OnCollsionEnter2D(Collision2D collision){
-        Debug.Log("Enemy: " + collision.gameObject.name);
+    void OnBulletHit(String bulletType){
+        Debug.Log("Enemy Bullet Hit" + bulletType)
     }
 
-    void Start()
-    {
+    void Start(){
         rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
-    {   
+    void Update(){   
+        //Target Player:
         transform.up = targetPlayer.transform.position - transform.position;
         if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
             rb.linearVelocity = transform.up * enemyMoveSpeed;
@@ -34,7 +32,7 @@ public class EnemyBehavior : MonoBehaviour
            rb.linearVelocity = transform.up * 0.000001f;
         }
 
-
+        //Shoot Player:
         if(enemyFireTimer >= enemyFireRate){
             Instantiate(enemyBullet, transform.position + (transform.up * 1.1f), transform.rotation);
             enemyFireTimer = 0f;
