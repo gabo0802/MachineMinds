@@ -12,13 +12,13 @@ public class EnemyBehavior : MonoBehaviour
     private float enemyFireTimer = 0f;
     public float distanceToPlayer = 5f;
 
-    void OnBulletHit(String bulletType){
-        Debug.Log("Enemy Bullet Hit" + bulletType)
+    void OnBulletHit(string bulletType){
+        Debug.Log("Enemy Bullet Hit" + bulletType);
 
-        if(bulletType.toLowerCase().contains("player")){
+        if(bulletType.ToLower().Contains("player")){
             targetPlayer.transform.SendMessageUpwards("OnEnemyDeath");
             Destroy(gameObject);
-        }else if(bulletType.toLowerCase().contains("enemy")){
+        }else if(bulletType.ToLower().Contains("enemy")){
             //could make it so enemy bullets can also hurt them (then we can remove distinction between player and enemy bullets)
         }
     }

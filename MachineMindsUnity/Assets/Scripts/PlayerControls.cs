@@ -20,20 +20,20 @@ public class PlayerControls : MonoBehaviour
     public int currentDifficulty = 0;
     private float totalPoints = 0f;
 
-    void OnBulletHit(String bulletType){
-        Debug.Log("Player Bullet Hit" + bulletType)
+    void OnBulletHit(string bulletType){
+        Debug.Log("Player Bullet Hit" + bulletType);
 
-        if(bulletType.toLowerCase().contains("enemy")){
+        if(bulletType.ToLower().Contains("enemy")){
             //restart level or go to main menu
             Destroy(gameObject);
-        }else if(bulletType.toLowerCase().contains("player")){
+        }else if(bulletType.ToLower().Contains("player")){
             //could make it so bullets can also hurt yourself
         }
     }
 
     void OnEnemyDeath(){
         totalEnemiesKilled += 1;
-        totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty))
+        totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
