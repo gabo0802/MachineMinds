@@ -18,9 +18,11 @@ public class EnemyBehavior : MonoBehaviour
         if(bulletType.toLowerCase().contains("player")){
             targetPlayer.transform.SendMessageUpwards("OnEnemyDeath");
             Destroy(gameObject);
+        }else if(bulletType.toLowerCase().contains("enemy")){
+            //could make it so enemy bullets can also hurt them (then we can remove distinction between player and enemy bullets)
         }
     }
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         rb = GetComponent<Rigidbody2D>();

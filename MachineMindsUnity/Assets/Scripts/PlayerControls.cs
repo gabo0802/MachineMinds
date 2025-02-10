@@ -26,6 +26,8 @@ public class PlayerControls : MonoBehaviour
         if(bulletType.toLowerCase().contains("enemy")){
             //restart level or go to main menu
             Destroy(gameObject);
+        }else if(bulletType.toLowerCase().contains("player")){
+            //could make it so bullets can also hurt yourself
         }
     }
 
