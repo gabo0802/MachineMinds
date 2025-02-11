@@ -12,13 +12,14 @@ public class PlayerControls : MonoBehaviour
     public GameObject playerBody;
 
     //Shooting
-    private bool isAlive = true;
+    public bool isAlive = true;
     public int totalBullets = 10;
     private int currentBullets;
     public GameObject cannonHead;
     public GameObject playerBullet;
     public float bulletShootDistance = 0.5f;
 
+    /*
     //Point Calculation
     public float pointsPerEnemy = 1000;
     public float difficultyMultiplier = 2f;
@@ -28,12 +29,12 @@ public class PlayerControls : MonoBehaviour
     private int totalEnemiesKilled = 0;
     public int currentDifficulty = 0;
     private float totalPoints = 0f;
+    */
 
     void OnBulletHit(string bulletType){
         Debug.Log("Player Bullet Hit" + bulletType);
 
         if(bulletType.ToLower().Contains("enemy")){
-            //restart level or go to main menu
             isAlive = false;
             Destroy(gameObject);
         }else if(bulletType.ToLower().Contains("player")){
@@ -41,7 +42,7 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    void OnEnemyDeath(){
+    /*void OnEnemyDeath(){
         totalEnemiesKilled += 1;
         totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
 
@@ -50,7 +51,7 @@ public class PlayerControls : MonoBehaviour
         if(!SceneManager.GetActiveScene().name.Contains("Level2")){
             SceneManager.LoadScene("Levels/Level2", LoadSceneMode.Single); //testing (can use additive to add objects into current scene)
         }
-    }
+    }*/
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
@@ -121,7 +122,7 @@ public class PlayerControls : MonoBehaviour
             }
             */
         
-            playerLifeTimer += Time.deltaTime;
+            //playerLifeTimer += Time.deltaTime;
         }
     }
 }

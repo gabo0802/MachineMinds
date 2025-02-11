@@ -6,6 +6,7 @@ public class EnemyBehavior : MonoBehaviour
     private Rigidbody2D rb;
 
     public GameObject targetPlayer;
+    public GameObject levelManager;
     public float enemyMoveSpeed = 1f;
     public GameObject enemyBullet;
     public float bulletShootDistance = 0.5f;
@@ -17,7 +18,9 @@ public class EnemyBehavior : MonoBehaviour
         Debug.Log("Enemy Bullet Hit" + bulletType);
 
         if(bulletType.ToLower().Contains("player")){
-            targetPlayer.transform.SendMessageUpwards("OnEnemyDeath");
+            if(levelManager){
+                levelManager.transform.SendMessageUpwards("OnEnemyDeath");
+            }
             Destroy(gameObject);
         }else if(bulletType.ToLower().Contains("enemy")){
             //could make it so enemy bullets can also hurt them (then we can remove distinction between player and enemy bullets)
