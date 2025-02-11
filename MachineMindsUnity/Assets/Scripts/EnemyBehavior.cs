@@ -8,6 +8,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject targetPlayer;
     public float enemyMoveSpeed = 1f;
     public GameObject enemyBullet;
+    public float bulletShootDistance = 0.5f;
     public float enemyFireRate = 5f;
     private float enemyFireTimer = 0f;
     public float distanceToPlayer = 5f;
@@ -41,7 +42,7 @@ public class EnemyBehavior : MonoBehaviour
         
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){
-                Instantiate(enemyBullet, transform.position + (transform.up * 1.1f), transform.rotation);
+                Instantiate(enemyBullet, transform.position + (transform.up * bulletShootDistance), transform.rotation);
                 enemyFireTimer = 0f;
             }else{
                 enemyFireTimer += Time.deltaTime;

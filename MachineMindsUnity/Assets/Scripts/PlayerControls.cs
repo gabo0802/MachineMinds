@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PlayerControls : MonoBehaviour
     private int currentBullets;
     public GameObject cannonHead;
     public GameObject playerBullet;
+    public float bulletShootDistance = 0.5f;
 
     //Point Calculation
     public float pointsPerEnemy = 1000;
@@ -42,6 +44,12 @@ public class PlayerControls : MonoBehaviour
     void OnEnemyDeath(){
         totalEnemiesKilled += 1;
         totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
+
+
+        //testing (WIP)
+        if(!SceneManager.GetActiveScene().name.Contains("Level2")){
+            SceneManager.LoadScene("Levels/Level2", LoadSceneMode.Single); //testing (can use additive to add objects into current scene)
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -59,7 +67,7 @@ public class PlayerControls : MonoBehaviour
 
             if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentBullets > 0){
                 currentBullets--;
-                Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * 1.1f), cannonHead.transform.rotation);
+                Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
             }
 
             //Movement:
