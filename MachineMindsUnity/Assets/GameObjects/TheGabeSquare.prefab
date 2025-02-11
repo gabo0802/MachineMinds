@@ -130,10 +130,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da67250429174097b4b6484ca5ff19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRotateSpeed: 0.75
+  playerMouseSensitivity: 9.9
   playerMoveSpeed: 2
   totalBullets: 10
+  cannonHead: {fileID: 8537781114359835261}
   playerBullet: {fileID: 8642936227962931598, guid: 4c2b68a3422cb7244aca4d84c04fbd66, type: 3}
+  pointsPerEnemy: 1000
+  difficultyMultiplier: 2
+  currentDifficulty: 0
 --- !u!61 &8909642584170928825
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -29,21 +29,28 @@ public class EnemyBehavior : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update(){   
-        //Target Player:
-        transform.up = targetPlayer.transform.position - transform.position;
-        if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
-            rb.linearVelocity = transform.up * enemyMoveSpeed;
+    void Update(){
+        if(targetPlayer){  
+            //Target Player:
+            transform.up = targetPlayer.transform.position - transform.position;
+            if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
+                rb.linearVelocity = transform.up * enemyMoveSpeed;
+            }else{
+            rb.linearVelocity = transform.up * 0.000001f;
+            }
+        
+            //Shoot Player:
+            if(enemyFireTimer >= enemyFireRate){
+                Instantiate(enemyBullet, transform.position + (transform.up * 1.1f), transform.rotation);
+                enemyFireTimer = 0f;
+            }else{
+                enemyFireTimer += Time.deltaTime;
+            }
         }else{
-           rb.linearVelocity = transform.up * 0.000001f;
+            //Celebrate?
+            transform.Rotate(0, 0, 1f);
         }
 
-        //Shoot Player:
-        if(enemyFireTimer >= enemyFireRate){
-            Instantiate(enemyBullet, transform.position + (transform.up * 1.1f), transform.rotation);
-            enemyFireTimer = 0f;
-        }else{
-            enemyFireTimer += Time.deltaTime;
-        }
+        
     }
 }
