@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour{
         currentEnemyTotal -= 1;
         totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
 
-        if(currentEnemyTotal <= 0){
+        if(currentEnemyTotal <= 0 && currentPlayer){
             string currentScene = SceneManager.GetActiveScene().name;
             
             string[] tempArray = currentScene.Split("Level");
@@ -47,6 +47,7 @@ public class LevelManager : MonoBehaviour{
                 SceneManager.LoadScene("Levels/Level1", LoadSceneMode.Single);
             }else{
                 currentDeadTime += Time.deltaTime;
+                Debug.Log(playerRespawnTime - currentDeadTime);
             }
         }
     }

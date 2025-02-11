@@ -3575,6 +3575,10 @@ PrefabInstance:
       propertyPath: currentEnemyTotal
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: playerRespawnTime
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
