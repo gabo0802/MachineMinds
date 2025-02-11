@@ -68,18 +68,18 @@ public class PlayerControls : MonoBehaviour
 
             if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
                 currentPlayerVelocity += transform.up * playerMoveSpeed;
-                currentPlayerRotation += "W";
+                currentPlayerRotationString += "W";
             }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
                 currentPlayerVelocity -= transform.up * playerMoveSpeed;
-                currentPlayerRotation += "S";
+                currentPlayerRotationString += "S";
             }
             
             if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
                 currentPlayerVelocity -= transform.right * playerMoveSpeed;
-                currentPlayerRotation += "A";
+                currentPlayerRotationString += "A";
             }else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
                 currentPlayerVelocity += transform.right * playerMoveSpeed;
-                currentPlayerRotation += "D";
+                currentPlayerRotationString += "D";
             }
 
             rb.linearVelocity = currentPlayerVelocity;
