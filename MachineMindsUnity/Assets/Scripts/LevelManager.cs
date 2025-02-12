@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviour{
             string[] tempArray = currentScene.Split("Level");
             int sceneNumber = int.Parse(tempArray[tempArray.Length - 1]);
             
-            string newScene = "Levels/Level" + (sceneNumber + 1);
+            string newScene = "Scenes/Levels/Level" + (sceneNumber + 1);
             SceneManager.LoadScene(newScene, LoadSceneMode.Single);
         }
     }
@@ -44,7 +44,7 @@ public class LevelManager : MonoBehaviour{
             playerLifeTimer += Time.deltaTime;
         }else{
             if(currentDeadTime > playerRespawnTime){
-                SceneManager.LoadScene("Levels/Level1", LoadSceneMode.Single);
+                SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
             }else{
                 currentDeadTime += Time.deltaTime;
                 Debug.Log(playerRespawnTime - currentDeadTime);
