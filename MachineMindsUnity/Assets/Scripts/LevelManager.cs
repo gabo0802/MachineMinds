@@ -5,7 +5,12 @@ public class LevelManager : MonoBehaviour{
 
     public GameObject currentPlayer;
     public TMPro.TextMeshProUGUI pointsUI;
+    public TMPro.TextMeshProUGUI countdownUI;
     private float playerLifeTimer = 0f;
+
+    private bool wonLevel = false;
+    public float playerCelebrateTime = 3f;
+    private float currentWinTime = 0f;
 
     public float playerRespawnTime = 3f;
     private float currentDeadTime = 0f;
@@ -26,13 +31,7 @@ public class LevelManager : MonoBehaviour{
         pointsUI.text = totalPoints + " pts";
 
         if(currentEnemyTotal <= 0 && currentPlayer){
-            string currentScene = SceneManager.GetActiveScene().name;
-            
-            string[] tempArray = currentScene.Split("Level");
-            int sceneNumber = int.Parse(tempArray[tempArray.Length - 1]);
-            
-            string newScene = "Scenes/Levels/Level" + (sceneNumber + 1);
-            SceneManager.LoadScene(newScene, LoadSceneMode.Single);
+           wonLevel = true;
         }
     }
     
@@ -44,13 +43,42 @@ public class LevelManager : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         if(currentPlayer){
+            countdownUI.text = "";
             playerLifeTimer += Time.deltaTime;
+
+            if(wonLevel){
+                if(currentWinTime > playerCelebrateTime){
+                    countdownUI.text = "Loading...";
+                    string currentScene = SceneManager.GetActiveScene().name;
+                    
+                    string[] tempArray = currentScene.Split("Level");
+                    int sceneNumber = int.Parse(tempArray[tempArray.Length - 1]);
+                    
+                    string newScene = "Scenes/Levels/Level" + (sceneNumber + 1);
+                    SceneManager.LoadScene(newScene, LoadSceneMode.Single);
+                }else{
+                    currentWinTime += Time.deltaTime;
+
+                    if(currentWinTime < 1f){
+                        countdownUI.text = "You Won! :)";
+                    }else{
+                        countdownUI.text = (playerCelebrateTime - currentWinTime) + " s";
+                    }
+                }
+            }
         }else{
+            countdownUI.text = (playerRespawnTime - currentDeadTime) + " s";
             if(currentDeadTime > playerRespawnTime){
+                countdownUI.text = "Loading...";
                 SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
             }else{
                 currentDeadTime += Time.deltaTime;
-                Debug.Log(playerRespawnTime - currentDeadTime);
+
+                if(currentDeadTime < 1f){
+                    countdownUI.text = "You Lost. :(";
+                }else{
+                    countdownUI.text = (playerRespawnTime - currentDeadTime) + " s";
+                }
             }
         }
     }
