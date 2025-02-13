@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour{
 
     public GameObject currentPlayer;
+    public TMPro.TextMeshProUGUI pointsUI;
     private float playerLifeTimer = 0f;
 
     public float playerRespawnTime = 3f;
@@ -21,6 +22,8 @@ public class LevelManager : MonoBehaviour{
         totalEnemiesKilled += 1;
         currentEnemyTotal -= 1;
         totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
+        
+        pointsUI.text = totalPoints + " pts";
 
         if(currentEnemyTotal <= 0 && currentPlayer){
             string currentScene = SceneManager.GetActiveScene().name;

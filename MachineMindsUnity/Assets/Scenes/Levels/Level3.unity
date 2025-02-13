@@ -7551,6 +7551,10 @@ PrefabInstance:
       value: LevelManager
       objectReference: {fileID: 0}
     - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: pointsUI
+      value: 
+      objectReference: {fileID: 6535018188594390485}
+    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: currentPlayer
       value: 
       objectReference: {fileID: 6535018188594390484}
@@ -8537,6 +8541,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4118708468397020586, guid: fe9d8dd7c97103c44b823660fcf92550, type: 3}
   m_PrefabInstance: {fileID: 6535018188594390483}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6535018188594390485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8948787061890927500, guid: fe9d8dd7c97103c44b823660fcf92550, type: 3}
+  m_PrefabInstance: {fileID: 6535018188594390483}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
