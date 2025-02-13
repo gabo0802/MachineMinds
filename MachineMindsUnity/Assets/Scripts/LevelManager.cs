@@ -37,11 +37,7 @@ public class LevelManager : MonoBehaviour{
         }
     }
 
-    void CreateSave_LevelEnd(int currentLevelNumber){        
-        if(!File.Exists(filePath)){
-            File.CreateText(filePath);
-        }
-    
+    void CreateSave_LevelEnd(int currentLevelNumber){            
         using (StreamWriter sw = File.CreateText(filePath)){
             sw.WriteLine(currentLevelNumber);
             sw.WriteLine(totalPoints);
