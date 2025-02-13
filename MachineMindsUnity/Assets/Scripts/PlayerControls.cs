@@ -13,6 +13,7 @@ public class PlayerControls : MonoBehaviour
 
     //Shooting
     public bool isAlive = true;
+    public TMPro.TextMeshProUGUI ammoUI = null;
     public int totalBullets = 10;
     private int currentBullets;
     public GameObject cannonHead;
@@ -70,6 +71,7 @@ public class PlayerControls : MonoBehaviour
                 currentBullets--;
                 Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
             }
+            ammoUI.text = currentBullets + " / " + totalBullets;
 
             //Movement:
             Vector3 currentPlayerVelocity = Vector3.zero;
