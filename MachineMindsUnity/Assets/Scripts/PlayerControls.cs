@@ -20,18 +20,6 @@ public class PlayerControls : MonoBehaviour
     public GameObject playerBullet;
     public float bulletShootDistance = 0.5f;
 
-    /*
-    //Point Calculation
-    public float pointsPerEnemy = 1000;
-    public float difficultyMultiplier = 2f;
-
-    //Possibly Useful Statistics
-    private float playerLifeTimer = 0f;
-    private int totalEnemiesKilled = 0;
-    public int currentDifficulty = 0;
-    private float totalPoints = 0f;
-    */
-
     void OnBulletHit(string bulletType){
         Debug.Log("Player Bullet Hit" + bulletType);
 
@@ -42,17 +30,6 @@ public class PlayerControls : MonoBehaviour
             //could make it so bullets can also hurt yourself
         }
     }
-
-    /*void OnEnemyDeath(){
-        totalEnemiesKilled += 1;
-        totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
-
-
-        //testing (WIP)
-        if(!SceneManager.GetActiveScene().name.Contains("Level2")){
-            SceneManager.LoadScene("Levels/Level2", LoadSceneMode.Single); //testing (can use additive to add objects into current scene)
-        }
-    }*/
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
@@ -108,6 +85,8 @@ public class PlayerControls : MonoBehaviour
 
 
             /*
+            //Old Movement (Tank Controls):
+            
             if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
                 rb.linearVelocity = transform.up * playerMoveSpeed;
             }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
