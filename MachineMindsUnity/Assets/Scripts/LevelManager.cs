@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 
 public class LevelManager : MonoBehaviour{
+    private string filePath = Application.dataPath + "/Resources/GameState.save";
 
     public GameObject currentPlayer;
     public TMPro.TextMeshProUGUI pointsUI;
@@ -36,9 +37,7 @@ public class LevelManager : MonoBehaviour{
         }
     }
 
-    void CreateSave_LevelEnd(int currentLevelNumber){
-        string filePath = Application.dataPath + "/Resources/GameState.save";
-        
+    void CreateSave_LevelEnd(int currentLevelNumber){        
         if(!File.Exists(filePath)){
             File.CreateText(filePath);
         }
@@ -53,8 +52,6 @@ public class LevelManager : MonoBehaviour{
     }
 
     void LoadSave(){
-        string filePath = Application.dataPath + "/Resources/GameState.save";
-
         if (File.Exists(filePath)){
             string saveFileData = "";
             using (StreamReader saveFile = File.OpenText(filePath)){
@@ -94,7 +91,7 @@ public class LevelManager : MonoBehaviour{
                     
                     string[] tempArray = currentScene.Split("Level");
                     int sceneNumber = int.Parse(tempArray[tempArray.Length - 1]);
-                    CreateSave_LevelEnd(sceneNumber);
+                    CreateSave_LevelEnd(sceneNumber + 1);
                     
                     string newScene = "Scenes/Levels/Level" + (sceneNumber + 1);
                     SceneManager.LoadScene(newScene, LoadSceneMode.Single);
@@ -124,7 +121,7 @@ public class LevelManager : MonoBehaviour{
                 playerLifeTimer = 0f;
                 totalPoints = 0f;
                 totalEnemiesKilled = 0;
-                CreateSave_LevelEnd(0);
+                CreateSave_LevelEnd(1);
 
                 //Go Back to First Level:
                 SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
