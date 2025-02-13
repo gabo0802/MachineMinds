@@ -10,6 +10,11 @@ public class PlayerControls : MonoBehaviour
     //public float playerRotateSpeed = 1f;
     public float playerMoveSpeed = 1f;
     public GameObject playerBody;
+    
+    private bool pressW = false;
+    private bool pressA = false;
+    private bool pressS = false;
+    private bool pressD = false;
 
     //Shooting
     public bool isAlive = true;
@@ -19,6 +24,39 @@ public class PlayerControls : MonoBehaviour
     public GameObject cannonHead;
     public GameObject playerBullet;
     public float bulletShootDistance = 0.5f;
+
+    public void UpPress(){
+        currentBullets += 1;
+        pressW = true;
+        pressS = false;
+    }
+
+    public void DownPress(){
+        currentBullets += 1;
+        pressW = false;
+        pressS = true;
+    }
+
+    public void LeftPress(){
+        currentBullets += 1;
+        pressA = true;
+        pressD = false;
+    }
+
+    public void RightPress(){
+        currentBullets += 1;
+        pressA = false;
+        pressD = true;
+    }
+
+    public void StopPress(){
+        currentBullets += 1;
+        pressW = false;
+        pressA = false;
+        pressS = false;
+        pressD = false;
+    }
+
 
     void OnBulletHit(string bulletType){
         Debug.Log("Player Bullet Hit" + bulletType);
@@ -54,18 +92,18 @@ public class PlayerControls : MonoBehaviour
             Vector3 currentPlayerVelocity = Vector3.zero;
             string currentPlayerRotationString = "";
 
-            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
+            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || pressW){
                 currentPlayerVelocity += transform.up * playerMoveSpeed;
                 currentPlayerRotationString += "W";
-            }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
+            }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || pressS){
                 currentPlayerVelocity -= transform.up * playerMoveSpeed;
                 currentPlayerRotationString += "S";
             }
             
-            if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
+            if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || pressA){
                 currentPlayerVelocity -= transform.right * playerMoveSpeed;
                 currentPlayerRotationString += "A";
-            }else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
+            }else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || pressD){
                 currentPlayerVelocity += transform.right * playerMoveSpeed;
                 currentPlayerRotationString += "D";
             }
