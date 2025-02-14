@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour{
     private string filePath = Application.dataPath + "/Resources/GameState.save";
+    public string playerName = "TheGabeSquare v2";
+    public string enemyName = "TheBenHexagon";
 
-    public GameObject currentPlayer;
-    public TMPro.TextMeshProUGUI pointsUI;
-    public TMPro.TextMeshProUGUI countdownUI;
+    private GameObject currentPlayer;
+    private TMPro.TextMeshProUGUI pointsUI;
+    private TMPro.TextMeshProUGUI countdownUI;
     private float playerLifeTimer = 0f;
 
     private bool wonLevel = false;
@@ -17,7 +20,7 @@ public class LevelManager : MonoBehaviour{
     public float playerRespawnTime = 3f;
     private float currentDeadTime = 0f;
 
-    public int currentEnemyTotal = 1;
+    private int currentEnemyTotal = 0;
     private int totalEnemiesKilled = 0;
 
     public float difficultyMultiplier = 2f;
@@ -67,6 +70,33 @@ public class LevelManager : MonoBehaviour{
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        Debug.Log("test");
+
+        //Get enemy total + get player object
+        RaycastHit2D[] allHitObjectsInScence = Physics2D.CircleCastAll(new Vector2(0, 0), Mathf.Infinity, new Vector2(0, 0), 0f);
+        List<GameObject> allEnemies = new List<GameObject>();
+
+        foreach(RaycastHit2D currentHitObject in allHitObjectsInScence){
+            string currentObjectName = currentHitObject.transform.gameObject.name;
+
+            if(currentObjectName.Contains(enemyName)){
+                allEnemies.Add(currentHitObject.transform.gameObject);
+                currentEnemyTotal += 1;
+            }else if(currentObjectName.Contains(playerName)){
+                currentPlayer = currentHitObject.transform.gameObject;
+            }
+        }
+
+        foreach(GameObject enemyObject in allEnemies){
+            enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentPlayer});
+        }
+
+        currentEnemyTotal /= 2;
+        
+        pointsUI = currentPlayer.transform.GetChild(2).GetChild(1).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
+        countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
+
+        //Save point total across levels
         LoadSave();
         pointsUI.text = totalPoints + " pts"; 
     }

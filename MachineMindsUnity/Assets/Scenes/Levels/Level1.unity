@@ -3544,6 +3544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &590959886
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3775,6 +3776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &732721585
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4179,6 +4181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &956686239
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4326,6 +4329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &956842851
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4541,6 +4545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &1032958009
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5198,6 +5203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!61 &1320073467
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5677,6 +5683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyable: 0
 --- !u!213 &1424648172
 Sprite:
   m_ObjectHideFlags: 0
@@ -6794,10 +6801,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1126801774865147948, guid: fe9d8dd7c97103c44b823660fcf92550, type: 3}
-      propertyPath: m_text
-      value: NO TEXT
-      objectReference: {fileID: 0}
     - target: {fileID: 4118708468397020586, guid: fe9d8dd7c97103c44b823660fcf92550, type: 3}
       propertyPath: m_Name
       value: TheGabeSquare v2

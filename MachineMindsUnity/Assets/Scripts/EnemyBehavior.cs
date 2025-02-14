@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour{
     private Rigidbody2D rb;
 
-    public GameObject targetPlayer;
-    public GameObject levelManager;
+    private GameObject targetPlayer;
+    private GameObject levelManager;
     
     public float enemyMoveSpeed = 1f;
 
@@ -21,6 +21,12 @@ public class EnemyBehavior : MonoBehaviour{
     public float distanceToPlayer = 5f;
 
     public float pointsWorth;
+
+    public void SetGameObjects(GameObject[] parameters){
+        levelManager = parameters[0];
+        targetPlayer = parameters[1];
+    }
+
 
     void OnBulletHit(string bulletType){
         Debug.Log("Enemy Bullet Hit" + bulletType);
