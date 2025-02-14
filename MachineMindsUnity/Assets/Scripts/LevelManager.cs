@@ -70,8 +70,6 @@ public class LevelManager : MonoBehaviour{
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
-        Debug.Log("test");
-
         //Get enemy total + get player object
         RaycastHit2D[] allHitObjectsInScence = Physics2D.CircleCastAll(new Vector2(0, 0), Mathf.Infinity, new Vector2(0, 0), 0f);
         List<GameObject> allEnemies = new List<GameObject>();
@@ -112,14 +110,8 @@ public class LevelManager : MonoBehaviour{
                     countdownUI.text = "Loading...";
 
                     //Load Next Level:
-                    string currentScene = SceneManager.GetActiveScene().name;
-                    
-                    string[] tempArray = currentScene.Split("Level");
-                    int sceneNumber = int.Parse(tempArray[tempArray.Length - 1]);
-                    CreateSave_LevelEnd(sceneNumber + 1);
-                    
-                    string newScene = "Scenes/Levels/Level" + (sceneNumber + 1);
-                    SceneManager.LoadScene(newScene, LoadSceneMode.Single);
+                    CreateSave_LevelEnd(SceneManager.GetActiveScene().buildIndex + 1);          
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
                 }else{
                     //Celebrate Time!!!!:
                     currentWinTime += Time.deltaTime;
