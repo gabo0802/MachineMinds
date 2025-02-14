@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyBehavior : MonoBehaviour
-{
+public class EnemyBehavior : MonoBehaviour{
     private Rigidbody2D rb;
 
     public GameObject targetPlayer;
@@ -21,6 +20,8 @@ public class EnemyBehavior : MonoBehaviour
 
     public float distanceToPlayer = 5f;
 
+    public float pointsWorth;
+
     void OnBulletHit(string bulletType){
         Debug.Log("Enemy Bullet Hit" + bulletType);
 
@@ -29,7 +30,7 @@ public class EnemyBehavior : MonoBehaviour
 
             if(currentEnemyHealth <= 0){
                 if(levelManager){
-                    levelManager.transform.SendMessageUpwards("OnEnemyDeath");
+                    levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
                 }
                 Destroy(gameObject);
             }

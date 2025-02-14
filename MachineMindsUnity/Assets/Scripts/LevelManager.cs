@@ -20,15 +20,14 @@ public class LevelManager : MonoBehaviour{
     public int currentEnemyTotal = 1;
     private int totalEnemiesKilled = 0;
 
-    public float pointsPerEnemy = 1000;
     public float difficultyMultiplier = 2f;
     public int currentDifficulty = 0;
     private float totalPoints = 0f;
 
-    void OnEnemyDeath(){
+    void OnEnemyDeath(int enemyPointWorth){
         totalEnemiesKilled += 1;
         currentEnemyTotal -= 1;
-        totalPoints += (pointsPerEnemy * Mathf.Pow(difficultyMultiplier, currentDifficulty));
+        totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty));
         
         pointsUI.text = totalPoints + " pts";
 
