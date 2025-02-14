@@ -1,27 +1,39 @@
 using System;
 using UnityEngine;
 
-public class EnemyBehavior : MonoBehaviour
-{
+public class EnemyBehavior : MonoBehaviour{
     private Rigidbody2D rb;
 
     public GameObject targetPlayer;
     public GameObject levelManager;
+    
     public float enemyMoveSpeed = 1f;
+
+    public int maxEnemyHealth; //# bullets they can survive
+    private int currentEnemyHealth;
+
     public GameObject enemyBullet;
-    public float bulletShootDistance = 0.5f;
+    public float bulletShotSpawnOffset = 0.5f;
+
     public float enemyFireRate = 5f;
     private float enemyFireTimer = 0f;
+
     public float distanceToPlayer = 5f;
+
+    public float pointsWorth;
 
     void OnBulletHit(string bulletType){
         Debug.Log("Enemy Bullet Hit" + bulletType);
 
         if(bulletType.ToLower().Contains("player")){
-            if(levelManager){
-                levelManager.transform.SendMessageUpwards("OnEnemyDeath");
+            currentEnemyHealth -= 1;
+
+            if(currentEnemyHealth <= 0){
+                if(levelManager){
+                    levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
+                }
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
         }else if(bulletType.ToLower().Contains("enemy")){
             //could make it so enemy bullets can also hurt them (then we can remove distinction between player and enemy bullets)
         }
@@ -29,6 +41,7 @@ public class EnemyBehavior : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        currentEnemyHealth = maxEnemyHealth;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -45,7 +58,7 @@ public class EnemyBehavior : MonoBehaviour
         
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){
-                Instantiate(enemyBullet, transform.position + (transform.up * bulletShootDistance), transform.rotation);
+                Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
                 enemyFireTimer = 0f;
             }else{
                 enemyFireTimer += Time.deltaTime;
