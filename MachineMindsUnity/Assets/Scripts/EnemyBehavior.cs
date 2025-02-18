@@ -29,6 +29,15 @@ public class EnemyBehavior : MonoBehaviour{
 
     void OnExplosionHit(){
         Debug.Log(gameObject.name + " got hit be explosion");
+
+        currentEnemyHealth -= 1; //could make explosions instant kills?
+
+        if(currentEnemyHealth <= 0){
+            if(levelManager){
+                levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
+            }
+            Destroy(gameObject);
+        }
     }
 
     void OnBulletHit(GameObject bullet){
