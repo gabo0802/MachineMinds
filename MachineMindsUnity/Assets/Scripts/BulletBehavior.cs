@@ -40,9 +40,9 @@ public class BulletBehavior : MonoBehaviour
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
             
             if(isExplody){
-                RaycastHit2D[] allExplodedObjects = Physics2D.CircleCastAll(new Vector2(0, 0), explosionRadius, new Vector2(0, 0), 0f);
+                Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
-                foreach(RaycastHit2D currentExplodedObject in allExplodedObjects){
+                foreach(Collider2D currentExplodedObject in allExplodedObjects){
                     currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
                 }
             }

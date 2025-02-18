@@ -71,10 +71,10 @@ public class LevelManager : MonoBehaviour{
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         //Get enemy total + get player object
-        RaycastHit2D[] allHitObjectsInScence = Physics2D.CircleCastAll(new Vector2(0, 0), Mathf.Infinity, new Vector2(0, 0), 0f);
+        Collider2D[] allHitObjectsInScence = Physics2D.OverlapCircleAll(new Vector2(0, 0), Mathf.Infinity);
         List<GameObject> allEnemies = new List<GameObject>();
 
-        foreach(RaycastHit2D currentHitObject in allHitObjectsInScence){
+        foreach(Collider2D currentHitObject in allHitObjectsInScence){
             string currentObjectName = currentHitObject.transform.gameObject.name;
 
             if(currentObjectName.Contains(enemyName)){
