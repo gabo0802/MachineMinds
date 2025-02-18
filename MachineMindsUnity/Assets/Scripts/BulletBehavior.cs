@@ -9,8 +9,8 @@ public class BulletBehavior : MonoBehaviour
     private float bulletLifeTimer = 0f;
     public float bulletDetectRange = 0.25f;
 
-    void OnBulletHit(string bulletType){
-      
+    void OnBulletHit(GameObject bullet){
+        //Destroy(bullet);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,8 +26,8 @@ public class BulletBehavior : MonoBehaviour
         //Object Hit Detection:
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, bulletDetectRange); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){       
-            hit.transform.SendMessageUpwards("OnBulletHit", gameObject.name);
-            Destroy(gameObject); 
+            hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
+            //bounce behavior
         }
 
         //Object Lifetime:

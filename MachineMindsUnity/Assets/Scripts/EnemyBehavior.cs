@@ -28,8 +28,10 @@ public class EnemyBehavior : MonoBehaviour{
     }
 
 
-    void OnBulletHit(string bulletType){
+    void OnBulletHit(GameObject bullet){
+        string bulletType = bullet.name;
         Debug.Log("Enemy Bullet Hit" + bulletType);
+        Destroy(bullet);
 
         if(bulletType.ToLower().Contains("player")){
             currentEnemyHealth -= 1;

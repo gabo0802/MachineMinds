@@ -58,8 +58,10 @@ public class PlayerControls : MonoBehaviour
     }
 
 
-    void OnBulletHit(string bulletType){
+    void OnBulletHit(GameObject bullet){
+        string bulletType = bullet.name;
         Debug.Log("Player Bullet Hit" + bulletType);
+        Destroy(bullet);
 
         if(bulletType.ToLower().Contains("enemy")){
             isAlive = false;
