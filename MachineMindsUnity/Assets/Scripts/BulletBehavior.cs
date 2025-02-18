@@ -8,9 +8,20 @@ public class BulletBehavior : MonoBehaviour
     public float bulletLifeTime = 10f;
     private float bulletLifeTimer = 0f;
     public float bulletDetectRange = 0.25f;
+    
+    public bool isBouncy = true;
+    
+    public bool isExplody = false;
+    public float explosionRadius = 20f;
 
     void OnBulletHit(GameObject bullet){
-        //Destroy(bullet);
+        /*if(bullet){
+            Destroy(bullet);
+        }*/
+    }
+
+    void OnExplosionHit(){
+        Debug.Log(gameObject.name + " got hit be explosion");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,7 +38,20 @@ public class BulletBehavior : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, bulletDetectRange); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){       
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
-            transform.Rotate(new Vector3(0, 0, bulletBounceAngle));
+            
+            if(isExplody){
+                RaycastHit2D[] allExplodedObjects = Physics2D.CircleCastAll(new Vector2(0, 0), explosionRadius, new Vector2(0, 0), 0f);
+
+                foreach(RaycastHit2D currentExplodedObject in allExplodedObjects){
+                    currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
+                }
+            }
+
+            if(isBouncy){
+                transform.Rotate(new Vector3(0, 0, bulletBounceAngle));
+            }else{
+                Destroy(gameObject);
+            }
         }
 
         //Object Lifetime:

@@ -27,11 +27,17 @@ public class EnemyBehavior : MonoBehaviour{
         targetPlayer = parameters[1];
     }
 
+    void OnExplosionHit(){
+        Debug.Log(gameObject.name + " got hit be explosion");
+    }
 
     void OnBulletHit(GameObject bullet){
-        string bulletType = bullet.name;
-        Debug.Log("Enemy Bullet Hit" + bulletType);
-        Destroy(bullet);
+        //string bulletType = bullet.name;
+        //Debug.Log("Enemy Bullet Hit" + bulletType);
+        
+        if(bullet){
+            Destroy(bullet);
+        }
 
         currentEnemyHealth -= 1;
 

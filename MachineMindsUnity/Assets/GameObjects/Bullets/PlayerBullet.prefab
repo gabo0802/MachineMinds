@@ -132,6 +132,10 @@ MonoBehaviour:
   bulletSpeed: 10
   bulletBounceAngle: 45
   bulletLifeTime: 10
+  bulletDetectRange: 0.25
+  isBouncy: 1
+  isExplody: 0
+  explosionRadius: 10
 --- !u!58 &805651900415447071
 CircleCollider2D:
   m_ObjectHideFlags: 0

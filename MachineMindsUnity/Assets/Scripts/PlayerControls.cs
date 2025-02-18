@@ -57,11 +57,17 @@ public class PlayerControls : MonoBehaviour
         pressD = false;
     }
 
+    void OnExplosionHit(){
+        Debug.Log(gameObject.name + " got hit be explosion");
+    }
 
     void OnBulletHit(GameObject bullet){
-        string bulletType = bullet.name;
-        Debug.Log("Player Bullet Hit" + bulletType);
-        Destroy(bullet);
+        //string bulletType = bullet.name;
+        //Debug.Log("Player Bullet Hit" + bulletType);
+
+        if(bullet){
+            Destroy(bullet);
+        }
 
         isAlive = false;
         Destroy(gameObject);
