@@ -27,7 +27,7 @@ public class BulletBehavior : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, bulletDetectRange); //in theory should work, if not need to change where looking (might be transform.up)
         if(hit){       
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
-            //bounce behavior
+            transform.Rotate(new Vector3(0, 0, bulletBounceAngle));
         }
 
         //Object Lifetime:

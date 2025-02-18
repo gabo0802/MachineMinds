@@ -63,12 +63,8 @@ public class PlayerControls : MonoBehaviour
         Debug.Log("Player Bullet Hit" + bulletType);
         Destroy(bullet);
 
-        if(bulletType.ToLower().Contains("enemy")){
-            isAlive = false;
-            Destroy(gameObject);
-        }else if(bulletType.ToLower().Contains("player")){
-            //could make it so bullets can also hurt yourself
-        }
+        isAlive = false;
+        Destroy(gameObject);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

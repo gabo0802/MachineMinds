@@ -33,17 +33,13 @@ public class EnemyBehavior : MonoBehaviour{
         Debug.Log("Enemy Bullet Hit" + bulletType);
         Destroy(bullet);
 
-        if(bulletType.ToLower().Contains("player")){
-            currentEnemyHealth -= 1;
+        currentEnemyHealth -= 1;
 
-            if(currentEnemyHealth <= 0){
-                if(levelManager){
-                    levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
-                }
-                Destroy(gameObject);
+        if(currentEnemyHealth <= 0){
+            if(levelManager){
+                levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
             }
-        }else if(bulletType.ToLower().Contains("enemy")){
-            //could make it so enemy bullets can also hurt them (then we can remove distinction between player and enemy bullets)
+            Destroy(gameObject);
         }
     }
 
