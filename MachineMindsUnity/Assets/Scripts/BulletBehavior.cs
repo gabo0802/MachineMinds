@@ -2,9 +2,16 @@ using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour{
     private Rigidbody2D rb;
-    public float bulletSpeed = 1f;
-    public float bulletBounceAngle = 45f; //do we really want to have bouncy bullets?
-    public float bulletLifeTime = 10f;
+
+    // -Gabe: Maybe nerf or allow the GameObject set this value, we could have different enemy types
+    // that have different bullet speeds.
+    public float bulletSpeed = 1f; 
+    
+    // - Gabe: This bounce angle should not be constant??? 
+    // It should be based on the angle at which the bullet is hitting, 
+    // so calcuated once it connects with collision.
+    public float bulletBounceAngle = 45f; //do we really want to have bouncy bullets? (Gabe - yes I think so but diff implementation)
+    public float bulletLifeTime = 10f; // -Gabe: Still think that this should be a bounce count instead of lifetime.
     private float bulletLifeTimer = 0f;
     public float bulletDetectRange = 0.25f;
     
