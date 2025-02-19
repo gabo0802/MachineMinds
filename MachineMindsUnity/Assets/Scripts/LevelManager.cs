@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class LevelManager : MonoBehaviour{
     private string filePath = Application.dataPath + "/Resources/GameState.save";
     private string playerName = "TheGabeSquare v2";
-    private string enemyName = "StrongEnemy";
+    private string enemyName = "FastEnemy";
 
     private GameObject currentPlayer;
     private TMPro.TextMeshProUGUI pointsUI;
