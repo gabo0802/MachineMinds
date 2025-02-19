@@ -77,7 +77,12 @@ public class EnemyBehavior : MonoBehaviour{
         
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){
-                Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + transform.up, transform.up, 10f);
+                Debug.Log(hit.transform.gameObject.name);
+                if(hit.transform.gameObject.name.Contains("Gabe")){
+                    Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
+                }
+
                 enemyFireTimer = 0f;
             }else{
                 enemyFireTimer += Time.deltaTime;
