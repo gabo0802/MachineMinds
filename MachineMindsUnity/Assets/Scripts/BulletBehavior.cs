@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class BulletBehavior : MonoBehaviour
-{
+public class BulletBehavior : MonoBehaviour{
     private Rigidbody2D rb;
     public float bulletSpeed = 1f;
     public float bulletBounceAngle = 45f; //do we really want to have bouncy bullets?
