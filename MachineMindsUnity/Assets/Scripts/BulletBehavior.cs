@@ -8,6 +8,8 @@ public class BulletBehavior : MonoBehaviour{
     public float bulletSpeed = 1f; 
     public float bulletLifeTime = 10f; // -Gabe: Still think that this should be a bounce count instead of lifetime.
     private float bulletLifeTimer = 0f;
+    
+    private int bounceCap = 2;
     public float bulletDetectRange = 0.25f;
     
     public bool isBouncy = true;
@@ -31,6 +33,7 @@ public class BulletBehavior : MonoBehaviour{
         float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0, 0, angle);
         rb.linearVelocity = newDirection * bulletSpeed; // Apply new velocity
+        bounceCap--;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,7 +81,7 @@ public class BulletBehavior : MonoBehaviour{
         }
 
         // Bullet Lifetime
-        if (bulletLifeTimer >= bulletLifeTime)
+        if (bulletLifeTimer >= bulletLifeTime || bounceCap <= 0)
         {
             Destroy(gameObject);
         }
