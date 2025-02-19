@@ -22,6 +22,8 @@ public class EnemyBehavior : MonoBehaviour{
 
     public float pointsWorth;
 
+    private string playerName = "Gabe";
+
     public void SetGameObjects(GameObject[] parameters){
         levelManager = parameters[0];
         targetPlayer = parameters[1];
@@ -72,14 +74,14 @@ public class EnemyBehavior : MonoBehaviour{
             if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
                 rb.linearVelocity = transform.up * enemyMoveSpeed;
             }else{
-            rb.linearVelocity = transform.up * 0.000001f;
+                rb.linearVelocity = transform.up * 0.000001f;
             }
         
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){
                 RaycastHit2D scanAhead = Physics2D.Raycast(transform.position + transform.up, transform.up, 10f);
                 //Debug.Log(hit.transform.gameObject.name);
-                if(scanAhead.transform.gameObject.name.Contains("Gabe")){
+                if(scanAhead.transform.gameObject.name.Contains(playerName)){
                     Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
                 }
 
