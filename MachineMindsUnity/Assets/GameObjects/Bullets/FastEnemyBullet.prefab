@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a814964eb3324c45b86cb357d4398b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 10
+  bulletSpeed: 3
   bulletLifeTime: 10
   bulletDetectRange: 0.25
   isBouncy: 1
