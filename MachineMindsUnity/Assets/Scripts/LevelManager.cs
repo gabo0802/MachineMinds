@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour{
     private string filePath = Application.dataPath + "/Resources/GameState.save";
-    private const string playerName = "Player";
-    private const string enemyName = "Enemy";
+    private const string playerName = "player";
+    private const string enemyName = "enemy";
 
     private GameObject currentPlayer;
     private TMPro.TextMeshProUGUI pointsUI;
@@ -77,10 +77,10 @@ public class LevelManager : MonoBehaviour{
         foreach(Collider2D currentHitObject in allHitObjectsInScence){
             string currentObjectName = currentHitObject.transform.gameObject.name;
 
-            if(currentObjectName.Contains(enemyName)){
+            if(currentObjectName.ToLower().Contains(enemyName)){
                 allEnemies.Add(currentHitObject.transform.gameObject);
-                currentEnemyTotal += 1;
-            }else if(currentObjectName.Contains(playerName)){
+                currentEnemyTotal += currentObjectName.ToLower().Contains("basic") ? 1 : 2;
+            }else if(currentObjectName.ToLower().Contains(playerName)){
                 currentPlayer = currentHitObject.transform.gameObject;
             }
         }
@@ -89,8 +89,10 @@ public class LevelManager : MonoBehaviour{
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentPlayer});
         }
 
+        Debug.Log(currentEnemyTotal);
         currentEnemyTotal /= 2;
-        
+        Debug.Log(currentEnemyTotal);
+
         pointsUI = currentPlayer.transform.GetChild(2).GetChild(1).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
         countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
 
