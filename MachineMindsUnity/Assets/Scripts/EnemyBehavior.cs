@@ -22,7 +22,7 @@ public class EnemyBehavior : MonoBehaviour{
 
     public float pointsWorth;
 
-    private string playerName = "Gabe";
+    private string playerName = "player";
 
     public void SetGameObjects(GameObject[] parameters){
         levelManager = parameters[0];
@@ -81,7 +81,7 @@ public class EnemyBehavior : MonoBehaviour{
             if(enemyFireTimer >= enemyFireRate){
                 RaycastHit2D scanAhead = Physics2D.Raycast(transform.position + transform.up, transform.up, 10f);
                 //Debug.Log(hit.transform.gameObject.name);
-                if(scanAhead.transform.gameObject.name.Contains(playerName)){
+                if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
                     Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
                 }
 
