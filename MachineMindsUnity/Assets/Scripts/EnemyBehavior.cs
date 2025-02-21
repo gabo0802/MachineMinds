@@ -22,7 +22,7 @@ public class EnemyBehavior : MonoBehaviour{
 
     public float pointsWorth;
 
-    private string playerName = "player";
+    private const string playerName = "player";
 
     public void SetGameObjects(GameObject[] parameters){
         levelManager = parameters[0];
