@@ -79,7 +79,7 @@ public class LevelManager : MonoBehaviour{
 
             if(currentObjectName.ToLower().Contains(enemyName)){
                 allEnemies.Add(currentHitObject.transform.gameObject);
-                currentEnemyTotal += currentObjectName.ToLower().Contains("basic") ? 1 : 2;
+                currentEnemyTotal += 1;
             }else if(currentObjectName.ToLower().Contains(playerName)){
                 currentPlayer = currentHitObject.transform.gameObject;
             }
@@ -88,10 +88,6 @@ public class LevelManager : MonoBehaviour{
         foreach(GameObject enemyObject in allEnemies){
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentPlayer});
         }
-
-        Debug.Log(currentEnemyTotal);
-        currentEnemyTotal /= 2;
-        Debug.Log(currentEnemyTotal);
 
         pointsUI = currentPlayer.transform.GetChild(2).GetChild(1).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
         countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
