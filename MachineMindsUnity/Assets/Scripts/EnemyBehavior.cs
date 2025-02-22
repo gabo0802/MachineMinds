@@ -1,8 +1,11 @@
 using System;
 using UnityEngine;
+using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour{
     private Rigidbody2D rb;
+
+    private AIPath path;
 
     private GameObject targetPlayer;
     private GameObject levelManager;
@@ -64,18 +67,22 @@ public class EnemyBehavior : MonoBehaviour{
     void Start(){
         currentEnemyHealth = maxEnemyHealth;
         rb = GetComponent<Rigidbody2D>();
+        path = GetComponent<AIPath>();
     }
 
     // Update is called once per frame
     void Update(){
         if(targetPlayer){  
             //Target Player:
-            transform.up = targetPlayer.transform.position - transform.position;
+            /*transform.up = targetPlayer.transform.position - transform.position;
             if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
                 rb.linearVelocity = transform.up * enemyMoveSpeed;
             }else{
                 rb.linearVelocity = transform.up * 0.000001f;
-            }
+            }*/
+
+            path.maxSpeed = enemyMoveSpeed;
+            path.destination = targetPlayer.transform.position;
         
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){

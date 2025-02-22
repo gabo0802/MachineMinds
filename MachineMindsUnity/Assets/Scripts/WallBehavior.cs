@@ -9,12 +9,14 @@ public class WallBehavior : MonoBehaviour{
 
         if(isExplodable){
             Destroy(gameObject);
+            AstarPath.active.Scan();           
         }
     }
 
     void OnBulletHit(GameObject bulletType){
         if(isDestroyable){
             Destroy(gameObject);
+            AstarPath.active.Scan();           
         }
     }
 }
