@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 19959813}
   - component: {fileID: 19959812}
   - component: {fileID: 19959811}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BreakableWalls (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4714,6 +4714,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: StrongEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6361910439809864366, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
+      propertyPath: height
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361910439809864366, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
+      propertyPath: radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361910439809864366, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
+      propertyPath: enableRotation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6361910439809864366, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
+      propertyPath: alwaysDrawGizmos
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.81
@@ -5455,7 +5471,7 @@ GameObject:
   - component: {fileID: 1083514637}
   - component: {fileID: 1083514636}
   - component: {fileID: 1083514635}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BreakableWalls (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7004,7 +7020,7 @@ GameObject:
   - component: {fileID: 1692717118}
   - component: {fileID: 1692717117}
   - component: {fileID: 1692717120}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BreakableWalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7396,38 +7412,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-      propertyPath: pointsUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-      propertyPath: countdownUI
-      value: 
-      objectReference: {fileID: 1846104955}
-    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-      propertyPath: currentPlayer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-      propertyPath: playerRespawnTime
-      value: 3
+    - target: {fileID: 6221943904035294753, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: data.dataString
+      value: UEsDBBQAAAgIAACYn+u8n/yqaAIAACAFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMziVjA02c3lpCSA9JmJBOLr4IaY01yJJHHwGS4b9XK9vYodMTy9u3u28/5E8ilK2BOW2WRvBHzYH8GBG0ybdR73yAA91qtRYf0HHeBHclkmjkvFAndMBTDLO6AmcE+6m2EslJAL0ShTbVgm9hrq2zAS6otBBcRjuMVgH6HJFD+BnfYsgxWJMbtD6CdZuMTsFkoByYATWdXH1vyWlLbZheMUmrGjjK7gMmXeq0oanQUMvAeKalFLZVQ9yxjt2u6xIMYLtc0NBcVID0EsS2dJh2GPtcFBZc27mhxzthwoyapOSXbgZXUbtrZL1T6bFMFgU1KR//8Y7T6C6Mrh66qmmCFVwp2O6FHhm1bjDXIXz3VbZXeyp3dCPhrQT1pJdGe8WD0xmPod7C5K7/e25sXgLb9Xgj9QL0dT/s8xqvptksza6n14txctOuCRs6xUEc5lJUG+RfzRpgLXWcfDwEMGFHv4P6eCa2zRtQlPTHwivdDu+pddwLY11wtS0r1LrR3iCV3AcDl8C8m2ujwAwT1KCodMdVSOMut3nh+3/UPcWX0xZvfd2DuAiJcM9PkgvXSu/Pm7Ol3j+CLZ+9k0JBP3Z0PIU5zbVSzbENW+rC1t4UlA3Ctl7wr3dGWMKn02yzgYzNZkCLMbudACsgy/iMwuY6IfEQhQp9UrlqhLbjCVtTfXIVjq77oIyWhtbx8Lmh+6X4qLTtmUIVes0MgHpuMpyFgwlFwvvkCy7CgNbgnFBx3+QzJ1KzHfD8nCiPnS4OztC8z5KTWrxrh0hO5vELkhOEz4e9MvAuYI/Fu2QncvoLUEsDBBQAAAgIAACYn+vwgxshbQAAAHgAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM011FQSi9KLMgoBooYgjilmSkgdrRSskGKsbFFUlKqRbKJSWpimm6ypVFqclqqhUWKSWJqkpmBUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAACYn+u8n/yqaAIAACAFAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAACYn+vwgxshbQAAAHgAAAAJACQAAAAAAAAAAAAAALUCAABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwUGAAAAAAIAAgC4AAAAbQMAAAAA
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
---- !u!114 &1846104955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5579268484883826415, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-  m_PrefabInstance: {fileID: 1846104954}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!213 &1848737227
 Sprite:
   m_ObjectHideFlags: 0
@@ -7654,7 +7647,7 @@ GameObject:
   - component: {fileID: 1971873780}
   - component: {fileID: 1971873779}
   - component: {fileID: 1971873778}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}

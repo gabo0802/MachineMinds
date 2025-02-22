@@ -102,6 +102,93 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &3025525780514834784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6744331982923511812}
+  - component: {fileID: 6221943904035294753}
+  m_Layer: 0
+  m_Name: Pathfinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6744331982923511812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3025525780514834784}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.27279738, y: -0.20215069, z: 0.08732687}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3001314140948248649}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6221943904035294753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3025525780514834784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78396926cbbfc4ac3b48fc5fc34a87d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  data:
+    dataString: UEsDBBQAAAgIAACYn+snE79PaQIAACAFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFlVE1z2jAQ/SuMziVjA02c3logpIckTGgnF1+EtMYaZMkjyQGS4b9XK8vYoSeWt293337In0QoWwNz2qyM4E+aA/kxImiTb6Pe+QhHutNqIz6g47wJ7kok0cB5pU5oj6cYZnUFzgj2U+0kkhMPNkoU2lRLvoO5ts56uKDSgncZ7TBaeehzRI7+Z3yPISdvTe7Q+vDWfTI6e5OBcmAG1HRy8z2S00htmY1iklY1cJTdB0y61GlLU76hyMB4pqUUNqoh7lSHbjd1CQawXS6oby4oQHoJYlc6TDuMfSkKCy52buhpIYyfUZuU/NLt4Cpq962sdyobLJMFQW3Kp/+84zS4C6Orx65qmmAFVwq2f6UnRq0bzHUIL77KbtSByj3dSngrQT3rldGN4t7pTIOhjYXJov97aWxeAtv3eCv1CmzqftiXNd5Ms1ma3U5vl+PkLq4JGzqHQRznUlRb5N/MWmAjdZh8OAQwfke/vfpwJjbm9ShK+mvhD90N7yk6HoSxzrtiywq1bnVjkEqWYYDYWuPm2igIcOygBkWlO619Gne9zSvfoOyV54Hiy4nFo697EFchAe75SXLlWuvDZXO21IcnsOVL46RQ0ItGx7Of01wr1R7bcCZd2KYxBWWDsF0j+Nc7Iyzh02m23ULGZjOgxZjdT4AVkGV8RmF7m5BwiEL5Pqlct0LjePzWVJ9c+aPrPiijlaF1OHxu6GElPio9GLlQhd4wA6Be2gwX4WB8Ef8++ZILP6ANOCdU2Df5zInUbA88vyTKQ6fLozM077PkpBbv2iGSk3n4guQE4cthrw28Czhg8S7ZmZz/AVBLAwQUAAAICAAAmJ/r8IMbIW0AAAB4AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDRM9IzNNdRUEovSizIKAaKGII4pZkpIHa0UrJBirGxRVJSqkWyiUlqYppusqVRanJaqoVFikliapKZgVIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAAmJ/rJxO/T2kCAAAgBQAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAmJ/r8IMbIW0AAAB4AAAACQAkAAAAAAAAAAAAAAC2AgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAG4DAAAAAA==
+    upgradeData: 
+    file_cachedStartup: {fileID: 0}
+    data_cachedStartup: 
+    cacheStartup: 0
+  showNavGraphs: 1
+  showUnwalkableNodes: 1
+  debugMode: 0
+  debugFloor: 0
+  debugRoof: 1
+  manualDebugFloorRoof: 0
+  showSearchTree: 0
+  unwalkableNodeDebugSize: 0.3
+  logPathResults: 1
+  maxNearestNodeDistance: 100
+  scanOnStartup: 1
+  fullGetNearestSearch: 0
+  prioritizeGraphs: 0
+  prioritizeGraphsLimit: 1
+  colorSettings:
+    _SolidColor: {r: 0.11764706, g: 0.4, b: 0.7882353, a: 0.9}
+    _UnwalkableNode: {r: 1, g: 0, b: 0, a: 0.5}
+    _BoundsHandles: {r: 0.29, g: 0.454, b: 0.741, a: 0.9}
+    _ConnectionLowLerp: {r: 0, g: 1, b: 0, a: 0.5}
+    _ConnectionHighLerp: {r: 1, g: 0, b: 0, a: 0.5}
+    _MeshEdgeColor: {r: 0, g: 0, b: 0, a: 0.5}
+    _AreaColors:
+    - {r: 0, g: 0, b: 0, a: 0}
+  tagNames: []
+  heuristic: 2
+  heuristicScale: 1
+  threadCount: 1
+  maxFrameTime: 1
+  batchGraphUpdates: 0
+  graphUpdateBatchingInterval: 0.2
+  euclideanEmbedding:
+    mode: 0
+    seed: 0
+    pivotPointRoot: {fileID: 0}
+    spreadOutCount: 1
+  showGraphs: 1
 --- !u!1 &4227258372502546876
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +220,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3570475116268433486}
+  - {fileID: 6744331982923511812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6177381822910003595
@@ -147,12 +235,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19d45c18090e87842b46b10070433ce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlayer: {fileID: 0}
-  pointsUI: {fileID: 5579268484883826415}
-  countdownUI: {fileID: 0}
+  playerCelebrateTime: 3
   playerRespawnTime: 3
-  currentEnemyTotal: 1
-  pointsPerEnemy: 1000
   difficultyMultiplier: 2
   currentDifficulty: 0
 --- !u!1 &4665352130969206929
