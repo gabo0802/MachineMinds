@@ -96,8 +96,9 @@ public class EnemyBehavior : MonoBehaviour{
                 stuckCheckTimer = stuckCheckInterval;
 
                 if(Vector2.Distance(latestPosition, lastPosition) <= 0.01f){
-                    //Debug.Log("Stuck");
-                    rb.AddForce(-transform.up * 10f);
+                    Debug.Log("Stuck");
+                    transform.Rotate(0, 0, 180f);
+                    //rb.AddForce(-transform.up * 5000f);
                 }
 
                 lastPosition = latestPosition;
