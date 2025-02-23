@@ -281,13 +281,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb955da3e55c18242aa81b0bd3ae12e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cannonHead: {fileID: 9105449426323012586}
   enemyMoveSpeed: 1
   maxEnemyHealth: 0
   enemyBullet: {fileID: 8642936227962931598, guid: cd0fb3dc6ba48ef4b96f566d5e576c70, type: 3}
   bulletShotSpawnOffset: 0.5
   enemyFireRate: 1
   distanceToPlayer: 5
-  pointsWorth: 0
+  pointsWorth: 100
 --- !u!50 &1506500029996170173
 Rigidbody2D:
   serializedVersion: 5
@@ -374,7 +375,7 @@ MonoBehaviour:
     interval: 0.5
     sensitivity: 10
     maximumInterval: 2
-    visualizeSensitivity: 0
+    visualizeSensitivity: 1
   targetCompatibility: {fileID: 0}
   maxAcceleration: -2.5
   rotationSpeed: 360

@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb955da3e55c18242aa81b0bd3ae12e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cannonHead: {fileID: 7690472065896736472}
   enemyMoveSpeed: 10
   maxEnemyHealth: 0
   enemyBullet: {fileID: 4939650420335017065, guid: 8c99883ec96191d43960cd26858bfcff, type: 3}

@@ -3,9 +3,14 @@ using UnityEngine;
 using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour{
+    public GameObject cannonHead;
+
     private Rigidbody2D rb;
 
     private AIPath path;
+    private Vector2 lastPosition;
+    private float stuckCheckTimer = 0f;
+    private float stuckCheckInterval = 0.5f;
 
     private GameObject targetPlayer;
     private GameObject levelManager;
@@ -68,6 +73,8 @@ public class EnemyBehavior : MonoBehaviour{
         currentEnemyHealth = maxEnemyHealth;
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
+
+        lastPosition = (Vector2) transform.position;
     }
 
     // Update is called once per frame
@@ -83,15 +90,43 @@ public class EnemyBehavior : MonoBehaviour{
 
             path.maxSpeed = enemyMoveSpeed;
             path.destination = targetPlayer.transform.position;
-        
-            //Shoot Player:
-            if(enemyFireTimer >= enemyFireRate){
-                RaycastHit2D scanAhead = Physics2D.Raycast(transform.position + transform.up, transform.up, 10f);
-                //Debug.Log(hit.transform.gameObject.name);
-                if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
-                    Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
+
+            if(stuckCheckTimer <= 0){
+                Vector2 latestPosition = (Vector2) transform.position;
+                stuckCheckTimer = stuckCheckInterval;
+
+                if(Vector2.Distance(latestPosition, lastPosition) <= 0.01f){
+                    //Debug.Log("Stuck");
+                    rb.AddForce(-transform.up * 10f);
                 }
 
+                lastPosition = latestPosition;
+            }
+            stuckCheckTimer -= Time.deltaTime;
+
+            if(cannonHead){
+                cannonHead.transform.up = targetPlayer.transform.position - transform.position;
+            }
+
+            //Shoot Player:
+            if(enemyFireTimer >= enemyFireRate){                
+                RaycastHit2D scanAhead;
+                if(cannonHead){
+                    scanAhead = Physics2D.Raycast(cannonHead.transform.position + transform.up, cannonHead.transform.up, Mathf.Infinity);
+                }else{
+                    scanAhead = Physics2D.Raycast(transform.position + cannonHead.transform.up, cannonHead.transform.up, Mathf.Infinity);
+                }
+                //Debug.DrawLine(transform.position + transform.up, transform.position + (transform.up * 100f), Color.white, enemyFireRate / 2);
+
+                //Debug.Log(hit.transform.gameObject.name);
+                if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
+                    if(cannonHead){
+                        Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                    }else{
+                        Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
+                    }
+                }
+                
                 enemyFireTimer = 0f;
             }else{
                 enemyFireTimer += Time.deltaTime;
