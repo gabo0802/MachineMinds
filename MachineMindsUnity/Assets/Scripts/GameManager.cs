@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor; //only for testing, remove when building
+//using UnityEditor; //only for testing, remove when building
 using UnityEngine.UI;
 using System.IO;
 
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour{
 
     public void QuitGame(){
         Application.Quit();
-        EditorApplication.ExitPlaymode(); //only for testing, remove when building
+        //EditorApplication.ExitPlaymode(); //only for testing, remove when building
     }
 
     void Start(){

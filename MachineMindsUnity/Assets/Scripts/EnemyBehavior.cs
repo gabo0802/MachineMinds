@@ -8,6 +8,7 @@ public class EnemyBehavior : MonoBehaviour{
     private Rigidbody2D rb;
 
     private AIPath path;
+    private bool canShoot;
     private Vector2 lastPosition;
     private float stuckCheckTimer = 0f;
     private float stuckCheckInterval = 0.5f;
@@ -26,7 +27,7 @@ public class EnemyBehavior : MonoBehaviour{
     public float enemyFireRate = 5f;
     private float enemyFireTimer = 0f;
 
-    public float distanceToPlayer = 5f;
+    //public float distanceToPlayer = 5f;
 
     public float pointsWorth;
 
@@ -79,7 +80,18 @@ public class EnemyBehavior : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if(targetPlayer){  
+        if(targetPlayer){
+            if(cannonHead){
+                cannonHead.transform.up = targetPlayer.transform.position - transform.position;
+            }
+
+            RaycastHit2D scanAhead;
+            if(cannonHead){
+                scanAhead = Physics2D.Raycast(cannonHead.transform.position + transform.up, cannonHead.transform.up, Mathf.Infinity);
+            }else{
+                scanAhead = Physics2D.Raycast(transform.position + cannonHead.transform.up, cannonHead.transform.up, Mathf.Infinity);
+            }
+
             //Target Player:
             /*transform.up = targetPlayer.transform.position - transform.position;
             if (Vector2.Distance(transform.position, targetPlayer.transform.position) > distanceToPlayer){
@@ -88,35 +100,29 @@ public class EnemyBehavior : MonoBehaviour{
                 rb.linearVelocity = transform.up * 0.000001f;
             }*/
 
-            path.maxSpeed = enemyMoveSpeed;
-            path.destination = targetPlayer.transform.position;
+            if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
+                path.maxSpeed = 0f;
+            }else{
+                path.maxSpeed = enemyMoveSpeed;
+                path.destination = targetPlayer.transform.position;
 
-            if(stuckCheckTimer <= 0){
-                Vector2 latestPosition = (Vector2) transform.position;
-                stuckCheckTimer = stuckCheckInterval;
+                if(stuckCheckTimer <= 0){
+                    Vector2 latestPosition = (Vector2) transform.position;
+                    stuckCheckTimer = stuckCheckInterval;
 
-                if(Vector2.Distance(latestPosition, lastPosition) <= 0.01f){
-                    Debug.Log("Stuck");
-                    transform.Rotate(0, 0, 180f);
-                    //rb.AddForce(-transform.up * 5000f);
+                    if(Vector2.Distance(latestPosition, lastPosition) <= 0.01f){
+                        Debug.Log("Stuck");
+                        transform.Rotate(0, 0, 180f);
+                        //rb.AddForce(-transform.up * 5000f);
+                    }
+
+                    lastPosition = latestPosition;
                 }
-
-                lastPosition = latestPosition;
-            }
-            stuckCheckTimer -= Time.deltaTime;
-
-            if(cannonHead){
-                cannonHead.transform.up = targetPlayer.transform.position - transform.position;
+                stuckCheckTimer -= Time.deltaTime;
             }
 
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){                
-                RaycastHit2D scanAhead;
-                if(cannonHead){
-                    scanAhead = Physics2D.Raycast(cannonHead.transform.position + transform.up, cannonHead.transform.up, Mathf.Infinity);
-                }else{
-                    scanAhead = Physics2D.Raycast(transform.position + cannonHead.transform.up, cannonHead.transform.up, Mathf.Infinity);
-                }
                 //Debug.DrawLine(transform.position + transform.up, transform.position + (transform.up * 100f), Color.white, enemyFireRate / 2);
 
                 //Debug.Log(hit.transform.gameObject.name);

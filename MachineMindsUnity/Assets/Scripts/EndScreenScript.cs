@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor; //only for testing, remove when building
+//using UnityEditor; //only for testing, remove when building
 
 public class EndScreenScript : MonoBehaviour
 {
@@ -12,6 +12,6 @@ public class EndScreenScript : MonoBehaviour
 
     public void QuitGame(){
         Application.Quit();
-        EditorApplication.ExitPlaymode(); //only for testing, remove when building
+        //EditorApplication.ExitPlaymode(); //only for testing, remove when building
     }
 }

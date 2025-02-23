@@ -16,6 +16,7 @@ public class WallBehavior : MonoBehaviour{
     void OnBulletHit(GameObject bulletType){
         if(isDestroyable){
             Destroy(gameObject);
+            Destroy(bulletType);
             AstarPath.active.Scan();           
         }
     }
