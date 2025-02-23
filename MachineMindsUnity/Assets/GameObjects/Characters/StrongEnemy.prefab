@@ -462,7 +462,6 @@ MonoBehaviour:
   enemyBullet: {fileID: 5493826410686333668, guid: 936a4ec920ed6734a86f2c4fef302bdc, type: 3}
   bulletShotSpawnOffset: 0.5
   enemyFireRate: 5
-  distanceToPlayer: 5
   pointsWorth: 150
 --- !u!50 &7701055470618375241
 Rigidbody2D:
@@ -596,4 +595,4 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.75

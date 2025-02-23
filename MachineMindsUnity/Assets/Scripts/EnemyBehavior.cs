@@ -71,6 +71,7 @@ public class EnemyBehavior : MonoBehaviour{
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
         currentEnemyHealth = maxEnemyHealth;
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
@@ -87,9 +88,9 @@ public class EnemyBehavior : MonoBehaviour{
 
             RaycastHit2D scanAhead;
             if(cannonHead){
-                scanAhead = Physics2D.Raycast(cannonHead.transform.position + transform.up, cannonHead.transform.up, Mathf.Infinity);
+                scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
             }else{
-                scanAhead = Physics2D.Raycast(transform.position + cannonHead.transform.up, cannonHead.transform.up, Mathf.Infinity);
+                scanAhead = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
             }
 
             //Target Player:
@@ -101,7 +102,7 @@ public class EnemyBehavior : MonoBehaviour{
             }*/
 
             if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
-                path.maxSpeed = 0f;
+                path.maxSpeed = 0.01f;
             }else{
                 path.maxSpeed = enemyMoveSpeed;
                 path.destination = targetPlayer.transform.position;
@@ -123,7 +124,7 @@ public class EnemyBehavior : MonoBehaviour{
 
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate){                
-                //Debug.DrawLine(transform.position + transform.up, transform.position + (transform.up * 100f), Color.white, enemyFireRate / 2);
+                Debug.DrawLine(transform.position + (transform.up * bulletShotSpawnOffset), transform.position + (transform.up * 100f), Color.white, enemyFireRate / 2);
 
                 //Debug.Log(hit.transform.gameObject.name);
                 if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
