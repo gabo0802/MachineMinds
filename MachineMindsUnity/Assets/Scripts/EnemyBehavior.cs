@@ -25,6 +25,7 @@ public class EnemyBehavior : MonoBehaviour{
 
     public GameObject enemyBullet;
     public float bulletShotSpawnOffset = 0.5f;
+    public bool shootIfCannotSeePlayer = false;
 
     public float enemyFireRate = 5f;
     private float enemyFireTimer = 0f;
@@ -156,7 +157,7 @@ public class EnemyBehavior : MonoBehaviour{
             //Shoot Player:
             if(enemyFireTimer >= enemyFireRate / currentDifficulty){                
                 //Debug.Log(hit.transform.gameObject.name);
-                if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
+                if(shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName))){
                     GameObject currentBullet;
                     if(cannonHead){
                         currentBullet = (GameObject) Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
@@ -198,7 +199,8 @@ public class EnemyBehavior : MonoBehaviour{
                     currentActualTarget = targetPlayer;
                     
                     if(shootPlayerImmediatelyChance <= 50){
-                        Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                        GameObject currentBullet = (GameObject) Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                        currentBullet.SendMessageUpwards("SetTarget", targetPlayer);
                     }
                 }
             }
