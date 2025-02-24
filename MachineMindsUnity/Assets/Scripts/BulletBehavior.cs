@@ -1,4 +1,5 @@
 using UnityEngine;
+using Pathfinding;
 
 public class BulletBehavior : MonoBehaviour{
     private Rigidbody2D rb;
@@ -16,11 +17,34 @@ public class BulletBehavior : MonoBehaviour{
     
     public bool isExplody = false;
     public float explosionRadius = 20f;
+    public GameObject explosionObject;
+
+    private AIPath pathFinder;
+    public GameObject targetPlayer;
+
+    public void SetTarget(GameObject newTarget){
+        targetPlayer = newTarget;
+        pathFinder = GetComponent<AIPath>();
+    }
+
 
     void OnBulletHit(GameObject bullet){
         /*if(bullet){
             Destroy(bullet);
         }*/
+
+         if(isExplody){
+            Destroy(bullet);
+
+            Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+            Instantiate(explosionObject, transform.position, transform.rotation);
+
+            foreach(Collider2D currentExplodedObject in allExplodedObjects){
+                currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
+            }
+        }
+
+        Destroy(gameObject);
     }
 
     void OnExplosionHit(){
@@ -39,6 +63,7 @@ public class BulletBehavior : MonoBehaviour{
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         rb = GetComponent<Rigidbody2D>();
+        pathFinder = GetComponent<AIPath>();
     }
 
     // Update is called once per frame
@@ -47,19 +72,19 @@ public class BulletBehavior : MonoBehaviour{
     }  
     
     // Use FixedUpdate for physics calculations
-    void FixedUpdate()
-    {
+    void FixedUpdate(){
         Vector2 moveDirection = transform.up;
         float moveDistance = bulletSpeed * Time.fixedDeltaTime;
-
+        
         // Raycast ahead to check if a collision will happen before moving
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, moveDistance);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + (transform.up * ((transform.localScale.magnitude / 2) + 0.1f)), moveDirection, moveDistance);
         if (hit)
         {
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
             
             if(isExplody){
                 Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+                Instantiate(explosionObject, transform.position, transform.rotation);
 
                 foreach(Collider2D currentExplodedObject in allExplodedObjects){
                     currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
@@ -77,7 +102,12 @@ public class BulletBehavior : MonoBehaviour{
         }
         else
         {
-            rb.linearVelocity = moveDirection * bulletSpeed; // Normal movement
+            if(!pathFinder){
+                rb.linearVelocity = moveDirection * bulletSpeed; // Normal movement
+            }else{
+                pathFinder.maxSpeed = bulletSpeed;
+                pathFinder.destination = targetPlayer.transform.position;
+            }
         }
 
         // Bullet Lifetime
