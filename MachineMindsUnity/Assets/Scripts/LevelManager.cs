@@ -4,7 +4,11 @@ using System.IO;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour{
-    private string filePath = Application.dataPath + "/Resources/GameState.save";
+    private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
+   
+    private string aiTrainingFilePath = Application.dataPath + "/Resources/game_data.csv";
+    private bool isTrainingMode = true;
+
     private const string playerName = "player";
     private const string enemyName = "enemy";
 
@@ -34,7 +38,7 @@ public class LevelManager : MonoBehaviour{
     public int totalPlayerLives = 3;
     private int currentPlayerLives;
 
-    public int numberLevelsCheckpoint = 5;
+    private int numberLevelsCheckpoint = 3;
     private int currentLevelNumber;
 
     void OnEnemyDeath(int enemyPointWorth){
@@ -49,40 +53,42 @@ public class LevelManager : MonoBehaviour{
         }
     }
 
-    void ResetSaveFile(){
+    void ResetSaveFile(int currentLevelNumber = 1){
         playerLifeTimer = 0f;
         currentPlayerLives = totalPlayerLives;
         totalPoints = 0f;
         totalEnemiesKilled = 0;
-        CreateSave_LevelEnd(1);
+        CreateSave_LevelEnd(currentLevelNumber);
     }
 
     void CreateSave_LevelRetry(int currentLevelNumber){            
-        using (StreamWriter sw = File.CreateText(filePath)){
+        using (StreamWriter sw = File.CreateText(saveFilePath)){
             sw.WriteLine(currentPlayerLives);
             sw.WriteLine(currentLevelNumber);
             sw.WriteLine(levelStartPoints);
             sw.WriteLine(levelStartEnemies);
             sw.WriteLine(currentDifficulty);        
             sw.WriteLine(playerLifeTimerStart);
+            sw.WriteLine(isTrainingMode);
         }
     }
 
     void CreateSave_LevelEnd(int currentLevelNumber){            
-        using (StreamWriter sw = File.CreateText(filePath)){
+        using (StreamWriter sw = File.CreateText(saveFilePath)){
             sw.WriteLine(currentPlayerLives);
             sw.WriteLine(currentLevelNumber);
             sw.WriteLine(totalPoints);
             sw.WriteLine(totalEnemiesKilled);
             sw.WriteLine(currentDifficulty);        
             sw.WriteLine(playerLifeTimer);
+            sw.WriteLine(isTrainingMode);
         }
     }
 
     void LoadSave(){
-        if (File.Exists(filePath)){
+        if (File.Exists(saveFilePath)){
             string saveFileData = "";
-            using (StreamReader saveFile = File.OpenText(filePath)){
+            using (StreamReader saveFile = File.OpenText(saveFilePath)){
                 string currentLine;
                 while ((currentLine = saveFile.ReadLine()) != null){
                     saveFileData += currentLine + "\n";
@@ -96,6 +102,7 @@ public class LevelManager : MonoBehaviour{
             totalEnemiesKilled = System.Int32.Parse(fileArray[3]);
             currentDifficulty = System.Int32.Parse(fileArray[4]);
             playerLifeTimer = System.Single.Parse(fileArray[5]);
+            isTrainingMode = bool.Parse(fileArray[6]);
 
             playerLifeTimerStart = playerLifeTimer;
             levelStartEnemies = totalEnemiesKilled;
@@ -148,6 +155,22 @@ public class LevelManager : MonoBehaviour{
                     }
                     
                     countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
+                    Debug.Log("Total: " + SceneManager.sceneCountInBuildSettings);
+
+                    if(currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode){
+                        int newDifficulty = currentDifficulty + 1;
+
+                        if (!File.Exists(aiTrainingFilePath)){
+                            using (StreamWriter sw = File.CreateText(aiTrainingFilePath)){
+                                sw.WriteLine("currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty");
+                                sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            }
+                        }else{
+                            using(TextWriter tw = new StreamWriter(aiTrainingFilePath, true)){
+                                tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            }
+                        }
+                    }
 
                     //Load Next Level:
                     CreateSave_LevelEnd(currentLevelNumber + 1);          
@@ -183,11 +206,32 @@ public class LevelManager : MonoBehaviour{
                     CreateSave_LevelEnd(currentLevelNumber);
                     SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
                 }else{
-                    //Reset Save File:
-                    ResetSaveFile();
+                    if(isTrainingMode){
+                        int newDifficulty = currentDifficulty - 1;
+                        if(newDifficulty < 0){
+                            newDifficulty = 0;
+                        }
+
+                        if (!File.Exists(aiTrainingFilePath)){
+                            using (StreamWriter sw = File.CreateText(aiTrainingFilePath)){
+                                sw.WriteLine("currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty");
+                                sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            }
+                        }else{
+                            using(TextWriter tw = new StreamWriter(aiTrainingFilePath, true)){
+                                tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            }
+                        }
+                    }
 
                     //Go Back to First Level:
-                    SceneManager.LoadScene(currentLevelNumber / numberLevelsCheckpoint, LoadSceneMode.Single);
+                    if(currentLevelNumber < numberLevelsCheckpoint){
+                        ResetSaveFile();
+                        SceneManager.LoadScene(1, LoadSceneMode.Single);
+                    }else{
+                        ResetSaveFile(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint));
+                        SceneManager.LoadScene(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint), LoadSceneMode.Single);
+                    }
                 }
             }else{
                 //Enemy Dancing Time:

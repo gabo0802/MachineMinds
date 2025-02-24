@@ -34,16 +34,29 @@ public class GameManager : MonoBehaviour{
             sw.WriteLine(0);
             sw.WriteLine(0);        
             sw.WriteLine(0);
+            sw.WriteLine(false);
         }
 
         SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
     }
 
     public void LoadGame(){
-        Debug.Log(lastLevelNumber);
+        /*Debug.Log(lastLevelNumber);
         LoadSave();
         Debug.Log(lastLevelNumber);
-        SceneManager.LoadScene("Scenes/Levels/Level" + lastLevelNumber, LoadSceneMode.Single);
+        SceneManager.LoadScene("Scenes/Levels/Level" + lastLevelNumber, LoadSceneMode.Single);*/
+
+        using (StreamWriter sw = File.CreateText(filePath)){
+            sw.WriteLine(3);
+            sw.WriteLine(1);
+            sw.WriteLine(0);
+            sw.WriteLine(0);
+            sw.WriteLine(0);        
+            sw.WriteLine(0);
+            sw.WriteLine(true);
+        }
+
+        SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
     }
 
     public void QuitGame(){
