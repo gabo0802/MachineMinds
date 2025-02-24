@@ -26,6 +26,16 @@ public class LevelManager : MonoBehaviour{
     public float difficultyMultiplier = 2f;
     public int currentDifficulty = 0;
     private float totalPoints = 0f;
+    
+    private int levelStartEnemies = 0;
+    private float levelStartPoints = 0f;
+    private float playerLifeTimerStart = 0f;
+
+    public int totalPlayerLives = 3;
+    private int currentPlayerLives;
+
+    public int numberLevelsCheckpoint = 5;
+    private int currentLevelNumber;
 
     void OnEnemyDeath(int enemyPointWorth){
         totalEnemiesKilled += 1;
@@ -39,8 +49,28 @@ public class LevelManager : MonoBehaviour{
         }
     }
 
+    void ResetSaveFile(){
+        playerLifeTimer = 0f;
+        currentPlayerLives = totalPlayerLives;
+        totalPoints = 0f;
+        totalEnemiesKilled = 0;
+        CreateSave_LevelEnd(1);
+    }
+
+    void CreateSave_LevelRetry(int currentLevelNumber){            
+        using (StreamWriter sw = File.CreateText(filePath)){
+            sw.WriteLine(currentPlayerLives);
+            sw.WriteLine(currentLevelNumber);
+            sw.WriteLine(levelStartPoints);
+            sw.WriteLine(levelStartEnemies);
+            sw.WriteLine(currentDifficulty);        
+            sw.WriteLine(playerLifeTimerStart);
+        }
+    }
+
     void CreateSave_LevelEnd(int currentLevelNumber){            
         using (StreamWriter sw = File.CreateText(filePath)){
+            sw.WriteLine(currentPlayerLives);
             sw.WriteLine(currentLevelNumber);
             sw.WriteLine(totalPoints);
             sw.WriteLine(totalEnemiesKilled);
@@ -60,16 +90,24 @@ public class LevelManager : MonoBehaviour{
             }
 
             string[] fileArray = saveFileData.Split('\n');
-            //currentLevelNumber = System.Int32.Parse(fileArray[0]);
-            totalPoints = System.Single.Parse(fileArray[1]);
-            totalEnemiesKilled = System.Int32.Parse(fileArray[2]);
-            currentDifficulty = System.Int32.Parse(fileArray[3]);
-            playerLifeTimer = System.Single.Parse(fileArray[4]);
+            currentPlayerLives = System.Int32.Parse(fileArray[0]);
+            //currentLevelNumber = System.Int32.Parse(fileArray[1]);
+            totalPoints = System.Single.Parse(fileArray[2]);
+            totalEnemiesKilled = System.Int32.Parse(fileArray[3]);
+            currentDifficulty = System.Int32.Parse(fileArray[4]);
+            playerLifeTimer = System.Single.Parse(fileArray[5]);
+
+            playerLifeTimerStart = playerLifeTimer;
+            levelStartEnemies = totalEnemiesKilled;
+            levelStartPoints = totalPoints;
+        }else{
+            ResetSaveFile();
         }
     }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         //Get enemy total + get player object
         Collider2D[] allHitObjectsInScence = Physics2D.OverlapCircleAll(new Vector2(0, 0), Mathf.Infinity);
         List<GameObject> allEnemies = new List<GameObject>();
@@ -105,24 +143,30 @@ public class LevelManager : MonoBehaviour{
 
             if(wonLevel){
                 if(currentWinTime > playerCelebrateTime){
-                    countdownUI.text = "Loading...";
+                    if(currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives){
+                        currentPlayerLives++;
+                    }
+                    
+                    countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
 
                     //Load Next Level:
-                    CreateSave_LevelEnd(SceneManager.GetActiveScene().buildIndex + 1);          
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
+                    CreateSave_LevelEnd(currentLevelNumber + 1);          
+                    SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
                 }else{
                     //Celebrate Time!!!!:
                     currentWinTime += Time.deltaTime;
 
                     if(currentWinTime < 1f){
                         countdownUI.text = "You Won! :)";
+                    }else if (currentWinTime < playerCelebrateTime * 0.5f && currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives){
+                        countdownUI.text = "Lives Increased";
                     }else{
-                        countdownUI.text = (playerCelebrateTime - currentWinTime) + " s";
+                        countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                     }
                 }
             }
         }else{
-            countdownUI.text = (playerRespawnTime - currentDeadTime) + " s";
+            countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
             if(currentDeadTime > playerRespawnTime){
                 //Loading:
                 countdownUI.text = "Loading...";
@@ -132,14 +176,19 @@ public class LevelManager : MonoBehaviour{
                 sendToAI()
                 */
 
-                //Reset Save File:
-                playerLifeTimer = 0f;
-                totalPoints = 0f;
-                totalEnemiesKilled = 0;
-                CreateSave_LevelEnd(1);
+                currentPlayerLives -= 1;
 
-                //Go Back to First Level:
-                SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
+                if(currentPlayerLives > 0){
+                    countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
+                    CreateSave_LevelEnd(currentLevelNumber);
+                    SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
+                }else{
+                    //Reset Save File:
+                    ResetSaveFile();
+
+                    //Go Back to First Level:
+                    SceneManager.LoadScene(currentLevelNumber / numberLevelsCheckpoint, LoadSceneMode.Single);
+                }
             }else{
                 //Enemy Dancing Time:
                 currentDeadTime += Time.deltaTime;
@@ -147,7 +196,7 @@ public class LevelManager : MonoBehaviour{
                 if(currentDeadTime < 1f){
                     countdownUI.text = "You Lost. :(";
                 }else{
-                    countdownUI.text = (playerRespawnTime - currentDeadTime) + " s";
+                    countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                 }
             }
         }
