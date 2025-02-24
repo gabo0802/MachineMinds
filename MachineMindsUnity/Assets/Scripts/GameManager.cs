@@ -28,13 +28,12 @@ public class GameManager : MonoBehaviour{
 
     public void PlayGame(){
         using (StreamWriter sw = File.CreateText(filePath)){
-            sw.WriteLine(3);
-            sw.WriteLine(1);
-            sw.WriteLine(0);
-            sw.WriteLine(0);
-            sw.WriteLine(0);        
-            sw.WriteLine(0);
-            sw.WriteLine(false);
+            sw.WriteLine(3); //lives
+            sw.WriteLine(0); //points
+            sw.WriteLine(0); //enemies killed
+            sw.WriteLine(1); //difficulty
+            sw.WriteLine(0); //time alive
+            sw.WriteLine(false); //training mode?
         }
 
         SceneManager.LoadScene("Scenes/Levels/Level1", LoadSceneMode.Single);
@@ -51,7 +50,7 @@ public class GameManager : MonoBehaviour{
             sw.WriteLine(1);
             sw.WriteLine(0);
             sw.WriteLine(0);
-            sw.WriteLine(0);        
+            sw.WriteLine(1);        
             sw.WriteLine(0);
             sw.WriteLine(true);
         }

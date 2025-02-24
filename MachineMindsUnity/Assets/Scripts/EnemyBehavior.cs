@@ -103,13 +103,22 @@ public class EnemyBehavior : MonoBehaviour{
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        if(currentDifficulty < 1){
+            currentDifficulty = 1;
+        }
+
+        if(maxEnemyHealth < 1){
+            maxEnemyHealth = 1;
+        }
+
         bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
-        currentEnemyHealth = maxEnemyHealth;
+        currentEnemyHealth = maxEnemyHealth * currentDifficulty;
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
 
         lastPosition = (Vector2) transform.position;
         patrolDestination = (Vector2) transform.position;
+
     }
     
 
@@ -138,14 +147,14 @@ public class EnemyBehavior : MonoBehaviour{
             if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
                 path.maxSpeed = 0.01f;
             }else{
-                path.maxSpeed = enemyMoveSpeed;
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty;
                 path.destination = currentActualTarget.transform.position;
 
                 PathFindingStuckFix(false);
             }
 
             //Shoot Player:
-            if(enemyFireTimer >= enemyFireRate){                
+            if(enemyFireTimer >= enemyFireRate / currentDifficulty){                
                 //Debug.Log(hit.transform.gameObject.name);
                 if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
                     if(cannonHead){
@@ -183,7 +192,7 @@ public class EnemyBehavior : MonoBehaviour{
                     Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
                 }
             }else{
-                path.maxSpeed = enemyMoveSpeed;
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty;
                 if(Vector2.Distance(transform.position, patrolDestination) <= 2f){
                     patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
                 }

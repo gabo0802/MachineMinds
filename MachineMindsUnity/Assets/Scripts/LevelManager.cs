@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviour{
     private int totalEnemiesKilled = 0;
 
     public float difficultyMultiplier = 2f;
-    public int currentDifficulty = 0;
+    public int currentDifficulty = 1;
     private float totalPoints = 0f;
     
     private int levelStartEnemies = 0;
@@ -44,7 +44,7 @@ public class LevelManager : MonoBehaviour{
     void OnEnemyDeath(int enemyPointWorth){
         totalEnemiesKilled += 1;
         currentEnemyTotal -= 1;
-        totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty));
+        totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
         
         pointsUI.text = totalPoints + " pts";
 
@@ -64,7 +64,6 @@ public class LevelManager : MonoBehaviour{
     void CreateSave_LevelRetry(int currentLevelNumber){            
         using (StreamWriter sw = File.CreateText(saveFilePath)){
             sw.WriteLine(currentPlayerLives);
-            sw.WriteLine(currentLevelNumber);
             sw.WriteLine(levelStartPoints);
             sw.WriteLine(levelStartEnemies);
             sw.WriteLine(currentDifficulty);        
@@ -76,7 +75,6 @@ public class LevelManager : MonoBehaviour{
     void CreateSave_LevelEnd(int currentLevelNumber){            
         using (StreamWriter sw = File.CreateText(saveFilePath)){
             sw.WriteLine(currentPlayerLives);
-            sw.WriteLine(currentLevelNumber);
             sw.WriteLine(totalPoints);
             sw.WriteLine(totalEnemiesKilled);
             sw.WriteLine(currentDifficulty);        
@@ -97,12 +95,11 @@ public class LevelManager : MonoBehaviour{
 
             string[] fileArray = saveFileData.Split('\n');
             currentPlayerLives = System.Int32.Parse(fileArray[0]);
-            //currentLevelNumber = System.Int32.Parse(fileArray[1]);
-            totalPoints = System.Single.Parse(fileArray[2]);
-            totalEnemiesKilled = System.Int32.Parse(fileArray[3]);
-            currentDifficulty = System.Int32.Parse(fileArray[4]);
-            playerLifeTimer = System.Single.Parse(fileArray[5]);
-            isTrainingMode = bool.Parse(fileArray[6]);
+            totalPoints = System.Single.Parse(fileArray[1]);
+            totalEnemiesKilled = System.Int32.Parse(fileArray[2]);
+            currentDifficulty = System.Int32.Parse(fileArray[3]);
+            playerLifeTimer = System.Single.Parse(fileArray[4]);
+            isTrainingMode = bool.Parse(fileArray[5]);
 
             playerLifeTimerStart = playerLifeTimer;
             levelStartEnemies = totalEnemiesKilled;
@@ -115,6 +112,9 @@ public class LevelManager : MonoBehaviour{
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
+
+        LoadSave();
+
         //Get enemy total + get player object
         Collider2D[] allHitObjectsInScence = Physics2D.OverlapCircleAll(new Vector2(0, 0), Mathf.Infinity);
         List<GameObject> allEnemies = new List<GameObject>();
@@ -127,18 +127,19 @@ public class LevelManager : MonoBehaviour{
                 currentEnemyTotal += 1;
             }else if(currentObjectName.ToLower().Contains(playerName)){
                 currentPlayer = currentHitObject.transform.gameObject;
+                currentPlayer.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
             }
         }
 
         foreach(GameObject enemyObject in allEnemies){
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentPlayer});
+            enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
         }
 
         pointsUI = currentPlayer.transform.GetChild(2).GetChild(1).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
         countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
 
         //Save point total across levels
-        LoadSave();
         pointsUI.text = totalPoints + " pts"; 
     }
 

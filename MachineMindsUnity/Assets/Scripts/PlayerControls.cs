@@ -20,10 +20,17 @@ public class PlayerControls : MonoBehaviour
     public bool isAlive = true;
     public TMPro.TextMeshProUGUI ammoUI = null;
     public int totalBullets = 10;
-    private int currentBullets;
+    private int currentBullets = 0;
     public GameObject cannonHead;
     public GameObject playerBullet;
     public float bulletShootDistance = 0.5f;
+
+    private int currentDifficulty = 1;
+
+    public void SetDifficultyLevel(int newDifficultyLevel){
+        currentDifficulty = newDifficultyLevel;
+        currentBullets = totalBullets * currentDifficulty;
+    }
 
     public void UpPress(){
         currentBullets += 1;
@@ -79,7 +86,10 @@ public class PlayerControls : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         rb = GetComponent<Rigidbody2D>();
-        currentBullets = totalBullets;
+
+        if(currentBullets == 0){
+            currentBullets = totalBullets * currentDifficulty;
+        }   
     }
 
     // Update is called once per frame
