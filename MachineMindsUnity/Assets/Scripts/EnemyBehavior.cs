@@ -177,21 +177,28 @@ public class EnemyBehavior : MonoBehaviour{
             transform.Rotate(0, 0, 1f);
         }else{
             RaycastHit2D lookForPlayerRay;
-            if(cannonHead){
-                lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
-            }else{
-                lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
-            }
-            cannonHead.transform.Rotate(new Vector3(0, 0, 1f));
 
-            if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(targetPlayer.transform.gameObject.name)){
-                int shootPlayerImmediatelyChance = (int) UnityEngine.Random.Range(0, 100);
-                currentActualTarget = targetPlayer;
-                
-                if(shootPlayerImmediatelyChance <= 50){
-                    Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+            for(int i = 0; i < 3; i++){          
+                if(i == 0){
+                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
+                    cannonHead.transform.Rotate(new Vector3(0, 0, 1f));
+                }else if(i == 2){
+                    lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
+                }else{
+                    lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity);
                 }
-            }else{
+
+                if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(targetPlayer.transform.gameObject.name)){
+                    int shootPlayerImmediatelyChance = (int) UnityEngine.Random.Range(0, 100);
+                    currentActualTarget = targetPlayer;
+                    
+                    if(shootPlayerImmediatelyChance <= 50){
+                        Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                    }
+                }
+            }
+            
+            if(!currentActualTarget){
                 path.maxSpeed = enemyMoveSpeed * currentDifficulty;
                 if(Vector2.Distance(transform.position, patrolDestination) <= 2f){
                     patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
