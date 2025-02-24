@@ -157,11 +157,13 @@ public class EnemyBehavior : MonoBehaviour{
             if(enemyFireTimer >= enemyFireRate / currentDifficulty){                
                 //Debug.Log(hit.transform.gameObject.name);
                 if(scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
+                    GameObject currentBullet;
                     if(cannonHead){
-                        Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                        currentBullet = (GameObject) Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
                     }else{
-                        Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
+                        currentBullet = (GameObject) Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
                     }
+                    currentBullet.SendMessageUpwards("SetTarget", targetPlayer);
                      
                     Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * scanAhead.distance), Color.red, enemyFireRate / 2);
                 }else{
@@ -181,11 +183,14 @@ public class EnemyBehavior : MonoBehaviour{
             for(int i = 0; i < 3; i++){          
                 if(i == 0){
                     lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
+                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
                     cannonHead.transform.Rotate(new Vector3(0, 0, 1f));
                 }else if(i == 2){
                     lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
+                    Debug.DrawLine(transform.position + (transform.up * bulletShotSpawnOffset), transform.position + (transform.up * 100f), Color.blue);
                 }else{
                     lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity);
+                    Debug.DrawLine(transform.position - (transform.up * bulletShotSpawnOffset), transform.position - (transform.up * 100f), Color.blue);
                 }
 
                 if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(targetPlayer.transform.gameObject.name)){
