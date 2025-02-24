@@ -62,7 +62,7 @@ public class EnemyBehavior : MonoBehaviour{
     void OnBulletHit(GameObject bullet){
         //string bulletType = bullet.name;
         //Debug.Log("Enemy Bullet Hit" + bulletType);
-        if(cannonHead){
+        if(!currentActualTarget && cannonHead){
             cannonHead.transform.up = bullet.transform.position - transform.position;
         }
 
