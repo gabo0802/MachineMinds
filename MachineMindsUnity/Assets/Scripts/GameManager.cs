@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour{
 
         using (StreamWriter sw = File.CreateText(filePath)){
             sw.WriteLine(3);
-            sw.WriteLine(1);
             sw.WriteLine(0);
             sw.WriteLine(0);
             sw.WriteLine(1);        
