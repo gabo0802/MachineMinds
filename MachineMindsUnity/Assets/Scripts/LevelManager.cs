@@ -214,7 +214,7 @@ public class LevelManager : MonoBehaviour{
 
                         if (!File.Exists(aiTrainingFilePath)){
                             using (StreamWriter sw = File.CreateText(aiTrainingFilePath)){
-                                sw.WriteLine("currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty");
+                                sw.WriteLine("currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty");
                                 sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
                             }
                         }else{
