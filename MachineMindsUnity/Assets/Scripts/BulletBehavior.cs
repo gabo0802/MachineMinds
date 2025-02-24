@@ -31,6 +31,7 @@ public class BulletBehavior : MonoBehaviour{
     void OnBulletHit(GameObject bullet){
         /*if(bullet){
             Destroy(bullet);
+            joe mama test change
         }*/
 
          if(isExplody){
