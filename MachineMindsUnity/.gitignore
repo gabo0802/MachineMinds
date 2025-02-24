@@ -73,9 +73,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Extra Ignored Files:
-Assets/Resources/GameState.save
-Assets/Resources/GameState.save.meta
-Assets/Sprites/Textures/Grass_corrupted_left.png
-Assets/Sprites/Textures/snow_super_dark.png
-Assets/Resources/game_data.csv
-Assets/AstarPathfindingProject/*
+./Assets/Resources/GameState.save
+./Assets/Resources/GameState.save.meta
+./Assets/Sprites/Textures/Grass_corrupted_left.png
+./Assets/Sprites/Textures/snow_super_dark.png
+./Assets/Resources/game_data.csv
+./Assets/AstarPathfindingProject/*
