@@ -10,12 +10,13 @@ public class BulletBehavior : MonoBehaviour{
     public float bulletLifeTime = 10f; // -Gabe: Still think that this should be a bounce count instead of lifetime.
     private float bulletLifeTimer = 0f;
     
-    private int bounceCap = 2;
+    public int bounceCap = 2;
     public float bulletDetectRange = 0.25f;
     
     public bool isBouncy = true;
     
     public bool isExplody = false;
+    private float worldScale = 2.0f;
     public float explosionRadius = 20f;
     public GameObject explosionObject;
 
@@ -38,8 +39,9 @@ public class BulletBehavior : MonoBehaviour{
             Destroy(bullet);
 
             Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-            Instantiate(explosionObject, transform.position, transform.rotation);
-
+            GameObject currentExplosionObject = (GameObject) Instantiate(explosionObject, transform.position, transform.rotation);
+            currentExplosionObject.transform.localScale = new Vector3(explosionRadius * worldScale, explosionRadius * worldScale, 1);
+            
             foreach(Collider2D currentExplodedObject in allExplodedObjects){
                 currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
             }
@@ -85,7 +87,12 @@ public class BulletBehavior : MonoBehaviour{
             
             if(isExplody){
                 Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-                Instantiate(explosionObject, transform.position, transform.rotation);
+                GameObject currentExplosionObject = (GameObject) Instantiate(explosionObject, transform.position, transform.rotation);
+                currentExplosionObject.transform.localScale = new Vector3(explosionRadius * worldScale, explosionRadius * worldScale, 1);
+
+                Debug.DrawLine(transform.position - new Vector3(explosionRadius, 0, 0), transform.position + new Vector3(explosionRadius, 0, 0), Color.red, 2.5f);
+                Debug.DrawLine(transform.position - new Vector3(0, explosionRadius, 0), transform.position + new Vector3(0, explosionRadius, 0), Color.red, 2.5f);
+
 
                 foreach(Collider2D currentExplodedObject in allExplodedObjects){
                     currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");

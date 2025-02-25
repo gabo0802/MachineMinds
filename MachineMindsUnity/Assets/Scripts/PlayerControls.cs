@@ -9,6 +9,8 @@ public class PlayerControls : MonoBehaviour
     private Rigidbody2D rb;
     //public float playerRotateSpeed = 1f;
     public float playerMoveSpeed = 1f;
+    public float playerMoveSpeedMultiplierMax = 2f;
+    private float playerMoveSpeedMultiplier;
     public GameObject playerBody;
     
     private bool pressW = false;
@@ -99,6 +101,12 @@ public class PlayerControls : MonoBehaviour
             Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             cannonHead.transform.up = mouseScreenPosition - (Vector2) cannonHead.transform.position;
 
+            if(Input.GetKey(KeyCode.LeftShift)){
+                playerMoveSpeedMultiplier = playerMoveSpeedMultiplierMax;
+            }else{
+                playerMoveSpeedMultiplier = 1f;
+            }
+
             if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentBullets > 0){
                 currentBullets--;
                 Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
@@ -110,18 +118,18 @@ public class PlayerControls : MonoBehaviour
             string currentPlayerRotationString = "";
 
             if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || pressW){
-                currentPlayerVelocity += transform.up * playerMoveSpeed;
+                currentPlayerVelocity += transform.up * playerMoveSpeed * playerMoveSpeedMultiplier;
                 currentPlayerRotationString += "W";
             }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || pressS){
-                currentPlayerVelocity -= transform.up * playerMoveSpeed;
+                currentPlayerVelocity -= transform.up * playerMoveSpeed * playerMoveSpeedMultiplier;
                 currentPlayerRotationString += "S";
             }
             
             if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || pressA){
-                currentPlayerVelocity -= transform.right * playerMoveSpeed;
+                currentPlayerVelocity -= transform.right * playerMoveSpeed * playerMoveSpeedMultiplier;
                 currentPlayerRotationString += "A";
             }else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || pressD){
-                currentPlayerVelocity += transform.right * playerMoveSpeed;
+                currentPlayerVelocity += transform.right * playerMoveSpeed * playerMoveSpeedMultiplier;
                 currentPlayerRotationString += "D";
             }
 
