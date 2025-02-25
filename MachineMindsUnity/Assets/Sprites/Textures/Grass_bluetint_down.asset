@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Grass_corrupted_left
+  m_Name: Grass_bluetint_down
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -1603860134203914603, guid: d98da30715081448d8b3c384229133da, type: 3}
+  m_Sprite: {fileID: -3627287359853018453, guid: 5646cb2c4cbb145a2a4376883a2813db, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

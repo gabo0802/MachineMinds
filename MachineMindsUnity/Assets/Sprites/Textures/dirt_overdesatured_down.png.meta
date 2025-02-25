@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dcd26e1627ec442d3ac106a1d4a8ba03
+guid: 91047f5329f1641bf8a2f02309eb5389
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5294945246212562882
-    second: snow_super_dark copy_0
+      213: -2746662577761006366
+    second: dirt_overdesatured_down_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: snow_super_dark copy_0
+      name: dirt_overdesatured_down_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e306b563a539486b0800000000000000
-      internalID: -5294945246212562882
+      spriteID: 2ec42be10f4e1e9d0800000000000000
+      internalID: -2746662577761006366
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      snow_super_dark copy_0: -5294945246212562882
+      dirt_overdesatured_down_0: -2746662577761006366
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
