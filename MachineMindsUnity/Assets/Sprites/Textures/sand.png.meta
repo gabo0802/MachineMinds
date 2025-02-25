@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 521e12763c5634e44a33c34267921e67
+guid: 718a633f35a1e44738de778660709950
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6615875730055799439
-    second: snow_dark_step_003_0
+      213: 4360390788417139489
+    second: sand_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 2000
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: snow_dark_step_003_0
+      name: sand_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 17d55ef6310bf24a0800000000000000
-      internalID: -6615875730055799439
+      spriteID: 1233d79d158338c30800000000000000
+      internalID: 4360390788417139489
       vertices: []
       indices: 
       edges: []
@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sand_0: 4360390788417139489
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

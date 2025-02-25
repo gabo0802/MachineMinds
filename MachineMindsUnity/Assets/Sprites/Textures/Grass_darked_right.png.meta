@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 521e12763c5634e44a33c34267921e67
+guid: 35003202d398d49569ee170434b0924b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6615875730055799439
-    second: snow_dark_step_003_0
+      213: 6889841294570913697
+    second: Grass_darked_right_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: snow_dark_step_003_0
+      name: Grass_darked_right_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 17d55ef6310bf24a0800000000000000
-      internalID: -6615875730055799439
+      spriteID: 1af77b94722ad9f50800000000000000
+      internalID: 6889841294570913697
       vertices: []
       indices: 
       edges: []
