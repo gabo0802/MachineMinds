@@ -4,6 +4,10 @@ using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour{
     public GameObject cannonHead;
+    
+    public GameObject tireThreads;
+    private float tireThreadRevealTimer = 0f;
+    public float tireThreadRevealInterval = 0.5f;
 
     private Rigidbody2D rb;
 
@@ -125,6 +129,14 @@ public class EnemyBehavior : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(tireThreads){
+            if(path.maxSpeed > 0.01f && tireThreadRevealTimer < 0){
+                tireThreadRevealTimer = tireThreadRevealInterval;
+                Instantiate(tireThreads, transform.position, transform.rotation);
+            }else{
+                tireThreadRevealTimer -= Time.deltaTime;
+            }
+        }
         if(currentActualTarget){
             if(cannonHead){
                 cannonHead.transform.up = currentActualTarget.transform.position - transform.position;
