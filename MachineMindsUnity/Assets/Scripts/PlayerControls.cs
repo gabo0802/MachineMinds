@@ -9,8 +9,13 @@ public class PlayerControls : MonoBehaviour
     private Rigidbody2D rb;
     //public float playerRotateSpeed = 1f;
     public float playerMoveSpeed = 1f;
+
     public float playerMoveSpeedMultiplierMax = 2f;
     private float playerMoveSpeedMultiplier;
+    public float coolDownRatio = 0.5f;    
+    public float timeYouCanGoFast = 5f;    
+    private float speedTimer;      
+
     public GameObject playerBody;
     
     private bool pressW = false;
@@ -87,6 +92,7 @@ public class PlayerControls : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        speedTimer = timeYouCanGoFast;
         rb = GetComponent<Rigidbody2D>();
 
         if(currentBullets == 0){
@@ -101,10 +107,13 @@ public class PlayerControls : MonoBehaviour
             Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             cannonHead.transform.up = mouseScreenPosition - (Vector2) cannonHead.transform.position;
 
-            if(Input.GetKey(KeyCode.LeftShift)){
+            if(speedTimer > 0 && Input.GetKey(KeyCode.LeftShift)){
+                speedTimer -= Time.deltaTime;
                 playerMoveSpeedMultiplier = playerMoveSpeedMultiplierMax;
             }else{
                 playerMoveSpeedMultiplier = 1f;
+                
+                speedTimer += Time.deltaTime * coolDownRatio;
             }
 
             if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentBullets > 0){

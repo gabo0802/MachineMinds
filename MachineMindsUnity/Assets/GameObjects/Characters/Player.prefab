@@ -299,6 +299,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMoveSpeed: 1
+  playerMoveSpeedMultiplierMax: 4
+  coolDownRatio: 0.25
+  timeYouCanGoFast: 2
   playerBody: {fileID: 7382355330975566920}
   isAlive: 1
   ammoUI: {fileID: 966779412048728479}
