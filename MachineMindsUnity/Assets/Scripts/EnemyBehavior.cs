@@ -193,7 +193,7 @@ public class EnemyBehavior : MonoBehaviour{
         }else{
             RaycastHit2D lookForPlayerRay;
 
-            for(int i = 0; i < 3; i++){          
+            for(int i = 0; i < 4; i++){          
                 if(i == 0){
                     lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
                     Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
@@ -201,19 +201,16 @@ public class EnemyBehavior : MonoBehaviour{
                 }else if(i == 2){
                     lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
                     Debug.DrawLine(transform.position + (transform.up * bulletShotSpawnOffset), transform.position + (transform.up * 100f), Color.blue);
+                }else if(i == 3){
+                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position - (transform.up * bulletShotSpawnOffset), -cannonHead.transform.up, Mathf.Infinity);
+                    Debug.DrawLine(cannonHead.transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position - (cannonHead.transform.up * 100f), Color.white);
                 }else{
                     lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity);
                     Debug.DrawLine(transform.position - (transform.up * bulletShotSpawnOffset), transform.position - (transform.up * 100f), Color.blue);
                 }
 
                 if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(targetPlayer.transform.gameObject.name)){
-                    int shootPlayerImmediatelyChance = (int) UnityEngine.Random.Range(0, 100);
                     currentActualTarget = targetPlayer;
-                    
-                    if(shootPlayerImmediatelyChance <= 50){
-                        GameObject currentBullet = (GameObject) Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
-                        currentBullet.SendMessageUpwards("SetTarget", targetPlayer);
-                    }
                 }
             }
             
