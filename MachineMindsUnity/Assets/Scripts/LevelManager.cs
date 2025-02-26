@@ -128,6 +128,7 @@ public class LevelManager : MonoBehaviour{
             }else if(currentObjectName.ToLower().Contains(playerName)){
                 currentPlayer = currentHitObject.transform.gameObject;
                 currentPlayer.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
+                currentPlayer.SendMessageUpwards("SetLivesUI", currentPlayerLives);
             }
         }
 

@@ -12,7 +12,7 @@ public class PlayerControls : MonoBehaviour
 
     public float playerMoveSpeedMultiplierMax = 2f;
     private float playerMoveSpeedMultiplier;
-    public float coolDownRatio = 0.5f;    
+    public float coolDownRatio = 0.1f;    
     public float timeYouCanGoFast = 5f;    
     private float speedTimer;      
 
@@ -26,17 +26,35 @@ public class PlayerControls : MonoBehaviour
     //Shooting
     public bool isAlive = true;
     public TMPro.TextMeshProUGUI ammoUI = null;
+    public UnityEngine.UI.Image fuelBar = null;
+    public UnityEngine.UI.Image[] playerHearts;
     public int totalBullets = 10;
     private int currentBullets = 0;
+    private int currentLives = 3;
     public GameObject cannonHead;
     public GameObject playerBullet;
     public float bulletShootDistance = 0.5f;
+
+    private const float screenSizeMuliplier = 2f;
+    private const float fuelBarSizeMuliplier = 165f / 2f;
 
     private int currentDifficulty = 1;
 
     public void SetDifficultyLevel(int newDifficultyLevel){
         currentDifficulty = newDifficultyLevel;
         currentBullets = totalBullets * currentDifficulty;
+    }
+
+    public void SetLivesUI(int newLives){
+        currentLives = newLives;
+
+        for(int i = 0; i < currentLives; i++){
+            playerHearts[i].color = new Color(1f, 1f, 1f, 1f);
+        }
+
+        for(int i = currentLives; i < playerHearts.Length; i++){
+            playerHearts[i].color = new Color(1f, 1f, 1f, 0f);
+        }
     }
 
     public void UpPress(){
@@ -113,8 +131,22 @@ public class PlayerControls : MonoBehaviour
             }else{
                 playerMoveSpeedMultiplier = 1f;
                 
-                speedTimer += Time.deltaTime * coolDownRatio;
+                if(speedTimer < timeYouCanGoFast){
+                    speedTimer += (Time.deltaTime * coolDownRatio);
+                }else if (speedTimer > timeYouCanGoFast){
+                    speedTimer = timeYouCanGoFast;
+                }
             }
+            fuelBar.rectTransform.sizeDelta = new Vector2(fuelBarSizeMuliplier * speedTimer, 15);
+            if(speedTimer >= 0.5f * timeYouCanGoFast){
+                fuelBar.color = new Color(0f, 1f, 0f);
+            }else if (speedTimer >= 0.25f * timeYouCanGoFast){
+                fuelBar.color = new Color(1f, 1f, 0f);
+            }else{
+                fuelBar.color = new Color(1f, 0f, 0f);
+            }
+            fuelBar.rectTransform.anchoredPosition = new Vector2((fuelBarSizeMuliplier * 0.9f) * (speedTimer - timeYouCanGoFast), -3);
+                
 
             if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentBullets > 0){
                 currentBullets--;
