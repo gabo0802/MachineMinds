@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2412896ee4029437a85774c801a2cc95
+guid: d98da30715081448d8b3c384229133da
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6047294879479758950
-    second: PNG image 6_0
+      213: -3528820129422945910
+    second: Grass_corrupted_left_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PNG image 6_0
+      name: Grass_corrupted_left_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 7
-        width: 72
-        height: 62
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6600e6727ae4ce350800000000000000
-      internalID: 6047294879479758950
+      spriteID: a815f7de9cc170fc0800000000000000
+      internalID: -3528820129422945910
       vertices: []
       indices: 
       edges: []

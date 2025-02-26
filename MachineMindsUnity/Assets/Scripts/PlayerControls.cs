@@ -28,6 +28,8 @@ public class PlayerControls : MonoBehaviour
     public TMPro.TextMeshProUGUI ammoUI = null;
     public UnityEngine.UI.Image fuelBar = null;
     public UnityEngine.UI.Image[] playerHearts;
+    public const string spritePath = "DynamicSprites/heart_empty"; // Path inside Resources folder
+    public const string spritePathFull = "DynamicSprites/heart_full"; // Path inside Resources folder
     public int totalBullets = 10;
     private int currentBullets = 0;
     private int currentLives = 3;
@@ -48,12 +50,36 @@ public class PlayerControls : MonoBehaviour
     public void SetLivesUI(int newLives){
         currentLives = newLives;
 
+        // Load New Sprites
+        Texture2D emptyTexture = Resources.Load<Texture2D>(spritePath); 
+        Texture2D fullTexture = Resources.Load<Texture2D>(spritePathFull); 
+
+        // Check if textures loaded properly
+        if (emptyTexture == null || fullTexture == null)
+        {
+            Debug.LogError($"Failed to load textures! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+
+        Sprite emptyHeart = Sprite.Create(emptyTexture, new Rect(0, 0, emptyTexture.width, emptyTexture.height), new Vector2(0.5f, 0.5f));
+        Sprite fullHeart = Sprite.Create(fullTexture, new Rect(0, 0, fullTexture.width, fullTexture.height), new Vector2(0.5f, 0.5f));
+        if (emptyHeart == null || fullHeart == null)
+        {
+            Debug.LogError($"Failed to load sprites! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+        else
+        {
+            Debug.Log("Successfully loaded heart sprites!");
+        }
+
+
         for(int i = 0; i < currentLives; i++){
-            playerHearts[i].color = new Color(1f, 1f, 1f, 1f);
+            playerHearts[i].sprite = fullHeart;
         }
 
         for(int i = currentLives; i < playerHearts.Length; i++){
-            playerHearts[i].color = new Color(1f, 1f, 1f, 0f);
+            playerHearts[i].sprite = emptyHeart;
         }
     }
 
