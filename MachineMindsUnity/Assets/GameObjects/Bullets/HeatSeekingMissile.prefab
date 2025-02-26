@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3819023770226869242}
   - component: {fileID: -1928526246842692471}
   - component: {fileID: 2655843442178917027}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HeatSeekingMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

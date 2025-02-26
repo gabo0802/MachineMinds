@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 255078769732338493}
   - component: {fileID: 2788074997186063770}
   - component: {fileID: 8426883570805883517}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: StongEnemyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 3
   bulletLifeTime: 10
+  bounceCap: 2
   bulletDetectRange: 0.25
   isBouncy: 1
   isExplody: 0
   explosionRadius: 20
+  explosionObject: {fileID: 0}
+  targetPlayer: {fileID: 0}

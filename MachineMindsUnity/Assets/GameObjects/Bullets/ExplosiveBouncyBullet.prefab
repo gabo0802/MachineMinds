@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5948649844995984493}
   - component: {fileID: 594207521731106153}
   - component: {fileID: 805651900415447071}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ExplosiveBouncyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

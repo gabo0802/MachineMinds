@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 723188090833091744}
   - component: {fileID: 1373856357507148557}
   - component: {fileID: 4743618767375667076}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FastEnemyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 3
   bulletLifeTime: 10
+  bounceCap: 2
   bulletDetectRange: 0.25
   isBouncy: 1
   isExplody: 0
   explosionRadius: 20
+  explosionObject: {fileID: 0}
+  targetPlayer: {fileID: 0}

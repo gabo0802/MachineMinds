@@ -11,8 +11,8 @@ TagManager:
   - Obstacle
   - Water
   - UI
-  - 
-  - 
+  - InteractableGround
+  - Bullets
   - 
   - 
   - 

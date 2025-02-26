@@ -80,7 +80,12 @@ public class BulletBehavior : MonoBehaviour{
         float moveDistance = bulletSpeed * Time.fixedDeltaTime;
         
         // Raycast ahead to check if a collision will happen before moving
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + (transform.up * ((transform.localScale.magnitude / 2) + 0.1f)), moveDirection, moveDistance);
+        int layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position + (transform.up * ((transform.localScale.magnitude / 2) + 0.1f)),
+            moveDirection, 
+            moveDistance, 
+            layerMask);
         if (hit)
         {
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);

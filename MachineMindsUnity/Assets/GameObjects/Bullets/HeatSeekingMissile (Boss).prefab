@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7671835230483656576}
   - component: {fileID: 2308124293811928565}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 3819023770226869242}
   - component: {fileID: -1928526246842692471}
   - component: {fileID: 2655843442178917027}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HeatSeekingMissile (Boss)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,7 +290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5387168468361063744}
   - component: {fileID: 5068322490720034567}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100481768578176279}
   - component: {fileID: 5880120959389276478}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Triangle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
