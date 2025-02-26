@@ -31,6 +31,7 @@ public class EndScreenScript : MonoBehaviour{
             string totalPoints = fileArray[1];
 
             finalPointsUI.text = "Final Score: " + totalPoints;
+            //test comment
          }
     }
 }
