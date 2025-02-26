@@ -344,7 +344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 891255317174473891, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
       propertyPath: m_UiScaleMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 891255317174473891, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
       propertyPath: m_PhysicalUnit
@@ -368,7 +368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 891255317174473891, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
       propertyPath: m_MatchWidthOrHeight
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 891255317174473891, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
       propertyPath: m_ReferencePixelsPerUnit
