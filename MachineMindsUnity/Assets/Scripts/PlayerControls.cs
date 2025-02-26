@@ -38,7 +38,7 @@ public class PlayerControls : MonoBehaviour
     public float bulletShootDistance = 0.5f;
 
     private const float screenSizeMuliplier = 2f;
-    private const float fuelBarSizeMuliplier = 165f / 2f;
+    private const float fuelBarSizeMuliplier = 170f / 2f;
 
     private int currentDifficulty = 1;
 
