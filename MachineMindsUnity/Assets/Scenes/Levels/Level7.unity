@@ -342,6 +342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3299199179178629876, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7728608257014334132, guid: dce806fa5c6c544968f9a6f2deafe0a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18.553474
@@ -19266,7 +19270,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 7, y: 5}
+  m_Size: {x: 8.8, y: 6.8}
   m_EdgeRadius: 0
 --- !u!1001 &2042158541
 PrefabInstance:

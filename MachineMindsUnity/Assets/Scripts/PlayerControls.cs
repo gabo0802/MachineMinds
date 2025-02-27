@@ -44,7 +44,7 @@ public class PlayerControls : MonoBehaviour
     private int currentDifficulty = 1;
 
     public void AffectSlowdownSpeed(float newMultiplier){
-        playerMoveSpeedSlowMultiplier = playerMoveSpeedSlowMultiplier == newMultiplier ? 1f : newMultiplier;
+        playerMoveSpeedSlowMultiplier = newMultiplier;
     }
 
     public void SetDifficultyLevel(int newDifficultyLevel){

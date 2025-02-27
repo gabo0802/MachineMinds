@@ -10,6 +10,7 @@ public class EnemyBehavior : MonoBehaviour{
     public float tireThreadRevealInterval = 0.5f;
 
     private Rigidbody2D rb;
+    int layerMask;
 
     private AIPath path;
     private bool canShoot;
@@ -44,7 +45,7 @@ public class EnemyBehavior : MonoBehaviour{
     private int currentDifficulty = 0;
 
     public void AffectSlowdownSpeed(float newMultiplier){
-        enemyMoveSpeedSlowMultiplier = enemyMoveSpeedSlowMultiplier == newMultiplier ? 1f : newMultiplier;
+        enemyMoveSpeedSlowMultiplier = newMultiplier;
     }
 
     public void SetGameObjects(GameObject[] parameters){
@@ -113,6 +114,8 @@ public class EnemyBehavior : MonoBehaviour{
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
+
         if(currentDifficulty < 1){
             currentDifficulty = 1;
         }
@@ -149,9 +152,9 @@ public class EnemyBehavior : MonoBehaviour{
 
             RaycastHit2D scanAhead;
             if(cannonHead){
-                scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
+                scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
             }else{
-                scanAhead = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
+                scanAhead = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
             }
 
             //Target Player:
@@ -200,17 +203,17 @@ public class EnemyBehavior : MonoBehaviour{
 
             for(int i = 0; i < 4; i++){          
                 if(i == 0){
-                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity);
+                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
                     Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
                     cannonHead.transform.Rotate(new Vector3(0, 0, 1f));
                 }else if(i == 2){
-                    lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity);
+                    lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
                     Debug.DrawLine(transform.position + (transform.up * bulletShotSpawnOffset), transform.position + (transform.up * 100f), Color.blue);
                 }else if(i == 3){
-                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position - (transform.up * bulletShotSpawnOffset), -cannonHead.transform.up, Mathf.Infinity);
+                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position - (transform.up * bulletShotSpawnOffset), -cannonHead.transform.up, Mathf.Infinity, layerMask);
                     Debug.DrawLine(cannonHead.transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position - (cannonHead.transform.up * 100f), Color.white);
                 }else{
-                    lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity);
+                    lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity, layerMask);
                     Debug.DrawLine(transform.position - (transform.up * bulletShotSpawnOffset), transform.position - (transform.up * 100f), Color.blue);
                 }
 

@@ -38,7 +38,7 @@ public class WallBehavior : MonoBehaviour{
         if(slowsCharacter){
             if(other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy")){
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
-               other.transform.SendMessage("AffectSlowdownSpeed", slowDownRatio);
+               other.transform.SendMessage("AffectSlowdownSpeed", 1f);
             }
         }
     }
