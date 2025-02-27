@@ -23,6 +23,8 @@ public class BulletBehavior : MonoBehaviour{
     private AIPath pathFinder;
     public GameObject targetPlayer;
 
+    public float bulletDiameter = 0f;
+
     public void SetTarget(GameObject newTarget){
         targetPlayer = newTarget;
         pathFinder = GetComponent<AIPath>();
@@ -66,6 +68,10 @@ public class BulletBehavior : MonoBehaviour{
     void Start(){
         rb = GetComponent<Rigidbody2D>();
         pathFinder = GetComponent<AIPath>();
+        
+        if(bulletDiameter == 0f){
+            bulletDiameter = transform.localScale.x;
+        }
     }
 
     // Update is called once per frame
@@ -87,13 +93,13 @@ public class BulletBehavior : MonoBehaviour{
             layerMask);*/
         
         RaycastHit2D hit = Physics2D.CircleCast(
-            transform.position + (transform.up * (transform.localScale.x + 0.1f)),
-            (transform.localScale.x / 2),
+            transform.position + (transform.up * (bulletDiameter + 0.1f)),
+            (bulletDiameter / 2),
             moveDirection, 
             moveDistance, 
             layerMask);
         
-        Debug.DrawLine(transform.position + (transform.up * (transform.localScale.x + 0.1f)), 
+        Debug.DrawLine(transform.position + (transform.up * (bulletDiameter + 0.1f)), 
         transform.position + (transform.up * moveDistance), Color.white);
 
 
