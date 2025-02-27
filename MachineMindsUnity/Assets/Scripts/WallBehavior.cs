@@ -26,7 +26,7 @@ public class WallBehavior : MonoBehaviour{
     void OnTriggerEnter2D(Collider2D other){
         Debug.Log("Slowing down something");
         if(slowsCharacter){
-            if(other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy")){
+            if(!other.gameObject.name.ToLower().Contains("bullet") && (other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy"))){
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
                other.transform.SendMessage("AffectSlowdownSpeed", slowDownRatio);
             }
@@ -36,7 +36,7 @@ public class WallBehavior : MonoBehaviour{
     void OnTriggerExit2D(Collider2D other){
         Debug.Log("Speeding up something");
         if(slowsCharacter){
-            if(other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy")){
+            if(!other.gameObject.name.ToLower().Contains("bullet") && (other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy"))){
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
                other.transform.SendMessage("AffectSlowdownSpeed", 1f);
             }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 723188090833091744}
   - component: {fileID: 1373856357507148557}
   - component: {fileID: 4743618767375667076}
+  - component: {fileID: -3777017011653852004}
   m_Layer: 7
   m_Name: FastEnemyBullet
   m_TagString: Untagged
@@ -137,3 +138,39 @@ MonoBehaviour:
   explosionRadius: 20
   explosionObject: {fileID: 0}
   targetPlayer: {fileID: 0}
+--- !u!58 &-3777017011653852004
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4939650420335017065}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
