@@ -8,7 +8,6 @@ public class PlayerControlsNEW : MonoBehaviour
     public GameObject playerBody;
     public GameObject cannonHead;
 
-    private bool isAlive = true;
     private Rigidbody2D rb;
 
     public float playerMoveSpeed = 1f;
@@ -56,7 +55,7 @@ public class PlayerControlsNEW : MonoBehaviour
         Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
     }
 
-    public void AffectSlowdownSpeed(float newMultiplier){
+    public void AffectSpeed(float newMultiplier){
         playerMoveSpeedSlowMultiplier = newMultiplier;
     }
 
@@ -119,7 +118,6 @@ public class PlayerControlsNEW : MonoBehaviour
     void OnExplosionHit(){
         //Debug.Log(gameObject.name + " got hit be explosion");
 
-        isAlive = false;
         Destroy(gameObject);
     }
 
@@ -130,7 +128,6 @@ public class PlayerControlsNEW : MonoBehaviour
             Destroy(bullet);
         }
 
-        isAlive = false;
         Destroy(gameObject);
     }
 
@@ -141,7 +138,7 @@ public class PlayerControlsNEW : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        if(isAlive){
+        if(gameObject){
             //Move Cannon to Mouse Position
             Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             cannonHead.transform.up = mouseScreenPosition - (Vector2) cannonHead.transform.position;

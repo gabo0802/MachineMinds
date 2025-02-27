@@ -8,7 +8,7 @@ public class SpeedAffectingMaterialScript : MonoBehaviour{
        
         if(!other.gameObject.name.ToLower().Contains("bullet") && (other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy"))){
         //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
-            other.transform.SendMessage("AffectSlowdownSpeed", speedAffect);
+            other.transform.SendMessage("AffectSpeed", speedAffect);
         }
     }
 
@@ -17,7 +17,7 @@ public class SpeedAffectingMaterialScript : MonoBehaviour{
         
         if(!other.gameObject.name.ToLower().Contains("bullet") && (other.gameObject.name.ToLower().Contains("player") || other.gameObject.name.ToLower().Contains("enemy"))){
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
-            other.transform.SendMessage("AffectSlowdownSpeed", 1f);
+            other.transform.SendMessage("AffectSpeed", 1f);
         }
     }
 }
