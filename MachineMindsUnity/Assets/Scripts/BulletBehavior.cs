@@ -80,11 +80,23 @@ public class BulletBehavior : MonoBehaviour{
         
         // Raycast ahead to check if a collision will happen before moving
         int layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
-        RaycastHit2D hit = Physics2D.Raycast(
+        /*RaycastHit2D hit = Physics2D.Raycast(
             transform.position + (transform.up * ((transform.localScale.magnitude / 2) + 0.1f)),
             moveDirection, 
             moveDistance, 
+            layerMask);*/
+        
+        RaycastHit2D hit = Physics2D.CircleCast(
+            transform.position + (transform.up * (transform.localScale.x + 0.1f)),
+            (transform.localScale.x / 2),
+            moveDirection, 
+            moveDistance, 
             layerMask);
+        
+        Debug.DrawLine(transform.position + (transform.up * (transform.localScale.x + 0.1f)), 
+        transform.position + (transform.up * moveDistance), Color.white);
+
+
         if (hit)
         {
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);

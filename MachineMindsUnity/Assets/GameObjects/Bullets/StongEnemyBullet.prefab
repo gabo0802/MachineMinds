@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 255078769732338493}
   - component: {fileID: 2788074997186063770}
   - component: {fileID: 8426883570805883517}
-  - component: {fileID: 7316288062315342206}
+  - component: {fileID: 5515128223119496543}
   m_Layer: 7
   m_Name: StongEnemyBullet
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8426883570805883517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,8 +138,8 @@ MonoBehaviour:
   explosionRadius: 20
   explosionObject: {fileID: 0}
   targetPlayer: {fileID: 0}
---- !u!58 &7316288062315342206
-CircleCollider2D:
+--- !u!70 &5515128223119496543
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -173,4 +173,5 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0

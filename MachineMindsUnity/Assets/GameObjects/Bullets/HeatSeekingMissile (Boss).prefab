@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8426883570805883517}
   - component: {fileID: 3819023770226869242}
   - component: {fileID: -1928526246842692471}
-  - component: {fileID: 2655843442178917027}
+  - component: {fileID: 8218062174762688019}
   m_Layer: 7
   m_Name: HeatSeekingMissile (Boss)
   m_TagString: Untagged
@@ -152,7 +152,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8426883570805883517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,8 +244,8 @@ MonoBehaviour:
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
---- !u!58 &2655843442178917027
-CircleCollider2D:
+--- !u!70 &8218062174762688019
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -278,8 +278,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.05083108}
-  m_Radius: 0.26848435
+  m_Offset: {x: 0, y: -0.05}
+  m_Size: {x: 0.25, y: 0.7}
+  m_Direction: 0
 --- !u!1 &5741968899894224074
 GameObject:
   m_ObjectHideFlags: 0
