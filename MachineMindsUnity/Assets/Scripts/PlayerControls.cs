@@ -11,7 +11,8 @@ public class PlayerControls : MonoBehaviour
     public float playerMoveSpeed = 1f;
 
     public float playerMoveSpeedMultiplierMax = 2f;
-    private float playerMoveSpeedMultiplier;
+    private float playerMoveSpeedMultiplier;    
+    private float playerMoveSpeedSlowMultiplier = 1f;
     public float coolDownRatio = 0.1f;    
     public float timeYouCanGoFast = 5f;    
     private float speedTimer;      
@@ -41,6 +42,10 @@ public class PlayerControls : MonoBehaviour
     private const float fuelBarSizeMuliplier = 170f / 2f;
 
     private int currentDifficulty = 1;
+
+    public void AffectSlowdownSpeed(float newMultiplier){
+        playerMoveSpeedSlowMultiplier = playerMoveSpeedSlowMultiplier == newMultiplier ? 1f : newMultiplier;
+    }
 
     public void SetDifficultyLevel(int newDifficultyLevel){
         currentDifficulty = newDifficultyLevel;
@@ -200,7 +205,7 @@ public class PlayerControls : MonoBehaviour
                 currentPlayerRotationString += "D";
             }
 
-            rb.linearVelocity = currentPlayerVelocity;
+            rb.linearVelocity = currentPlayerVelocity * playerMoveSpeedSlowMultiplier;
 
             //Rotation:
             if(currentPlayerRotationString == "WA" || currentPlayerRotationString == "SD" ){

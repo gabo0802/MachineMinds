@@ -23,6 +23,7 @@ public class EnemyBehavior : MonoBehaviour{
     private Vector2 patrolDestination;
     
     public float enemyMoveSpeed = 1f;
+    private float enemyMoveSpeedSlowMultiplier = 1f;
 
     public int maxEnemyHealth; //# bullets they can survive
     private int currentEnemyHealth;
@@ -41,6 +42,10 @@ public class EnemyBehavior : MonoBehaviour{
     private const string playerName = "player";
 
     private int currentDifficulty = 0;
+
+    public void AffectSlowdownSpeed(float newMultiplier){
+        enemyMoveSpeedSlowMultiplier = enemyMoveSpeedSlowMultiplier == newMultiplier ? 1f : newMultiplier;
+    }
 
     public void SetGameObjects(GameObject[] parameters){
         levelManager = parameters[0];
@@ -160,7 +165,7 @@ public class EnemyBehavior : MonoBehaviour{
             if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
                 path.maxSpeed = 0.01f;
             }else{
-                path.maxSpeed = enemyMoveSpeed * currentDifficulty;
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedSlowMultiplier;
                 path.destination = currentActualTarget.transform.position;
 
                 PathFindingStuckFix(false);
@@ -215,7 +220,7 @@ public class EnemyBehavior : MonoBehaviour{
             }
             
             if(!currentActualTarget){
-                path.maxSpeed = enemyMoveSpeed * currentDifficulty;
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedSlowMultiplier;
                 if(Vector2.Distance(transform.position, patrolDestination) <= 2f){
                     patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
                 }
