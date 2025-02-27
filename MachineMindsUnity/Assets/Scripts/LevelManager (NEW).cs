@@ -175,10 +175,13 @@ public class LevelManagerNew : MonoBehaviour{
             }
 
             //Update UI:
+            float greenBarCutoff = 0.75f;
+            float yellowBarCutoff = 0.25f;
+
             fuelBar.rectTransform.sizeDelta = new Vector2(fuelBarSizeMuliplier * playerBoostTimer, 15);
-            if(playerBoostTimer >= 0.5f * timePlayerCanBoost){
+            if(playerBoostTimer >= greenBarCutoff * timePlayerCanBoost){
                 fuelBar.color = new Color(0f, 1f, 0f);
-            }else if (playerBoostTimer >= 0.25f * timePlayerCanBoost){
+            }else if (playerBoostTimer >= yellowBarCutoff * timePlayerCanBoost){
                 fuelBar.color = new Color(1f, 1f, 0f);
             }else{
                 fuelBar.color = new Color(1f, 0f, 0f);

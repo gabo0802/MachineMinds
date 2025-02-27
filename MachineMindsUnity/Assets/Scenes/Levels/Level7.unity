@@ -11637,7 +11637,6 @@ MonoBehaviour:
   isDestroyable: 0
   isExplodable: 0
   slowsCharacter: 0
-  slowDownRatio: 1
 --- !u!66 &1037194411
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -17339,7 +17338,6 @@ MonoBehaviour:
   isDestroyable: 1
   isExplodable: 0
   slowsCharacter: 0
-  slowDownRatio: 1
 --- !u!114 &1706599036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17835,7 +17833,6 @@ MonoBehaviour:
   isDestroyable: 0
   isExplodable: 0
   slowsCharacter: 0
-  slowDownRatio: 1
 --- !u!66 &1971873779
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -18399,11 +18396,11 @@ GameObject:
   - component: {fileID: 2011448998}
   - component: {fileID: 2011449004}
   - component: {fileID: 2011449003}
-  - component: {fileID: 2011449005}
   - component: {fileID: 2011449006}
   - component: {fileID: 2011449008}
   - component: {fileID: 2011449007}
   - component: {fileID: 2011449009}
+  - component: {fileID: 2011449010}
   m_Layer: 6
   m_Name: SlowSand
   m_TagString: Untagged
@@ -19074,22 +19071,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &2011449005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011448997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94625e743378c524190a3e0c9df900c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDestroyable: 0
-  isExplodable: 1
-  slowsCharacter: 1
-  slowDownRatio: 0.25
 --- !u!19719996 &2011449006
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -19272,6 +19253,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 8.8, y: 6.8}
   m_EdgeRadius: 0
+--- !u!114 &2011449010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011448997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e6465774d8bc5749a30d0bd5d3b4d95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedAffect: 0.25
 --- !u!1001 &2042158541
 PrefabInstance:
   m_ObjectHideFlags: 0
