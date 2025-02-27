@@ -11570,6 +11570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
+  slowsCharacter: 0
+  slowDownRatio: 1
 --- !u!66 &1037194411
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -17004,7 +17006,7 @@ GameObject:
   - component: {fileID: 1692717118}
   - component: {fileID: 1692717117}
   - component: {fileID: 1692717120}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BreakableWalls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17270,6 +17272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
+  slowsCharacter: 0
+  slowDownRatio: 1
 --- !u!114 &1706599036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17614,7 +17618,7 @@ GameObject:
   - component: {fileID: 1971873780}
   - component: {fileID: 1971873779}
   - component: {fileID: 1971873778}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17650,6 +17654,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
+  slowsCharacter: 0
+  slowDownRatio: 1
 --- !u!66 &1971873779
 CompositeCollider2D:
   m_ObjectHideFlags: 0
