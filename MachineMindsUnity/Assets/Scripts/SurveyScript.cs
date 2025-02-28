@@ -76,8 +76,6 @@ public class SurveyScript : MonoBehaviour{
             currentFileData[3],  //playerLifeTimer
             true + "" //isTrainingMode
         }, true);
-
-        contextMessage.text = "How is Difficulty Level: " + currentDifficulty + "?";
     }
 
     public void SetNextLevel(int newNextLevel){
@@ -87,7 +85,6 @@ public class SurveyScript : MonoBehaviour{
     public void SetFileData(string[] newFileData){
         fileData = newFileData;
         currentDifficulty = System.Int32.Parse(fileData[3]);
-
     }
 
     public void TooEasyAdjustment(){
@@ -108,5 +105,9 @@ public class SurveyScript : MonoBehaviour{
         adjustDifficulty(currentDifficulty - 1);
         SceneManager.LoadScene(nextLevel, LoadSceneMode.Single);
         Destroy(gameObject);
+    }
+
+    void Start(){
+        contextMessage.text = "Current Difficulty Level\n[" + currentDifficulty + "]";
     }
 }

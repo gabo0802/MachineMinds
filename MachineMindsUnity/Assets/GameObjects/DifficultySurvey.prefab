@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -52}
+  m_AnchoredPosition: {x: 0, y: -56}
   m_SizeDelta: {x: 330.6555, y: 71.6482}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5788564903936404955
@@ -1068,8 +1068,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015259, y: 121}
-  m_SizeDelta: {x: 408.6915, y: 51.0158}
+  m_AnchoredPosition: {x: 0.000015259, y: 128}
+  m_SizeDelta: {x: 465.7002, y: 69.2101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5738149645400283026
 CanvasRenderer:
@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: How is the Difficulty?
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cafd3e8e7ddff4a3698ff2e59608e3a1, type: 2}
   m_sharedMaterial: {fileID: -7767848430101961142, guid: cafd3e8e7ddff4a3698ff2e59608e3a1, type: 2}
@@ -1132,7 +1132,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 4
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1164,7 +1164,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -1.0159454, w: 0}
+  m_margin: {x: 0, y: 0, z: -1.0160675, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
