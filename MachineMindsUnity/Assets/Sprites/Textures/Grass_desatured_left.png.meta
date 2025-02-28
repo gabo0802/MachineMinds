@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Grass_desatured_left_0: 3771173025059902089
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
