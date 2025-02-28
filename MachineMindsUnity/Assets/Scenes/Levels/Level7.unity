@@ -17424,6 +17424,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4484564812155729530, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: totalPlayerBullets
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: pointsUI
       value: 
@@ -17431,7 +17435,7 @@ PrefabInstance:
     - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: countdownUI
       value: 
-      objectReference: {fileID: 1846104955}
+      objectReference: {fileID: 0}
     - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: currentPlayer
       value: 
@@ -17445,17 +17449,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
---- !u!114 &1846104955 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5579268484883826415, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-  m_PrefabInstance: {fileID: 1846104954}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!213 &1848737227
 Sprite:
   m_ObjectHideFlags: 0
