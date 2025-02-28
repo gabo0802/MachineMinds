@@ -326,10 +326,30 @@ public class LevelManagerNew : MonoBehaviour{
             playerLifeTimer += Time.deltaTime;
 
             if(wonLevel){
-                goNextLevel();
+                backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
+                levelMessageUI.text = "[You Won]";
+
+                if(currentWinTime > playerCelebrateTime){
+                    levelMessageUI.text = "[Loading]";
+                    countdownUI.text = "";
+                    goNextLevel();
+                }else{
+                    currentWinTime += Time.deltaTime;
+                }
             }
         }else{
-            onPlayerDeath();
-        }
+            backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+            countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
+            levelMessageUI.text = "[You Lost]";
+
+            if(currentDeadTime > playerRespawnTime){
+                levelMessageUI.text = "[Loading]";
+                countdownUI.text = "";
+                onPlayerDeath();
+            }else{
+                currentDeadTime += Time.deltaTime;
+            }
+        }  
     }
 }
