@@ -209,7 +209,7 @@ public class LevelManagerNew : MonoBehaviour{
             "" + totalEnemiesKilled, //totalEnemiesKilled
             "" + currentDifficulty,  //currentDifficulty
             "" + playerLifeTimer,  //playerLifeTimer
-            "" + isTrainingMode //isTrainingMode
+            "" + currentLevelNumber //levelsBeat
             });
             
             activeSurvey.SendMessage("SetNextLevel", currentLevelNumber + 1);
@@ -254,7 +254,7 @@ public class LevelManagerNew : MonoBehaviour{
             "" + totalEnemiesKilled, //totalEnemiesKilled
             "" + currentDifficulty,  //currentDifficulty
             "" + playerLifeTimer,  //playerLifeTimer
-            "" + isTrainingMode //isTrainingMode
+            "" + (currentLevelNumber - 1) //levelsBeat
             });
 
             int nextLevel = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
@@ -296,27 +296,6 @@ public class LevelManagerNew : MonoBehaviour{
         foreach(GameObject enemyObject in allEnemies){
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentAlivePlayer});
             enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
-        }
-    }
-
-    private void saveAITrainingData(int newDifficulty){
-        int maxDifficulty = 10;
-
-        if(newDifficulty < 0){
-            newDifficulty = 0;
-        }else if(newDifficulty > maxDifficulty){
-            newDifficulty = maxDifficulty;
-        }
-
-        if (!File.Exists(aiTrainingFilePath)){
-            writeFileData(aiTrainingFilePath, new string[]{
-                "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty",
-                currentPlayerLives + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
-            }, true);
-        }else{
-            writeFileData(aiTrainingFilePath, new string[]{
-                currentPlayerLives + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
-            }, false);
         }
     }
 

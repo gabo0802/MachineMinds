@@ -47,20 +47,20 @@ public class SurveyScript : MonoBehaviour{
     private void saveAITrainingData(int newDifficulty){
         int maxDifficulty = 10;
 
-        if(newDifficulty < 0){
-            newDifficulty = 0;
+        if(newDifficulty < 1){
+            newDifficulty = 1;
         }else if(newDifficulty > maxDifficulty){
             newDifficulty = maxDifficulty;
         }
 
         if (!File.Exists(aiTrainingFilePath)){
             writeFileData(aiTrainingFilePath, new string[]{
-                "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty",
-                fileData[0] + "," + fileData[1] + "," + fileData[2] + "," + fileData[3] + "," + fileData[4] + "," + newDifficulty
+                "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,levelsBeat,newDifficulty",
+                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+"," +fileData[4]+","+fileData[5]+","+newDifficulty
             }, true);
         }else{
             writeFileData(aiTrainingFilePath, new string[]{
-                fileData[0] + "," + fileData[1] + "," + fileData[2] + "," + fileData[3] + "," + fileData[4] + "," + newDifficulty
+                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+","+fileData[4]+","+fileData[5]+","+newDifficulty
             }, false);
         }
     }
