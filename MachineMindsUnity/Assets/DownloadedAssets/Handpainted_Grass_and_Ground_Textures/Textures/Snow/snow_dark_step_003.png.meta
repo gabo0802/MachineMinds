@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      snow_dark_step_003_0: -6615875730055799439
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

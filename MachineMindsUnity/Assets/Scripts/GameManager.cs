@@ -61,8 +61,4 @@ public class GameManager : MonoBehaviour{
         Application.Quit();
         //EditorApplication.ExitPlaymode(); //only for testing, remove when building
     }
-
-    void Start(){
-        loadGameButton.interactable = File.Exists(filePath);
-    }
 }
