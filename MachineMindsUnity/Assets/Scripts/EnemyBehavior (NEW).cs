@@ -121,7 +121,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
         float rotationSpeed = 60f;
         cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * rotationSpeed, 160) - 80); //(-80, 80)
 
-        RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+        RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
         Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
         Debug.DrawLine(transform.position, transform.position + (transform.up * 2f), Color.blue);
 
@@ -144,7 +144,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
         cannonHead.transform.up = currentTarget.transform.position - transform.position;
         cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
         
-        RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+        RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
 
         if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
             if(enemyMoveSpeed > 0f){
@@ -167,8 +167,14 @@ public class EnemyBehaviorNew : MonoBehaviour{
                      
                 Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), 
                 cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance), 
-                Color.red, enemyShootInterval / 2);
+                Color.green, enemyShootInterval / 2);
                 enemyShootTimer = 0f;
+            }else if (scanAhead){
+                Debug.Log(scanAhead.transform.gameObject.name);
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), 
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance), 
+                Color.red, enemyShootInterval / 2);
+                enemyShootTimer = enemyShootInterval / (currentDifficulty * 2f);
             }else{
                 Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), 
                 cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * 100f), 
