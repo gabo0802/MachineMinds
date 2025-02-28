@@ -51,7 +51,7 @@ public class LevelManagerNew : MonoBehaviour{
 
     //Player Boost Variables:
         public UnityEngine.UI.Image fuelBar = null;
-        private float fuelBarSizeMuliplier = 170f;
+        private float fuelBarSizeMuliplier = 175f;
         public float boostCooldownRatio = 0.1f;    
         public float timePlayerCanBoost = 5f;    
         private float playerBoostTimer;

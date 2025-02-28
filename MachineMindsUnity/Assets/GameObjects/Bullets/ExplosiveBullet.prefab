@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.9935299, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.8021469, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
   explosionRadius: 1.5
   explosionObject: {fileID: 801812182257050566, guid: 55aa675169ff5e241834351e954a8eee, type: 3}
   targetPlayer: {fileID: 0}
+  bulletDiameter: 0
 --- !u!58 &805651900415447071
 CircleCollider2D:
   m_ObjectHideFlags: 0
