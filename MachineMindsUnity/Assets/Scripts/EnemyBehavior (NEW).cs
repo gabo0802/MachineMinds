@@ -53,6 +53,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
 
     public void SetDifficultyLevel(int newDifficultyLevel){
         currentDifficulty = newDifficultyLevel;
+        currentEnemyHealth *= currentDifficulty;
     }
 
     void OnExplosionHit(){
@@ -129,7 +130,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
             cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
 
-         if(!currentTarget){
+         if(!currentTarget && enemyMoveSpeed > 0f){
             path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedMultiplier;
             if(Vector2.Distance(transform.position, patrolDestination) <= 2f){
                 patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
@@ -146,10 +147,14 @@ public class EnemyBehaviorNew : MonoBehaviour{
         RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
 
         if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
-            path.maxSpeed = 0.01f;
+            if(enemyMoveSpeed > 0f){
+                path.maxSpeed = 0.01f;
+            }
         }else{
-            path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedMultiplier;
-            path.destination = currentTarget.transform.position;
+            if(enemyMoveSpeed > 0f){
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedMultiplier;
+                path.destination = currentTarget.transform.position;
+            }
 
             PathFindingStuckFix(false);
         }
@@ -216,15 +221,9 @@ public class EnemyBehaviorNew : MonoBehaviour{
 
         }else if (!currentTarget){
             //Patrol Behavior
-            path.destination = patrolDestination;
-            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;
-
             PatrolBehavior();
         }else{
             //Target Player Behavior
-            path.destination = currentTarget.transform.position;
-            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;
-
             TargetPlayerBehavior();
         }
     }
