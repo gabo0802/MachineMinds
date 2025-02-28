@@ -199,6 +199,15 @@ public class EnemyBehaviorNew : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(tireThreads){
+            if(path.maxSpeed > 0.01f && tireThreadCreateTimer < 0){
+                tireThreadCreateTimer = tireThreadCreateInterval;
+                Instantiate(tireThreads, transform.position, transform.rotation);
+            }else{
+                tireThreadCreateTimer -= Time.deltaTime;
+            }
+        }
+
         if(!currentAlivePlayer){
             //Player is Dead
             path.maxSpeed = 0f;
