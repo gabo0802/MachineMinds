@@ -17992,6 +17992,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1488456212683028382, guid: 19b5f952cef3e184188283942d6d98d7, type: 3}
+      propertyPath: enemyMoveSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6279392409009837609, guid: 19b5f952cef3e184188283942d6d98d7, type: 3}
       propertyPath: m_Name
       value: BossTestEnemy
