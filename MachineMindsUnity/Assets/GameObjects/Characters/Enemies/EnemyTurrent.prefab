@@ -112,7 +112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849521285683302735}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
@@ -272,7 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3934430881688512091}
   - component: {fileID: 7155817134785751747}
-  - component: {fileID: 2715249328312403504}
+  - component: {fileID: 6361871814955714631}
   - component: {fileID: 6735878823126603655}
   - component: {fileID: 2878257792866156222}
   - component: {fileID: 831840676777083369}
@@ -292,7 +292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6995039215712514279}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.38, y: -0.01, z: 2.9210677}
   m_LocalScale: {x: 1, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -301,7 +301,7 @@ Transform:
   - {fileID: 4202456681436512477}
   - {fileID: 1069995084114036105}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7155817134785751747
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -357,7 +357,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2715249328312403504
+--- !u!114 &6361871814955714631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -366,18 +366,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6995039215712514279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb955da3e55c18242aa81b0bd3ae12e3, type: 3}
+  m_Script: {fileID: 11500000, guid: b9d057c951e6a3b45a26b32af53fbb73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cannonHead: {fileID: 1849521285683302735}
   tireThreads: {fileID: 0}
-  tireThreadRevealInterval: 0.5
-  enemyMoveSpeed: 0
+  tireThreadCreateInterval: 0.5
   maxEnemyHealth: 3
+  enemyMoveSpeed: 0
   enemyBullet: {fileID: 8642936227962931598, guid: cd0fb3dc6ba48ef4b96f566d5e576c70, type: 3}
-  bulletShotSpawnOffset: 0.5
+  enemyShootInterval: 5
   shootIfCannotSeePlayer: 0
-  enemyFireRate: 1
   pointsWorth: 100
 --- !u!50 &6735878823126603655
 Rigidbody2D:

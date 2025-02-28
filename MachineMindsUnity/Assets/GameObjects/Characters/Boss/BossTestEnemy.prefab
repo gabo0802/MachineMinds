@@ -359,7 +359,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6798315737942583264}
   - component: {fileID: 8594610551508255133}
-  - component: {fileID: 3782352740829184079}
+  - component: {fileID: 1488456212683028382}
   - component: {fileID: 7701055470618375241}
   - component: {fileID: 4594330870723099318}
   - component: {fileID: 6361910439809864366}
@@ -444,7 +444,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3782352740829184079
+--- !u!114 &1488456212683028382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -453,18 +453,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6279392409009837609}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb955da3e55c18242aa81b0bd3ae12e3, type: 3}
+  m_Script: {fileID: 11500000, guid: b9d057c951e6a3b45a26b32af53fbb73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cannonHead: {fileID: 801905346945509414}
   tireThreads: {fileID: 0}
-  tireThreadRevealInterval: 0.5
-  enemyMoveSpeed: 0.001
-  maxEnemyHealth: 7
+  tireThreadCreateInterval: 0.5
+  maxEnemyHealth: 10
+  enemyMoveSpeed: 0.05
   enemyBullet: {fileID: 5493826410686333668, guid: e9961a5a212abd7439b324adbe08b495, type: 3}
-  bulletShotSpawnOffset: 0.5
+  enemyShootInterval: 5
   shootIfCannotSeePlayer: 1
-  enemyFireRate: 2.5
   pointsWorth: 5000
 --- !u!50 &7701055470618375241
 Rigidbody2D:

@@ -199,6 +199,10 @@ public class LevelManagerNew : MonoBehaviour{
             "" + isTrainingMode //isTrainingMode
         }, true);     
         
+        if(currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode){
+            saveAITrainingData(currentDifficulty + 1);
+        }
+
         SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
     }
 
@@ -228,6 +232,10 @@ public class LevelManagerNew : MonoBehaviour{
     }
 
     private void goBackToCheckpointLevel(){
+        if(isTrainingMode){
+            saveAITrainingData(currentDifficulty - 1);
+        }
+        
         NewGameData();
 
         if(currentLevelNumber < numberLevelsCheckpoint){
@@ -267,6 +275,27 @@ public class LevelManagerNew : MonoBehaviour{
         foreach(GameObject enemyObject in allEnemies){
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentAlivePlayer});
             enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
+        }
+    }
+
+    private void saveAITrainingData(int newDifficulty){
+        int maxDifficulty = 10;
+
+        if(newDifficulty < 0){
+            newDifficulty = 0;
+        }else if(newDifficulty > maxDifficulty){
+            newDifficulty = maxDifficulty;
+        }
+
+        if (!File.Exists(aiTrainingFilePath)){
+            writeFileData(aiTrainingFilePath, new string[]{
+                "currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty",
+                currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
+            }, true);
+        }else{
+            writeFileData(aiTrainingFilePath, new string[]{
+                currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
+            }, false);
         }
     }
 

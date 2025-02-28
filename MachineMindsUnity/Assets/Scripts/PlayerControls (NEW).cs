@@ -12,7 +12,7 @@ public class PlayerControlsNEW : MonoBehaviour
 
     public float playerMoveSpeed = 1f;
     public float playerRotateSpeed = 1f; //if want to use tank controls
-    private float playerMoveSpeedSlowMultiplier = 1f;
+    private float playerMoveSpeedMultiplier = 1f;
     private float playerMoveSpeedBoostMultiplier = 1f;
 
     public GameObject playerBullet;
@@ -56,18 +56,18 @@ public class PlayerControlsNEW : MonoBehaviour
     }
 
     public void AffectSpeed(float newMultiplier){
-        playerMoveSpeedSlowMultiplier = newMultiplier;
+        playerMoveSpeedMultiplier = newMultiplier;
     }
 
     public void AffectBoostSpeed(float newMultiplier){
-        playerMoveSpeedSlowMultiplier = newMultiplier;
+        playerMoveSpeedBoostMultiplier = newMultiplier;
     }
 
     private void tankControlMovement(){
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || pressW){
-            rb.linearVelocity = transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedSlowMultiplier;
+            rb.linearVelocity = transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
         }else if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || pressS){
-            rb.linearVelocity = transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedSlowMultiplier;
+            rb.linearVelocity = transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
         }else{
             rb.linearVelocity = new Vector2(0, 0);
         }
@@ -101,7 +101,7 @@ public class PlayerControlsNEW : MonoBehaviour
             currentPlayerRotationString += "D";
         }
 
-        rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedSlowMultiplier;
+        rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
 
         //Rotation:
         if(currentPlayerRotationString == "WA" || currentPlayerRotationString == "SD" ){

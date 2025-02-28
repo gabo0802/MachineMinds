@@ -93,7 +93,7 @@ public class BulletBehavior : MonoBehaviour{
             moveDistance, 
             layerMask);*/
         
-        Debug.Log(bulletDiameter);
+        //Debug.Log(bulletDiameter);
 
         float bulletOffset = 0.1f;
 
