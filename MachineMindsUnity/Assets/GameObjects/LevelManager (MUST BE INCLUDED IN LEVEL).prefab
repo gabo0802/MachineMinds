@@ -574,6 +574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773fb7ed00b008f4b9699bc389972250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  surveyObject: {fileID: 4227258372502546876, guid: 6b558d19a9add2b41a0b8dd6c059ad6e, type: 3}
   numberLevelsCheckpoint: 3
   backgroundImage: {fileID: 136448094502929755}
   countdownUI: {fileID: 1423455565788053932}

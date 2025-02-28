@@ -4,6 +4,8 @@ using System.IO;
 using System.Collections.Generic;
 
 public class LevelManagerNew : MonoBehaviour{
+    public GameObject surveyObject;
+    private GameObject activeSurvey;
     private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
     private string aiTrainingFilePath = Application.dataPath + "/Resources/game_data.csv";
     private bool isTrainingMode = true;
@@ -199,11 +201,21 @@ public class LevelManagerNew : MonoBehaviour{
             "" + isTrainingMode //isTrainingMode
         }, true);     
         
-        if(currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode){
-            saveAITrainingData(currentDifficulty + 1);
+        if(isTrainingMode){
+            activeSurvey = (GameObject) Instantiate(surveyObject);
+            activeSurvey.SendMessage("SetFileData", new string[]{
+            "" + currentPlayerLives, //currentPlayerLives
+            "" + totalPoints, //totalPoints
+            "" + totalEnemiesKilled, //totalEnemiesKilled
+            "" + currentDifficulty,  //currentDifficulty
+            "" + playerLifeTimer,  //playerLifeTimer
+            "" + isTrainingMode //isTrainingMode
+            });
+            
+            activeSurvey.SendMessage("SetNextLevel", currentLevelNumber + 1);
+        }else{
+            SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
         }
-
-        SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
     }
 
     private void onPlayerDeath(){
@@ -232,17 +244,26 @@ public class LevelManagerNew : MonoBehaviour{
     }
 
     private void goBackToCheckpointLevel(){
-        if(isTrainingMode){
-            saveAITrainingData(currentDifficulty - 1);
-        }
-        
-        NewGameData();
+        int goLevelNumber = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
 
-        if(currentLevelNumber < numberLevelsCheckpoint){
-            SceneManager.LoadScene(1, LoadSceneMode.Single);
+        if(isTrainingMode){
+            activeSurvey = (GameObject) Instantiate(surveyObject);
+            activeSurvey.SendMessage("SetFileData", new string[]{
+            "" + currentPlayerLives, //currentPlayerLives
+            "" + totalPoints, //totalPoints
+            "" + totalEnemiesKilled, //totalEnemiesKilled
+            "" + currentDifficulty,  //currentDifficulty
+            "" + playerLifeTimer,  //playerLifeTimer
+            "" + isTrainingMode //isTrainingMode
+            });
+
+            int nextLevel = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
+            activeSurvey.SendMessage("SetNextLevel", goLevelNumber);
+            NewGameData();
         }else{
-            SceneManager.LoadScene(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint), LoadSceneMode.Single);
-        }  
+            NewGameData();
+            SceneManager.LoadScene(goLevelNumber, LoadSceneMode.Single);  
+        }
     }
 
     void OnEnemyDeath(int enemyPointWorth){
@@ -289,12 +310,12 @@ public class LevelManagerNew : MonoBehaviour{
 
         if (!File.Exists(aiTrainingFilePath)){
             writeFileData(aiTrainingFilePath, new string[]{
-                "currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty",
-                currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
+                "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty",
+                currentPlayerLives + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
             }, true);
         }else{
             writeFileData(aiTrainingFilePath, new string[]{
-                currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
+                currentPlayerLives + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty
             }, false);
         }
     }
@@ -319,37 +340,39 @@ public class LevelManagerNew : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
-        if(currentAlivePlayer){
-            tryBoostPlayer();
-            tryPlayerShoot();
+        if(!activeSurvey){
+            if(currentAlivePlayer){
+                tryBoostPlayer();
+                tryPlayerShoot();
 
-            playerLifeTimer += Time.deltaTime;
+                playerLifeTimer += Time.deltaTime;
 
-            if(wonLevel){
+                if(wonLevel){
+                    backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                    countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
+                    levelMessageUI.text = "[You Won]";
+
+                    if(currentWinTime > playerCelebrateTime){
+                        levelMessageUI.text = "[Loading]";
+                        countdownUI.text = "";
+                        goNextLevel();
+                    }else{
+                        currentWinTime += Time.deltaTime;
+                    }
+                }
+            }else{
                 backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
-                countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
-                levelMessageUI.text = "[You Won]";
+                countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
+                levelMessageUI.text = "[You Lost]";
 
-                if(currentWinTime > playerCelebrateTime){
+                if(currentDeadTime > playerRespawnTime){
                     levelMessageUI.text = "[Loading]";
                     countdownUI.text = "";
-                    goNextLevel();
+                    onPlayerDeath();
                 }else{
-                    currentWinTime += Time.deltaTime;
+                    currentDeadTime += Time.deltaTime;
                 }
-            }
-        }else{
-            backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
-            countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
-            levelMessageUI.text = "[You Lost]";
-
-            if(currentDeadTime > playerRespawnTime){
-                levelMessageUI.text = "[Loading]";
-                countdownUI.text = "";
-                onPlayerDeath();
-            }else{
-                currentDeadTime += Time.deltaTime;
-            }
-        }  
+             } 
+        }
     }
 }
