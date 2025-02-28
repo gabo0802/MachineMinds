@@ -131,7 +131,7 @@ public class LevelManagerNew : MonoBehaviour{
             "" + maxPlayerLives, //currentPlayerLives
             "0", //totalPoints
             "0", //totalEnemiesKilled
-            "1",  //currentDifficulty
+            "" + currentDifficulty,  //currentDifficulty
             "0",  //playerLifeTimer
             "" + isTrainingMode //isTrainingMode
         }, true);
