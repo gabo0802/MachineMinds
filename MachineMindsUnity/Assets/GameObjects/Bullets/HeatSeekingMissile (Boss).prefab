@@ -171,7 +171,7 @@ MonoBehaviour:
   bulletDetectRange: 0.1
   isBouncy: 0
   isExplody: 1
-  explosionRadius: 2
+  explosionRadius: 1
   explosionObject: {fileID: 801812182257050566, guid: 55aa675169ff5e241834351e954a8eee, type: 3}
   targetPlayer: {fileID: 0}
   bulletDiameter: 0.4
