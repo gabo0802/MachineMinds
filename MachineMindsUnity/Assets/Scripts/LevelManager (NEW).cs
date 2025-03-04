@@ -46,6 +46,9 @@ public class LevelManagerNew : MonoBehaviour{
 
     //Player Shooting Variables:
         public TMPro.TextMeshProUGUI ammoUI = null;
+        public int maxBulletsInMagazine = 5;
+        public float bulletReloadRatio = 0.1f;
+        private float currentBulletsInMagazine;
         public int totalPlayerBullets = 10;
         private int currentPlayerBullets;
 
@@ -154,12 +157,14 @@ public class LevelManagerNew : MonoBehaviour{
     }
 
     private void tryPlayerShoot(){
-        if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0){
+        if((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && (int)currentBulletsInMagazine > 0 && currentPlayerBullets > 0){
             currentPlayerBullets--;
+            currentBulletsInMagazine -= 1f;
             currentAlivePlayer.SendMessage("ShootBullet");
         }
-        
-        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
+
+        currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
+        ammoUI.text = (int)currentBulletsInMagazine + " / " + currentPlayerBullets;
     }
 
     private void tryBoostPlayer(){
@@ -313,6 +318,7 @@ public class LevelManagerNew : MonoBehaviour{
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
+        currentBulletsInMagazine = maxBulletsInMagazine;
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();

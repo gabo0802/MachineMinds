@@ -122,10 +122,15 @@ public class EnemyBehaviorNew : MonoBehaviour{
         cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * rotationSpeed, 160) - 80); //(-80, 80)
 
         RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+        RaycastHit2D lookForPlayerRay2 = Physics2D.Raycast(transform.position + (transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
+
         Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
-        Debug.DrawLine(transform.position, transform.position + (transform.up * 2f), Color.blue);
+        Debug.DrawLine(transform.position, transform.position + (transform.up * 100f), Color.blue);
 
         if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name)){
+            currentTarget = currentAlivePlayer;
+            cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }else if(lookForPlayerRay2 && lookForPlayerRay2.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name)){
             currentTarget = currentAlivePlayer;
             cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
