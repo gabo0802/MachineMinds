@@ -163,7 +163,9 @@ public class LevelManagerNew : MonoBehaviour{
             currentAlivePlayer.SendMessage("ShootBullet");
         }
 
-        currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
+        if(currentBulletsInMagazine < maxBulletsInMagazine){
+            currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
+        }
         ammoUI.text = (int)currentBulletsInMagazine + " / " + currentPlayerBullets;
     }
 
