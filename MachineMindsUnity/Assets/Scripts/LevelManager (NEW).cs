@@ -192,6 +192,10 @@ public class LevelManagerNew : MonoBehaviour{
     }
 
     private void goNextLevel(){
+        if(!isTrainingMode){
+            adjustGameDifficulty();
+        }
+        
         writeFileData(saveFilePath, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
@@ -230,12 +234,14 @@ public class LevelManagerNew : MonoBehaviour{
 
     private void goRetryCurrentLevel(){
         string[] currentSaveData = getFileData(saveFilePath);
+        
+        //adjustGameDifficulty();
 
         writeFileData(saveFilePath, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             currentSaveData[1], //totalPoints
             currentSaveData[2], //totalEnemiesKilled
-            currentSaveData[3],  //currentDifficulty
+            currentDifficulty,  //currentDifficulty
             currentSaveData[4],  //playerLifeTimer
             currentSaveData[5] //isTrainingMode
         }, true);        
@@ -261,6 +267,7 @@ public class LevelManagerNew : MonoBehaviour{
             activeSurvey.SendMessage("SetNextLevel", goLevelNumber);
             NewGameData();
         }else{
+            adjustGameDifficulty();
             NewGameData();
             SceneManager.LoadScene(goLevelNumber, LoadSceneMode.Single);  
         }
@@ -297,6 +304,11 @@ public class LevelManagerNew : MonoBehaviour{
             enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentAlivePlayer});
             enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
         }
+    }
+
+    private void adjustGameDifficulty(){
+        //call AI
+        //currentDifficulty = getAIData();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
