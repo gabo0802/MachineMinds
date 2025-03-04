@@ -55,6 +55,9 @@ public class LevelManagerNew : MonoBehaviour{
     //Player Boost Variables:
         public UnityEngine.UI.Image fuelBar = null;
         private float fuelBarSizeMuliplier = 175f;
+        private const float bossBarSizeMax = 775f;
+        private float bossBarSizeMulitplier = 775f;
+
         public float boostCooldownRatio = 0.1f;    
         public float timePlayerCanBoost = 5f;    
         private float playerBoostTimer;
@@ -66,6 +69,10 @@ public class LevelManagerNew : MonoBehaviour{
         public const string spritePathFull = "DynamicSprites/heart_full"; // Path inside Resources folder
         public int maxPlayerLives = 3;
         private int currentPlayerLives = 3;
+
+    public UnityEngine.UI.Image bossUIBar;
+    public UnityEngine.UI.Image bossUIBarPercent;
+    public TMPro.TextMeshProUGUI bossUIBarText;
 
     //Functions:
     private string[] getFileData(string filePath){
@@ -196,6 +203,22 @@ public class LevelManagerNew : MonoBehaviour{
                 fuelBar.color = new Color(1f, 0f, 0f);
             }
             fuelBar.rectTransform.anchoredPosition = new Vector2((fuelBarSizeMuliplier * 0.9f) * (playerBoostTimer - timePlayerCanBoost), -3);
+    }
+    
+    public void updateBossHealhBar(int[] bossParameters){
+        int bossCurrentHealth = bossParameters[0];
+        int bossMaxHealth = bossParameters[1];
+        
+        if(bossBarSizeMulitplier > bossBarSizeMax / bossMaxHealth){
+            bossBarSizeMulitplier /= bossMaxHealth;
+        }
+
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 40);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), -3);
+
+        bossUIBar.color = new Color(1f, 1f, 1f, 1f);
+        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
+        bossUIBarText.text = "Boss Health";
     }
 
     private void goNextLevel(){
@@ -335,6 +358,10 @@ public class LevelManagerNew : MonoBehaviour{
         levelMessageUI.text = "";
         backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 0f);
         UpdateLivesUI();
+
+        bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+        bossUIBarText.text = "";
     }
 
     // Update is called once per frame

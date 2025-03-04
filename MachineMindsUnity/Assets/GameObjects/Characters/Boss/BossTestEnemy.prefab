@@ -465,6 +465,7 @@ MonoBehaviour:
   enemyShootInterval: 5
   shootIfCannotSeePlayer: 1
   pointsWorth: 5000
+  isBoss: 1
 --- !u!50 &7701055470618375241
 Rigidbody2D:
   serializedVersion: 5

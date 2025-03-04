@@ -40,7 +40,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
     private const string playerName = "player";
 
     private GameObject currentTarget;
-
+    public bool isBoss = false;
 
     public void AffectSpeed(float newMultiplier){
         enemyMoveSpeedMultiplier = newMultiplier;
@@ -83,6 +83,9 @@ public class EnemyBehaviorNew : MonoBehaviour{
         }
 
         currentEnemyHealth -= 1;
+        if(isBoss){
+            levelManager.transform.SendMessage("updateBossHealhBar", new int[]{currentEnemyHealth, maxEnemyHealth});
+        }
 
         if(currentEnemyHealth <= 0){
             if(levelManager){
@@ -215,6 +218,12 @@ public class EnemyBehaviorNew : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        if(isBoss){
+            if(levelManager){
+                levelManager.transform.SendMessage("updateBossHealhBar", new int[]{currentEnemyHealth, maxEnemyHealth});
+            }
+        }
+
         if(tireThreads){
             if(path.maxSpeed > 0.01f && tireThreadCreateTimer < 0){
                 tireThreadCreateTimer = tireThreadCreateInterval;
