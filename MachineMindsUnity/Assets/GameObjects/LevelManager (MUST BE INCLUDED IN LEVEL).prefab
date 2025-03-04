@@ -767,10 +767,10 @@ MonoBehaviour:
   ammoUI: {fileID: 3986388341209005611}
   maxBulletsInMagazine: 5
   bulletReloadRatio: 0.1
-  totalPlayerBullets: 3
+  totalPlayerBullets: 10
   fuelBar: {fileID: 3409819311176132308}
   boostCooldownRatio: 0.5
-  timePlayerCanBoost: 20
+  timePlayerCanBoost: 7.5
   playerBoostSpeedMultiplier: 4
   playerHearts:
   - {fileID: 8852376210614250832}
