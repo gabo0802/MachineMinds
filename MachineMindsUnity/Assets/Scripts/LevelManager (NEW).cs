@@ -195,7 +195,7 @@ public class LevelManagerNew : MonoBehaviour{
         if(!isTrainingMode){
             adjustGameDifficulty();
         }
-        
+
         writeFileData(saveFilePath, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
@@ -241,7 +241,7 @@ public class LevelManagerNew : MonoBehaviour{
             "" + currentPlayerLives, //currentPlayerLives
             currentSaveData[1], //totalPoints
             currentSaveData[2], //totalEnemiesKilled
-            currentDifficulty,  //currentDifficulty
+            currentDifficulty + "",  //currentDifficulty
             currentSaveData[4],  //playerLifeTimer
             currentSaveData[5] //isTrainingMode
         }, true);        
