@@ -163,7 +163,7 @@ public class LevelManagerNew : MonoBehaviour{
             currentAlivePlayer.SendMessage("ShootBullet");
         }
 
-        if(currentBulletsInMagazine < maxBulletsInMagazine){
+        if(currentBulletsInMagazine < maxBulletsInMagazine && currentBulletsInMagazine < currentPlayerBullets){
             currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
         }
         ammoUI.text = (int)currentBulletsInMagazine + " / " + currentPlayerBullets;
@@ -320,12 +320,12 @@ public class LevelManagerNew : MonoBehaviour{
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
-        currentBulletsInMagazine = maxBulletsInMagazine;
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
         
         currentPlayerBullets = totalPlayerBullets * currentDifficulty; 
+        currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
         playerBoostTimer = timePlayerCanBoost;
 
         findAllLevelObjects();
