@@ -55,6 +55,7 @@ public class EnemyBehavior : MonoBehaviour{
 
     public void SetDifficultyLevel(int newDifficultyLevel){
         currentDifficulty = newDifficultyLevel;
+        Debug.Log("Enemy Difficulty " + currentDifficulty);
     }
 
     void OnExplosionHit(){

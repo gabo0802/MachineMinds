@@ -9,6 +9,8 @@ public class SurveyScript : MonoBehaviour{
     private string[] fileData;
     private int currentDifficulty = 1;
     private int nextLevel = 1;
+    private const int maxDifficulty = 10;
+
 
     public TMPro.TextMeshProUGUI contextMessage;
 
@@ -45,8 +47,6 @@ public class SurveyScript : MonoBehaviour{
     }
 
     private void saveAITrainingData(int newDifficulty){
-        int maxDifficulty = 10;
-
         if(newDifficulty < 1){
             newDifficulty = 1;
         }else if(newDifficulty > maxDifficulty){
@@ -67,6 +67,12 @@ public class SurveyScript : MonoBehaviour{
     
     private void adjustDifficulty(int newDifficulty){
         string[] currentFileData = getFileData(saveFilePath);
+
+        if(newDifficulty < 1){
+            newDifficulty = 1;
+        }else if(newDifficulty > maxDifficulty){
+            newDifficulty = maxDifficulty;
+        }
 
         writeFileData(saveFilePath, new string[]{
             currentFileData[0], //currentPlayerLives
