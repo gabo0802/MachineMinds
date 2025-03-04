@@ -118,7 +118,7 @@ public class EnemyBehaviorNew : MonoBehaviour{
     private float turnTimer;
 
     private void PatrolBehavior(){
-        float rotationSpeed = 60f;
+        float rotationSpeed = 60f * turretRotationSpeedMultiplier;
         cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * rotationSpeed, 160) - 80); //(-80, 80)
 
         RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
