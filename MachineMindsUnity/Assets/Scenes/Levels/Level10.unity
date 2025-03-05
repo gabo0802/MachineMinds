@@ -17721,8 +17721,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2432857114072638028, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
-      propertyPath: m_PreserveAspect
+      propertyPath: m_Maskable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432857114072638028, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2432857114072638028, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3001314140948248649, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: m_LocalPosition.x

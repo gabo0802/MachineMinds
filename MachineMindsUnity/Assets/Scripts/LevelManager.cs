@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static WebGLSaveSystem;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
-public class LevelManager : MonoBehaviour{
+public class LevelManager : MonoBehaviour
+{
     private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
-   
+
     private string aiTrainingFilePath = Application.dataPath + "/Resources/game_data.csv";
     private bool isTrainingMode = true;
 
@@ -30,7 +33,7 @@ public class LevelManager : MonoBehaviour{
     public float difficultyMultiplier = 2f;
     public int currentDifficulty = 1;
     private float totalPoints = 0f;
-    
+
     private int levelStartEnemies = 0;
     private float levelStartPoints = 0f;
     private float playerLifeTimerStart = 0f;
@@ -41,19 +44,22 @@ public class LevelManager : MonoBehaviour{
     private int numberLevelsCheckpoint = 3;
     private int currentLevelNumber;
 
-    void OnEnemyDeath(int enemyPointWorth){
+    void OnEnemyDeath(int enemyPointWorth)
+    {
         totalEnemiesKilled += 1;
         currentEnemyTotal -= 1;
         totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
-        
+
         pointsUI.text = totalPoints + " pts";
 
-        if(currentEnemyTotal <= 0 && currentPlayer){
-           wonLevel = true;
+        if (currentEnemyTotal <= 0 && currentPlayer)
+        {
+            wonLevel = true;
         }
     }
 
-    void ResetSaveFile(int currentLevelNumber = 1){
+    void ResetSaveFile(int currentLevelNumber = 1)
+    {
         playerLifeTimer = 0f;
         currentPlayerLives = totalPlayerLives;
         totalPoints = 0f;
@@ -61,35 +67,83 @@ public class LevelManager : MonoBehaviour{
         CreateSave_LevelEnd(currentLevelNumber);
     }
 
-    void CreateSave_LevelRetry(int currentLevelNumber){            
-        using (StreamWriter sw = File.CreateText(saveFilePath)){
-            sw.WriteLine(currentPlayerLives);
-            sw.WriteLine(levelStartPoints);
-            sw.WriteLine(levelStartEnemies);
-            sw.WriteLine(currentDifficulty);        
-            sw.WriteLine(playerLifeTimerStart);
-            sw.WriteLine(isTrainingMode);
+    void CreateSave_LevelRetry(int currentLevelNumber)
+    {
+        if (WebGLSaveSystem.IsWebGLPlatform())
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(currentPlayerLives.ToString());
+            sb.AppendLine(levelStartPoints.ToString());
+            sb.AppendLine(levelStartEnemies.ToString());
+            sb.AppendLine(currentDifficulty.ToString());
+            sb.AppendLine(playerLifeTimerStart.ToString());
+            sb.AppendLine(isTrainingMode.ToString());
+            WebGLSaveSystem.WriteAllText(saveFilePath, sb.ToString());
+        }
+        else
+        {
+            using (StreamWriter sw = File.CreateText(saveFilePath))
+            {
+                sw.WriteLine(currentPlayerLives);
+                sw.WriteLine(levelStartPoints);
+                sw.WriteLine(levelStartEnemies);
+                sw.WriteLine(currentDifficulty);
+                sw.WriteLine(playerLifeTimerStart);
+                sw.WriteLine(isTrainingMode);
+            }
         }
     }
 
-    void CreateSave_LevelEnd(int currentLevelNumber){            
-        using (StreamWriter sw = File.CreateText(saveFilePath)){
-            sw.WriteLine(currentPlayerLives);
-            sw.WriteLine(totalPoints);
-            sw.WriteLine(totalEnemiesKilled);
-            sw.WriteLine(currentDifficulty);        
-            sw.WriteLine(playerLifeTimer);
-            sw.WriteLine(isTrainingMode);
+    void CreateSave_LevelEnd(int currentLevelNumber)
+    {
+        if (WebGLSaveSystem.IsWebGLPlatform())
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(currentPlayerLives.ToString());
+            sb.AppendLine(totalPoints.ToString());
+            sb.AppendLine(totalEnemiesKilled.ToString());
+            sb.AppendLine(currentDifficulty.ToString());
+            sb.AppendLine(playerLifeTimer.ToString());
+            sb.AppendLine(isTrainingMode.ToString());
+            WebGLSaveSystem.WriteAllText(saveFilePath, sb.ToString());
+        }
+        else
+        {
+            using (StreamWriter sw = File.CreateText(saveFilePath))
+            {
+                sw.WriteLine(currentPlayerLives);
+                sw.WriteLine(totalPoints);
+                sw.WriteLine(totalEnemiesKilled);
+                sw.WriteLine(currentDifficulty);
+                sw.WriteLine(playerLifeTimer);
+                sw.WriteLine(isTrainingMode);
+            }
         }
     }
 
-    void LoadSave(){
-        if (File.Exists(saveFilePath)){
+    void LoadSave()
+    {
+        bool fileExists = WebGLSaveSystem.IsWebGLPlatform() ?
+            WebGLSaveSystem.FileExists(saveFilePath) :
+            File.Exists(saveFilePath);
+
+        if (fileExists)
+        {
             string saveFileData = "";
-            using (StreamReader saveFile = File.OpenText(saveFilePath)){
-                string currentLine;
-                while ((currentLine = saveFile.ReadLine()) != null){
-                    saveFileData += currentLine + "\n";
+
+            if (WebGLSaveSystem.IsWebGLPlatform())
+            {
+                saveFileData = WebGLSaveSystem.ReadAllText(saveFilePath);
+            }
+            else
+            {
+                using (StreamReader saveFile = File.OpenText(saveFilePath))
+                {
+                    string currentLine;
+                    while ((currentLine = saveFile.ReadLine()) != null)
+                    {
+                        saveFileData += currentLine + "\n";
+                    }
                 }
             }
 
@@ -104,13 +158,16 @@ public class LevelManager : MonoBehaviour{
             playerLifeTimerStart = playerLifeTimer;
             levelStartEnemies = totalEnemiesKilled;
             levelStartPoints = totalPoints;
-        }else{
+        }
+        else
+        {
             ResetSaveFile();
         }
     }
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start(){
+    void Start()
+    {
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
 
         LoadSave();
@@ -119,21 +176,26 @@ public class LevelManager : MonoBehaviour{
         Collider2D[] allHitObjectsInScence = Physics2D.OverlapCircleAll(new Vector2(0, 0), Mathf.Infinity);
         List<GameObject> allEnemies = new List<GameObject>();
 
-        foreach(Collider2D currentHitObject in allHitObjectsInScence){
+        foreach (Collider2D currentHitObject in allHitObjectsInScence)
+        {
             string currentObjectName = currentHitObject.transform.gameObject.name;
 
-            if(currentObjectName.ToLower().Contains(enemyName)){
+            if (currentObjectName.ToLower().Contains(enemyName))
+            {
                 allEnemies.Add(currentHitObject.transform.gameObject);
                 currentEnemyTotal += 1;
-            }else if(currentObjectName.ToLower().Contains(playerName)){
+            }
+            else if (currentObjectName.ToLower().Contains(playerName))
+            {
                 currentPlayer = currentHitObject.transform.gameObject;
                 currentPlayer.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
                 currentPlayer.SendMessageUpwards("SetLivesUI", currentPlayerLives);
             }
         }
 
-        foreach(GameObject enemyObject in allEnemies){
-            enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[]{gameObject, currentPlayer});
+        foreach (GameObject enemyObject in allEnemies)
+        {
+            enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[] { gameObject, currentPlayer });
             enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
         }
 
@@ -141,61 +203,102 @@ public class LevelManager : MonoBehaviour{
         countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
 
         //Save point total across levels
-        pointsUI.text = totalPoints + " pts"; 
+        pointsUI.text = totalPoints + " pts";
     }
 
     // Update is called once per frame
-    void Update(){
-        if(currentPlayer){
+    void Update()
+    {
+        if (currentPlayer)
+        {
             countdownUI.text = "";
             playerLifeTimer += Time.deltaTime;
 
-            if(wonLevel){
-                if(currentWinTime > playerCelebrateTime){
-                    if(currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives){
+            if (wonLevel)
+            {
+                if (currentWinTime > playerCelebrateTime)
+                {
+                    if (currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives)
+                    {
                         currentPlayerLives++;
                     }
-                    
+
                     countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
                     Debug.Log("Total: " + SceneManager.sceneCountInBuildSettings);
 
-                    if(currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode){
+                    if (currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode)
+                    {
                         int newDifficulty = currentDifficulty + 1;
 
-                        if (!File.Exists(aiTrainingFilePath)){
-                            using (StreamWriter sw = File.CreateText(aiTrainingFilePath)){
-                                sw.WriteLine("currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty");
-                                sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                        if (WebGLSaveSystem.IsWebGLPlatform())
+                        {
+                            bool fileExists = WebGLSaveSystem.FileExists(aiTrainingFilePath);
+                            string csvLine = currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," +
+                                totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty;
+
+                            if (!fileExists)
+                            {
+                                string header = "currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty";
+                                WebGLSaveSystem.WriteAllText(aiTrainingFilePath, header + "\n" + csvLine);
                             }
-                        }else{
-                            using(TextWriter tw = new StreamWriter(aiTrainingFilePath, true)){
-                                tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            else
+                            {
+                                string existingData = WebGLSaveSystem.ReadAllText(aiTrainingFilePath);
+                                WebGLSaveSystem.WriteAllText(aiTrainingFilePath, existingData + "\n" + csvLine);
+                            }
+                        }
+                        else
+                        {
+                            if (!File.Exists(aiTrainingFilePath))
+                            {
+                                using (StreamWriter sw = File.CreateText(aiTrainingFilePath))
+                                {
+                                    sw.WriteLine("currentPlayerLives, currentLevelNumber, totalPoints, totalEnemiesKilled, currentDifficulty, playerLifeTimer, newDifficulty");
+                                    sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                                }
+                            }
+                            else
+                            {
+                                using (TextWriter tw = new StreamWriter(aiTrainingFilePath, true))
+                                {
+                                    tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                                }
                             }
                         }
                     }
 
                     //Load Next Level:
-                    CreateSave_LevelEnd(currentLevelNumber + 1);          
+                    CreateSave_LevelEnd(currentLevelNumber + 1);
                     SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
-                }else{
+                }
+                else
+                {
                     //Celebrate Time!!!!:
                     currentWinTime += Time.deltaTime;
 
-                    if(currentWinTime < 1f){
+                    if (currentWinTime < 1f)
+                    {
                         countdownUI.text = "You Won! :)";
-                    }else if (currentWinTime < playerCelebrateTime * 0.5f && currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives){
+                    }
+                    else if (currentWinTime < playerCelebrateTime * 0.5f && currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives)
+                    {
                         countdownUI.text = "Lives Increased";
-                    }else{
+                    }
+                    else
+                    {
                         countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                     }
                 }
             }
-        }else{
+        }
+        else
+        {
             countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
-            if(currentDeadTime > playerRespawnTime){
+            if (currentDeadTime > playerRespawnTime)
+            {
                 //Loading:
                 countdownUI.text = "Loading...";
-                
+
                 /*
                 //Send to AI?:
                 sendToAI()
@@ -203,45 +306,83 @@ public class LevelManager : MonoBehaviour{
 
                 currentPlayerLives -= 1;
 
-                if(currentPlayerLives > 0){
+                if (currentPlayerLives > 0)
+                {
                     countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
                     CreateSave_LevelEnd(currentLevelNumber);
                     SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
-                }else{
-                    if(isTrainingMode){
+                }
+                else
+                {
+                    if (isTrainingMode)
+                    {
                         int newDifficulty = currentDifficulty - 1;
-                        if(newDifficulty < 0){
+                        if (newDifficulty < 0)
+                        {
                             newDifficulty = 0;
                         }
 
-                        if (!File.Exists(aiTrainingFilePath)){
-                            using (StreamWriter sw = File.CreateText(aiTrainingFilePath)){
-                                sw.WriteLine("currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty");
-                                sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                        if (WebGLSaveSystem.IsWebGLPlatform())
+                        {
+                            bool fileExists = WebGLSaveSystem.FileExists(aiTrainingFilePath);
+                            string csvLine = currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," +
+                                totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty;
+
+                            if (!fileExists)
+                            {
+                                string header = "currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty";
+                                WebGLSaveSystem.WriteAllText(aiTrainingFilePath, header + "\n" + csvLine);
                             }
-                        }else{
-                            using(TextWriter tw = new StreamWriter(aiTrainingFilePath, true)){
-                                tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                            else
+                            {
+                                string existingData = WebGLSaveSystem.ReadAllText(aiTrainingFilePath);
+                                WebGLSaveSystem.WriteAllText(aiTrainingFilePath, existingData + "\n" + csvLine);
+                            }
+                        }
+                        else
+                        {
+                            if (!File.Exists(aiTrainingFilePath))
+                            {
+                                using (StreamWriter sw = File.CreateText(aiTrainingFilePath))
+                                {
+                                    sw.WriteLine("currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty");
+                                    sw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                                }
+                            }
+                            else
+                            {
+                                using (TextWriter tw = new StreamWriter(aiTrainingFilePath, true))
+                                {
+                                    tw.WriteLine(currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," + totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty);
+                                }
                             }
                         }
                     }
 
                     //Go Back to First Level:
-                    if(currentLevelNumber < numberLevelsCheckpoint){
+                    if (currentLevelNumber < numberLevelsCheckpoint)
+                    {
                         ResetSaveFile();
                         SceneManager.LoadScene(1, LoadSceneMode.Single);
-                    }else{
+                    }
+                    else
+                    {
                         ResetSaveFile(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint));
                         SceneManager.LoadScene(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint), LoadSceneMode.Single);
                     }
                 }
-            }else{
+            }
+            else
+            {
                 //Enemy Dancing Time:
                 currentDeadTime += Time.deltaTime;
 
-                if(currentDeadTime < 1f){
+                if (currentDeadTime < 1f)
+                {
                     countdownUI.text = "You Lost. :(";
-                }else{
+                }
+                else
+                {
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                 }
             }
