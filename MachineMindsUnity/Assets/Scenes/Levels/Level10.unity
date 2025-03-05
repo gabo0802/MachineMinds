@@ -17720,6 +17720,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2432857114072638028, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3001314140948248649, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.27279738
@@ -17862,7 +17866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6764098065676031780, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
+      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 6764098065676031780, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: m_AnchoredPosition.y
