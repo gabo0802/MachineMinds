@@ -765,8 +765,8 @@ MonoBehaviour:
   pointsUI: {fileID: 2405148518289923300}
   difficultyMultiplier: 2
   ammoUI: {fileID: 3986388341209005611}
-  maxBulletsInMagazine: 5
-  bulletReloadRatio: 0.1
+  maxBulletsInMagazine: 3
+  bulletReloadTime: 1.5
   totalPlayerBullets: 10
   fuelBar: {fileID: 3409819311176132308}
   boostCooldownRatio: 0.5
