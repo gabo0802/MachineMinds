@@ -48,16 +48,17 @@ public class LevelManager : MonoBehaviour
     //Player Shooting Variables:
     public TMPro.TextMeshProUGUI ammoUI = null;
     public int maxBulletsInMagazine = 5;
-    public float bulletReloadRatio = 0.1f;
-    private float currentBulletsInMagazine;
+    public float bulletReloadTime = 0.1f;
+    private float bulletReloadTimer = 0.1f;
+    private int currentBulletsInMagazine;
     public int totalPlayerBullets = 10;
     private int currentPlayerBullets;
 
     //Player Boost Variables:
     public UnityEngine.UI.Image fuelBar = null;
     private float fuelBarSizeMuliplier = 175f;
-    private const float bossBarSizeMax = 775f;
-    private float bossBarSizeMulitplier = 775f;
+    private const float bossBarSizeMax = 725f;
+    private float bossBarSizeMulitplier = 725f;
 
     public float boostCooldownRatio = 0.1f;
     public float timePlayerCanBoost = 5f;
@@ -185,18 +186,24 @@ public class LevelManager : MonoBehaviour
 
     private void tryPlayerShoot()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && (int)currentBulletsInMagazine > 0 && currentPlayerBullets > 0)
-        {
-            currentPlayerBullets--;
-            currentBulletsInMagazine -= 1f;
-            currentAlivePlayer.SendMessage("ShootBullet");
+        if(currentBulletsInMagazine > 0){
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
+            {
+                currentPlayerBullets--;
+                currentBulletsInMagazine--;
+                currentAlivePlayer.SendMessage("ShootBullet");
+            }
+        }else{
+            if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
+            {
+                bulletReloadTimer = 0;
+                currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+            }else{
+                bulletReloadTimer += Time.deltaTime;
+            }
         }
 
-        if (currentBulletsInMagazine < maxBulletsInMagazine && currentBulletsInMagazine < currentPlayerBullets)
-        {
-            currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
-        }
-        ammoUI.text = (int)currentBulletsInMagazine + " / " + currentPlayerBullets;
+        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
     }
 
     private void tryBoostPlayer()
@@ -250,8 +257,8 @@ public class LevelManager : MonoBehaviour
             bossBarSizeMulitplier /= bossMaxHealth;
         }
 
-        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 40);
-        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), -3);
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 35);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), 30);
 
         bossUIBar.color = new Color(1f, 1f, 1f, 1f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);

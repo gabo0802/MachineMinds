@@ -7,6 +7,7 @@ public class PlayerControls : MonoBehaviour
 {
     public GameObject playerBody;
     public GameObject cannonHead;
+    int layerMask;
 
     private Rigidbody2D rb;
 
@@ -57,8 +58,13 @@ public class PlayerControls : MonoBehaviour
     }
 
     public void ShootBullet()
-    {
-        Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
+    {   
+        float wallHitDistance = 0.1f;
+        RaycastHit2D shootWallGlitchPrevention = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.up, wallHitDistance, layerMask);
+
+        if(!shootWallGlitchPrevention){
+            Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
+        }
     }
 
     public void AffectSpeed(float newMultiplier)
@@ -167,6 +173,7 @@ public class PlayerControls : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
         rb = GetComponent<Rigidbody2D>();
     }
 
