@@ -20,7 +20,7 @@ public class EndScreenScript : MonoBehaviour
         if (Application.isEditor)
         {
             Debug.Log("Quitting game in editor");
-            EditorApplication.ExitPlaymode();
+            // EditorApplication.ExitPlaymode();
         }
         else
         {
