@@ -8,7 +8,11 @@ public class Test : MonoBehaviour
 
     public void Start()
     {
-        AddDocument("test-collection", "{\"testField\": \"testValue\"}", gameObject.name, "OnRequestSuccess", "OnRequestFailed");
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            AddDocument("test-collection", "{\"testField\": \"testValue\"}", gameObject.name, "OnRequestSuccess", "OnRequestFailed");
+            Debug.Log("WebGL");
+        }
     }
 
     private void OnRequestSuccess(string data)
