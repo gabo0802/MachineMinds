@@ -57,8 +57,8 @@ public class LevelManager : MonoBehaviour
     //Player Boost Variables:
     public UnityEngine.UI.Image fuelBar = null;
     private float fuelBarSizeMuliplier = 175f;
-    private const float bossBarSizeMax = 775f;
-    private float bossBarSizeMulitplier = 775f;
+    private const float bossBarSizeMax = 725f;
+    private float bossBarSizeMulitplier = 725f;
 
     public float boostCooldownRatio = 0.1f;
     public float timePlayerCanBoost = 5f;
@@ -257,8 +257,8 @@ public class LevelManager : MonoBehaviour
             bossBarSizeMulitplier /= bossMaxHealth;
         }
 
-        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 40);
-        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), -3);
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 35);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), 30);
 
         bossUIBar.color = new Color(1f, 1f, 1f, 1f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
