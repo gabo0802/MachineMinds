@@ -1,137 +1,464 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static WebGLSaveSystem;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 public class LevelManager : MonoBehaviour
 {
-    private string saveFilePath = "GameState";
-
-    private string aiTrainingFilePath = "GameData";
+    public GameObject surveyObject;
+    private GameObject activeSurvey;
+    private string saveKey = "GameState";
+    private string aiTrainingKey = "GameTrainingData";
     private bool isTrainingMode = true;
 
+    public int numberLevelsCheckpoint = 3;
+
+    //Current Level Variables:  
     private const string playerName = "player";
     private const string enemyName = "enemy";
 
-    private GameObject currentPlayer;
-    private TMPro.TextMeshProUGUI pointsUI;
-    private TMPro.TextMeshProUGUI countdownUI;
-    public GameObject difficultySurveyPrefab; // Reference to the DifficultySurvey prefab
-    private GameObject activeSurvey = null; // Reference to currently active survey
-    private float playerLifeTimer = 0f;
+    public UnityEngine.UI.Image backgroundImage;
+    public TMPro.TextMeshProUGUI countdownUI;
+    public TMPro.TextMeshProUGUI levelMessageUI;
 
+    private GameObject currentAlivePlayer;
+
+    private int currentLevelEnemyTotal = 0;
+
+    private int currentLevelNumber;
     private bool wonLevel = false;
+
     public float playerCelebrateTime = 3f;
     private float currentWinTime = 0f;
 
     public float playerRespawnTime = 3f;
     private float currentDeadTime = 0f;
 
-    private int currentEnemyTotal = 0;
-    private int totalEnemiesKilled = 0;
-
-    public float difficultyMultiplier = 2f;
+    //Difficulty AI Metrics:
     public int currentDifficulty = 1;
+    private int totalEnemiesKilled = 0;
     private float totalPoints = 0f;
+    private float playerLifeTimer = 0f;
 
-    private int levelStartEnemies = 0;
-    private float levelStartPoints = 0f;
-    private float playerLifeTimerStart = 0f;
+    //Player Points Variables:
+    public TMPro.TextMeshProUGUI pointsUI;
+    private float currentPlayerPoints = 0f;
+    public float difficultyMultiplier = 2f;
 
-    public int totalPlayerLives = 3;
-    private int currentPlayerLives;
+    //Player Shooting Variables:
+    public TMPro.TextMeshProUGUI ammoUI = null;
+    public int maxBulletsInMagazine = 5;
+    public float bulletReloadTime = 0.1f;
+    private float bulletReloadTimer = 0.1f;
+    private int currentBulletsInMagazine;
+    public int totalPlayerBullets = 10;
+    private int currentPlayerBullets;
 
-    private int numberLevelsCheckpoint = 3;
-    private int currentLevelNumber;
+    //Player Boost Variables:
+    public UnityEngine.UI.Image fuelBar = null;
+    private float fuelBarSizeMuliplier = 175f;
+    private const float bossBarSizeMax = 725f;
+    private float bossBarSizeMulitplier = 725f;
+
+    public float boostCooldownRatio = 0.1f;
+    public float timePlayerCanBoost = 5f;
+    private float playerBoostTimer;
+    public float playerBoostSpeedMultiplier = 2f;
+
+    //Player Lives Variables:
+    public UnityEngine.UI.Image[] playerHearts;
+    public const string spritePath = "DynamicSprites/heart_empty"; // Path inside Resources folder
+    public const string spritePathFull = "DynamicSprites/heart_full"; // Path inside Resources folder
+    public int maxPlayerLives = 3;
+    private int currentPlayerLives = 3;
+
+    public UnityEngine.UI.Image bossUIBar;
+    public UnityEngine.UI.Image bossUIBarPercent;
+    public TMPro.TextMeshProUGUI bossUIBarText;
+
+    //Functions:
+    private string[] getFileData(string key)
+    {
+        if (PlayerPrefs.HasKey(key))
+        {
+            string saveFileData = PlayerPrefs.GetString(key);
+            return saveFileData.Split('\n');
+        }
+        return new string[0];
+    }
+
+    private void writeFileData(string key, string[] newFileData, bool overwriteExistingFileData)
+    {
+        string saveData = "";
+
+        if (!overwriteExistingFileData && PlayerPrefs.HasKey(key))
+        {
+            saveData = PlayerPrefs.GetString(key) + "\n";
+        }
+
+        for (int i = 0; i < newFileData.Length; i++)
+        {
+            saveData += newFileData[i];
+            if (i < newFileData.Length - 1)
+            {
+                saveData += "\n";
+            }
+        }
+
+        PlayerPrefs.SetString(key, saveData);
+        PlayerPrefs.Save();
+    }
+
+    private void UpdateLivesUI()
+    {
+        // Load New Sprites
+        Texture2D emptyTexture = Resources.Load<Texture2D>(spritePath);
+        Texture2D fullTexture = Resources.Load<Texture2D>(spritePathFull);
+
+        // Check if textures loaded properly
+        if (emptyTexture == null || fullTexture == null)
+        {
+            Debug.LogError($"Failed to load textures! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+
+        Sprite emptyHeart = Sprite.Create(emptyTexture, new Rect(0, 0, emptyTexture.width, emptyTexture.height), new Vector2(0.5f, 0.5f));
+        Sprite fullHeart = Sprite.Create(fullTexture, new Rect(0, 0, fullTexture.width, fullTexture.height), new Vector2(0.5f, 0.5f));
+        if (emptyHeart == null || fullHeart == null)
+        {
+            Debug.LogError($"Failed to load sprites! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+        else
+        {
+            Debug.Log("Successfully loaded heart sprites!");
+        }
+
+
+        for (int i = 0; i < currentPlayerLives; i++)
+        {
+            playerHearts[i].sprite = fullHeart;
+        }
+
+        for (int i = currentPlayerLives; i < playerHearts.Length; i++)
+        {
+            playerHearts[i].sprite = emptyHeart;
+        }
+    }
+
+    private void NewGameData()
+    {
+        writeFileData(saveKey, new string[]{
+            "" + maxPlayerLives, //currentPlayerLives
+            "0", //totalPoints
+            "0", //totalEnemiesKilled
+            "" + currentDifficulty,  //currentDifficulty
+            "0",  //playerLifeTimer
+            "" + isTrainingMode //isTrainingMode
+        }, true);
+    }
+
+    private void LoadGameData()
+    {
+        if (PlayerPrefs.HasKey(saveKey))
+        {
+            string[] fileDataArray = getFileData(saveKey);
+
+            if (fileDataArray.Length >= 6)
+            {
+                currentPlayerLives = System.Int32.Parse(fileDataArray[0]);
+                totalPoints = System.Single.Parse(fileDataArray[1]);
+                totalEnemiesKilled = System.Int32.Parse(fileDataArray[2]);
+                currentDifficulty = System.Int32.Parse(fileDataArray[3]);
+                playerLifeTimer = System.Single.Parse(fileDataArray[4]);
+                isTrainingMode = bool.Parse(fileDataArray[5]);
+            }
+            else
+            {
+                NewGameData();
+            }
+        }
+        else
+        {
+            NewGameData();
+        }
+    }
+
+    private void tryPlayerShoot()
+    {
+        if(currentBulletsInMagazine > 0){
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
+            {
+                currentPlayerBullets--;
+                currentBulletsInMagazine--;
+                currentAlivePlayer.SendMessage("ShootBullet");
+            }
+        }else{
+            if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
+            {
+                bulletReloadTimer = 0;
+                currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+            }else{
+                bulletReloadTimer += Time.deltaTime;
+            }
+        }
+
+        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
+    }
+
+    private void tryBoostPlayer()
+    {
+        if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift))
+        {
+            playerBoostTimer -= Time.deltaTime;
+            currentAlivePlayer.SendMessage("AffectBoostSpeed", playerBoostSpeedMultiplier);
+        }
+        else
+        {
+            currentAlivePlayer.SendMessage("AffectBoostSpeed", 1f);
+
+            if (playerBoostTimer < timePlayerCanBoost)
+            {
+                playerBoostTimer += (Time.deltaTime * boostCooldownRatio);
+            }
+            else if (playerBoostTimer > timePlayerCanBoost)
+            {
+                playerBoostTimer = timePlayerCanBoost;
+            }
+        }
+
+        //Update UI:
+        float greenBarCutoff = 0.75f;
+        float yellowBarCutoff = 0.25f;
+
+        fuelBar.rectTransform.sizeDelta = new Vector2(fuelBarSizeMuliplier * playerBoostTimer, 15);
+        if (playerBoostTimer >= greenBarCutoff * timePlayerCanBoost)
+        {
+            fuelBar.color = new Color(0f, 1f, 0f);
+        }
+        else if (playerBoostTimer >= yellowBarCutoff * timePlayerCanBoost)
+        {
+            fuelBar.color = new Color(1f, 1f, 0f);
+        }
+        else
+        {
+            fuelBar.color = new Color(1f, 0f, 0f);
+        }
+        fuelBar.rectTransform.anchoredPosition = new Vector2((fuelBarSizeMuliplier * 0.9f) * (playerBoostTimer - timePlayerCanBoost), -3);
+    }
+
+    public void updateBossHealhBar(int[] bossParameters)
+    {
+        int bossCurrentHealth = bossParameters[0];
+        int bossMaxHealth = bossParameters[1];
+
+        if (bossBarSizeMulitplier > bossBarSizeMax / bossMaxHealth)
+        {
+            bossBarSizeMulitplier /= bossMaxHealth;
+        }
+
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 35);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), 30);
+
+        bossUIBar.color = new Color(1f, 1f, 1f, 1f);
+        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
+        bossUIBarText.text = "Boss Health";
+    }
+
+    private void goNextLevel()
+    {
+        if (!isTrainingMode)
+        {
+            adjustGameDifficulty();
+        }
+
+        writeFileData(saveKey, new string[]{
+            "" + currentPlayerLives, //currentPlayerLives
+            "" + totalPoints, //totalPoints
+            "" + totalEnemiesKilled, //totalEnemiesKilled
+            "" + currentDifficulty,  //currentDifficulty
+            "" + playerLifeTimer,  //playerLifeTimer
+            "" + isTrainingMode //isTrainingMode
+        }, true);
+
+        if (isTrainingMode)
+        {
+            Debug.Log("Training mode active, creating survey...");
+
+            if (surveyObject == null)
+            {
+                Debug.LogError("Cannot create survey: surveyObject is null!");
+                // Fallback to loading next level directly
+                SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
+                return;
+            }
+
+            // Check if survey prefab has a SurveyScript component
+            bool hasSurveyScript = surveyObject.GetComponent<MonoBehaviour>() != null &&
+                                surveyObject.GetComponent<MonoBehaviour>().GetType().Name.Contains("SurveyScript");
+
+            if (!hasSurveyScript)
+            {
+                Debug.LogWarning("Survey prefab doesn't have a SurveyScript component! Check that it's properly set up.");
+
+                // Log all components on the survey prefab
+                Component[] components = surveyObject.GetComponents<Component>();
+                string[] componentNames = new string[components.Length];
+                for (int i = 0; i < components.Length; i++)
+                {
+                    componentNames[i] = components[i].GetType().Name;
+                }
+                Debug.Log("Components on survey prefab: " + string.Join(", ", componentNames));
+            }
+
+            // Determine if survey is a UI element or a regular GameObject
+            bool isUIElement = surveyObject.GetComponent<RectTransform>() != null;
+
+            if (isUIElement)
+            {
+                // Create the survey as a child of the main canvas
+                Canvas mainCanvas = FindObjectOfType<Canvas>();
+                if (mainCanvas == null)
+                {
+                    Debug.LogError("No Canvas found in scene! Creating a new Canvas for the UI survey.");
+                    mainCanvas = new GameObject("MainCanvas").AddComponent<Canvas>();
+                    mainCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    mainCanvas.gameObject.AddComponent<UnityEngine.UI.CanvasScaler>();
+                    mainCanvas.gameObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+                }
+
+                activeSurvey = Instantiate(surveyObject, mainCanvas.transform);
+
+                // Set the survey's position to the center of the screen
+                RectTransform surveyRect = activeSurvey.GetComponent<RectTransform>();
+                if (surveyRect != null)
+                {
+                    surveyRect.anchoredPosition = Vector2.zero;
+                    surveyRect.anchorMin = new Vector2(0.5f, 0.5f);
+                    surveyRect.anchorMax = new Vector2(0.5f, 0.5f);
+                    surveyRect.pivot = new Vector2(0.5f, 0.5f);
+                    Debug.Log($"UI Survey positioned at center of screen: {surveyRect.anchoredPosition}");
+                }
+            }
+            else
+            {
+                // For non-UI objects, instantiate in world space
+                activeSurvey = Instantiate(surveyObject);
+
+                // Position at center of the screen in world space
+                Camera mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    // Place it in front of the camera
+                    Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 10);
+                    Vector3 worldPos = mainCamera.ScreenToWorldPoint(screenCenter);
+                    activeSurvey.transform.position = worldPos;
+                    Debug.Log($"Non-UI Survey positioned at world position: {worldPos}");
+                }
+                else
+                {
+                    // Fallback position if no camera is found
+                    activeSurvey.transform.position = Vector3.zero;
+                    Debug.LogWarning("No main camera found. Positioning survey at world origin.");
+                }
+            }
+
+            Debug.Log($"Survey instantiated: {activeSurvey.name}, Active: {activeSurvey.activeInHierarchy}");
+
+            activeSurvey.SendMessage("SetFileData", new string[]{
+                "" + currentPlayerLives, //currentPlayerLives
+                "" + totalPoints, //totalPoints
+                "" + totalEnemiesKilled, //totalEnemiesKilled
+                "" + currentDifficulty,  //currentDifficulty
+                "" + playerLifeTimer,  //playerLifeTimer
+                "" + currentLevelNumber //levelsBeat
+            });
+
+            activeSurvey.SendMessage("SetNextLevel", currentLevelNumber + 1);
+            Debug.Log("Survey data and next level set successfully.");
+        }
+        else
+        {
+            SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
+        }
+    }
+
+    private void onPlayerDeath()
+    {
+        currentPlayerLives -= 1;
+
+        if (currentPlayerLives > 0)
+        {
+            goRetryCurrentLevel();
+        }
+        else
+        {
+            goBackToCheckpointLevel();
+        }
+    }
+
+    private void goRetryCurrentLevel()
+    {
+        string[] currentSaveData = getFileData(saveKey);
+
+        //adjustGameDifficulty();
+
+        writeFileData(saveKey, new string[]{
+            "" + currentPlayerLives, //currentPlayerLives
+            currentSaveData.Length > 1 ? currentSaveData[1] : "0", //totalPoints
+            currentSaveData.Length > 2 ? currentSaveData[2] : "0", //totalEnemiesKilled
+            currentDifficulty + "",  //currentDifficulty
+            currentSaveData.Length > 4 ? currentSaveData[4] : "0",  //playerLifeTimer
+            currentSaveData.Length > 5 ? currentSaveData[5] : "false" //isTrainingMode
+        }, true);
+
+        SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
+    }
+
+    private void goBackToCheckpointLevel()
+    {
+        int goLevelNumber = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
+
+        if (isTrainingMode)
+        {
+            activeSurvey = (GameObject)Instantiate(surveyObject);
+            activeSurvey.SendMessage("SetFileData", new string[]{
+            "" + currentPlayerLives, //currentPlayerLives
+            "" + totalPoints, //totalPoints
+            "" + totalEnemiesKilled, //totalEnemiesKilled
+            "" + currentDifficulty,  //currentDifficulty
+            "" + playerLifeTimer,  //playerLifeTimer
+            "" + (currentLevelNumber - 1) //levelsBeat
+            });
+
+            int nextLevel = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
+            activeSurvey.SendMessage("SetNextLevel", goLevelNumber);
+            NewGameData();
+        }
+        else
+        {
+            adjustGameDifficulty();
+            NewGameData();
+            SceneManager.LoadScene(goLevelNumber, LoadSceneMode.Single);
+        }
+    }
 
     void OnEnemyDeath(int enemyPointWorth)
     {
         totalEnemiesKilled += 1;
-        currentEnemyTotal -= 1;
+        currentLevelEnemyTotal -= 1;
         totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
 
         pointsUI.text = totalPoints + " pts";
 
-        if (currentEnemyTotal <= 0 && currentPlayer)
+        if (currentLevelEnemyTotal <= 0 && currentAlivePlayer)
         {
             wonLevel = true;
         }
     }
 
-    void ResetSaveFile(int currentLevelNumber = 1)
+    private void findAllLevelObjects()
     {
-        playerLifeTimer = 0f;
-        currentPlayerLives = totalPlayerLives;
-        totalPoints = 0f;
-        totalEnemiesKilled = 0;
-        CreateSave_LevelEnd(currentLevelNumber);
-    }
-
-    void CreateSave_LevelRetry(int currentLevelNumber)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine(currentPlayerLives.ToString());
-        sb.AppendLine(levelStartPoints.ToString());
-        sb.AppendLine(levelStartEnemies.ToString());
-        sb.AppendLine(currentDifficulty.ToString());
-        sb.AppendLine(playerLifeTimerStart.ToString());
-        sb.AppendLine(isTrainingMode.ToString());
-        WebGLSaveSystem.WriteAllText(saveFilePath, sb.ToString());
-    }
-
-    void CreateSave_LevelEnd(int currentLevelNumber)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine(currentPlayerLives.ToString());
-        sb.AppendLine(totalPoints.ToString());
-        sb.AppendLine(totalEnemiesKilled.ToString());
-        sb.AppendLine(currentDifficulty.ToString());
-        sb.AppendLine(playerLifeTimer.ToString());
-        sb.AppendLine(isTrainingMode.ToString());
-        WebGLSaveSystem.WriteAllText(saveFilePath, sb.ToString());
-    }
-
-    void LoadSave()
-    {
-        bool fileExists = WebGLSaveSystem.FileExists(saveFilePath);
-
-        if (fileExists)
-        {
-            string saveFileData = WebGLSaveSystem.ReadAllText(saveFilePath);
-
-            string[] fileArray = saveFileData.Split('\n');
-            currentPlayerLives = System.Int32.Parse(fileArray[0]);
-            totalPoints = System.Single.Parse(fileArray[1]);
-            totalEnemiesKilled = System.Int32.Parse(fileArray[2]);
-            currentDifficulty = System.Int32.Parse(fileArray[3]);
-            playerLifeTimer = System.Single.Parse(fileArray[4]);
-            isTrainingMode = bool.Parse(fileArray[5]);
-
-            playerLifeTimerStart = playerLifeTimer;
-            levelStartEnemies = totalEnemiesKilled;
-            levelStartPoints = totalPoints;
-        }
-        else
-        {
-            ResetSaveFile();
-        }
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
-
-        LoadSave();
-
-        // Check if the difficulty survey prefab is assigned
-        if (difficultySurveyPrefab == null)
-        {
-            Debug.LogWarning("DifficultySurvey prefab is not assigned in the Inspector!");
-        }
-
-        //Get enemy total + get player object
         Collider2D[] allHitObjectsInScence = Physics2D.OverlapCircleAll(new Vector2(0, 0), Mathf.Infinity);
         List<GameObject> allEnemies = new List<GameObject>();
 
@@ -142,210 +469,176 @@ public class LevelManager : MonoBehaviour
             if (currentObjectName.ToLower().Contains(enemyName))
             {
                 allEnemies.Add(currentHitObject.transform.gameObject);
-                currentEnemyTotal += 1;
+                currentLevelEnemyTotal += 1;
             }
             else if (currentObjectName.ToLower().Contains(playerName))
             {
-                currentPlayer = currentHitObject.transform.gameObject;
-                currentPlayer.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
-                currentPlayer.SendMessageUpwards("SetLivesUI", currentPlayerLives);
+                currentAlivePlayer = currentHitObject.transform.gameObject;
             }
         }
 
         foreach (GameObject enemyObject in allEnemies)
         {
-            enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[] { gameObject, currentPlayer });
+            enemyObject.SendMessageUpwards("SetGameObjects", new GameObject[] { gameObject, currentAlivePlayer });
             enemyObject.SendMessageUpwards("SetDifficultyLevel", currentDifficulty);
         }
-
-        pointsUI = currentPlayer.transform.GetChild(2).GetChild(1).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
-        countdownUI = transform.GetChild(0).GetChild(0).GetComponent<TMPro.TextMeshProUGUI>();
-
-        //Save point total across levels
-        pointsUI.text = totalPoints + " pts";
     }
 
-    // Update is called once per frame
-    void Update()
+    private void adjustGameDifficulty()
     {
-        if (currentPlayer)
+        //call AI
+        //currentDifficulty = getAIData();
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if (surveyObject == null)
         {
-            countdownUI.text = "";
-            playerLifeTimer += Time.deltaTime;
-
-            if (wonLevel)
-            {
-                if (currentWinTime > playerCelebrateTime)
-                {
-                    if (currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives)
-                    {
-                        currentPlayerLives++;
-                    }
-
-                    countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
-                    Debug.Log("Total: " + SceneManager.sceneCountInBuildSettings);
-
-                    // If in training mode, show the difficulty survey
-                    // Instantiate the survey as a UI element
-                    Canvas canvas = FindObjectOfType<Canvas>();
-                    if (canvas != null)
-                    {
-                        activeSurvey = Instantiate(difficultySurveyPrefab, canvas.transform);
-                    }
-                    else
-                    {
-                        activeSurvey = Instantiate(difficultySurveyPrefab);
-                    }
-                    Debug.Log("Survey instantiated: " + (activeSurvey != null));
-
-                    // Make sure the survey is visible in the scene
-                    RectTransform surveyRect = activeSurvey.GetComponent<RectTransform>();
-                    if (surveyRect != null)
-                    {
-                        surveyRect.anchoredPosition = Vector2.zero;
-                        surveyRect.sizeDelta = new Vector2(1920, 1080); // Standard UI size
-                    }
-
-                    // Set up the survey with save file data
-                    string saveFileData = WebGLSaveSystem.ReadAllText(saveFilePath);
-                    string[] fileDataArray = saveFileData.Split('\n');
-
-                    // Get the SurveyScript component
-                    SurveyScript surveyScript = activeSurvey.GetComponent<SurveyScript>();
-                    if (surveyScript != null)
-                    {
-                        Debug.Log("SurveyScript component found");
-                        surveyScript.SetFileData(fileDataArray);
-                        surveyScript.SetNextLevel(currentLevelNumber + 1);
-                    }
-                    else
-                    {
-                        Debug.LogError("SurveyScript component not found on the survey prefab");
-                    }
-
-                    // Pause the progression to next level until survey is completed
-                    return;
-                }
-
-                if (currentLevelNumber + 1 == SceneManager.sceneCountInBuildSettings - 1 && isTrainingMode)
-                {
-                    int newDifficulty = currentDifficulty + 1;
-
-                    bool fileExists = WebGLSaveSystem.FileExists(aiTrainingFilePath);
-                    string csvLine = currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," +
-                        totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty;
-
-                    if (!fileExists)
-                    {
-                        string header = "currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty";
-                        WebGLSaveSystem.WriteAllText(aiTrainingFilePath, header + "\n" + csvLine);
-                    }
-                    else
-                    {
-                        string existingData = WebGLSaveSystem.ReadAllText(aiTrainingFilePath);
-                        WebGLSaveSystem.WriteAllText(aiTrainingFilePath, existingData + "\n" + csvLine);
-                    }
-                }
-
-                //Load Next Level:
-                CreateSave_LevelEnd(currentLevelNumber + 1);
-                SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
-            }
-            else
-            {
-                //Celebrate Time!!!!:
-                currentWinTime += Time.deltaTime;
-
-                if (currentWinTime < 1f)
-                {
-                    countdownUI.text = "You Won! :)";
-                }
-                else if (currentWinTime < playerCelebrateTime * 0.5f && currentLevelNumber % 5 == 0 && currentPlayerLives >= totalPlayerLives)
-                {
-                    countdownUI.text = "Lives Increased";
-                }
-                else
-                {
-                    countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
-                }
-            }
+            Debug.LogError("Survey object is not assigned in LevelManagerNew! The survey will not display at the end of levels.");
         }
         else
         {
-            countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
-            if (currentDeadTime > playerRespawnTime)
+            Debug.Log($"Survey prefab assigned: {surveyObject.name}");
+
+            // Check if survey prefab has a SurveyScript component
+            bool hasSurveyScript = surveyObject.GetComponent<MonoBehaviour>() != null &&
+                                surveyObject.GetComponent<MonoBehaviour>().GetType().Name.Contains("SurveyScript");
+
+            if (!hasSurveyScript)
             {
-                //Loading:
-                countdownUI.text = "Loading...";
+                Debug.LogError("Survey prefab doesn't have a SurveyScript component! It won't function properly.");
 
-                /*
-                //Send to AI?:
-                sendToAI()
-                */
-
-                currentPlayerLives -= 1;
-
-                if (currentPlayerLives > 0)
+                // Log all components on the survey prefab
+                Component[] components = surveyObject.GetComponents<Component>();
+                string[] componentNames = new string[components.Length];
+                for (int i = 0; i < components.Length; i++)
                 {
-                    countdownUI.text = currentPlayerLives + " / " + totalPlayerLives;
-                    CreateSave_LevelEnd(currentLevelNumber);
-                    SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
+                    componentNames[i] = components[i].GetType().Name;
                 }
-                else
+                Debug.Log("Components on survey prefab: " + string.Join(", ", componentNames));
+            }
+
+            // Check if it's a UI element
+            bool isUIElement = surveyObject.GetComponent<RectTransform>() != null;
+            if (isUIElement)
+            {
+                Debug.Log("Survey prefab is a UI element.");
+                if (surveyObject.GetComponent<CanvasRenderer>() == null)
                 {
-                    if (isTrainingMode)
+                    Debug.LogWarning("Survey prefab is missing CanvasRenderer component which is typically needed for UI elements.");
+                }
+            }
+            else
+            {
+                Debug.Log("Survey prefab is a non-UI GameObject. It will be positioned in world space.");
+            }
+        }
+
+        fuelBarSizeMuliplier /= timePlayerCanBoost;
+        currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
+        LoadGameData();
+
+        currentPlayerBullets = totalPlayerBullets * currentDifficulty;
+        currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+        playerBoostTimer = timePlayerCanBoost;
+
+        findAllLevelObjects();
+
+        pointsUI.text = totalPoints + " pts";
+        countdownUI.text = "";
+        levelMessageUI.text = "";
+        backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 0f);
+        UpdateLivesUI();
+
+        bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+        bossUIBarText.text = "";
+    }
+
+    bool freezeGame = false;
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            freezeGame = !freezeGame;
+            Time.timeScale = freezeGame ? 0f : 1f;
+        }
+
+        if (activeSurvey)
+        {
+            Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
+
+            // Determine if survey is a UI element
+            RectTransform rt = activeSurvey.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                Debug.Log($"UI Survey position: {rt.anchoredPosition}, Size: {rt.sizeDelta}, Scale: {rt.localScale}");
+                Debug.Log($"Survey anchors: min={rt.anchorMin}, max={rt.anchorMax}, pivot={rt.pivot}");
+            }
+            else
+            {
+                // For non-UI surveys, log the world position
+                Debug.Log($"Non-UI Survey world position: {activeSurvey.transform.position}, rotation: {activeSurvey.transform.rotation}");
+            }
+
+            // Log all components on the active survey for debugging
+            Component[] components = activeSurvey.GetComponents<Component>();
+            string[] componentNames = new string[components.Length];
+            for (int i = 0; i < components.Length; i++)
+            {
+                componentNames[i] = components[i].GetType().Name;
+            }
+            Debug.Log("Components on active survey: " + string.Join(", ", componentNames));
+        }
+        if (!activeSurvey && Time.timeScale != 0f)
+        {
+            if (currentAlivePlayer)
+            {
+                tryBoostPlayer();
+                tryPlayerShoot();
+
+                playerLifeTimer += Time.deltaTime;
+
+                if (wonLevel)
+                {
+                    
+                    bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+                    bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+                    bossUIBarText.text = "";
+                    backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                    countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
+                    levelMessageUI.text = "You Won";
+
+                    if (currentWinTime > playerCelebrateTime)
                     {
-                        int newDifficulty = currentDifficulty - 1;
-                        if (newDifficulty < 0)
-                        {
-                            newDifficulty = 0;
-                        }
-
-                        bool fileExists = WebGLSaveSystem.FileExists(aiTrainingFilePath);
-                        string csvLine = currentPlayerLives + "," + currentLevelNumber + "," + totalPoints + "," +
-                            totalEnemiesKilled + "," + currentDifficulty + "," + playerLifeTimer + "," + newDifficulty;
-
-                        if (!fileExists)
-                        {
-                            string header = "currentPlayerLives,currentLevelNumber,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,newDifficulty";
-                            WebGLSaveSystem.WriteAllText(aiTrainingFilePath, header + "\n" + csvLine);
-                        }
-                        else
-                        {
-                            string existingData = WebGLSaveSystem.ReadAllText(aiTrainingFilePath);
-                            WebGLSaveSystem.WriteAllText(aiTrainingFilePath, existingData + "\n" + csvLine);
-                        }
-                    }
-
-                    //Go Back to First Level:
-                    if (currentLevelNumber < numberLevelsCheckpoint)
-                    {
-                        ResetSaveFile();
-                        SceneManager.LoadScene(1, LoadSceneMode.Single);
+                        levelMessageUI.text = "Loading...";
+                        countdownUI.text = "";
+                        goNextLevel();
                     }
                     else
                     {
-                        ResetSaveFile(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint));
-                        SceneManager.LoadScene(currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint), LoadSceneMode.Single);
+                        currentWinTime += Time.deltaTime;
                     }
                 }
             }
             else
             {
-                //Enemy Dancing Time:
-                currentDeadTime += Time.deltaTime;
+                backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
+                levelMessageUI.text = "You Lost";
 
-                if (currentDeadTime < 1f)
+                if (currentDeadTime > playerRespawnTime)
                 {
-                    countdownUI.text = "You Lost. :(";
+                    levelMessageUI.text = "Loading...";
+                    countdownUI.text = "";
+                    onPlayerDeath();
                 }
                 else
                 {
-                    countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
+                    currentDeadTime += Time.deltaTime;
                 }
             }
         }
     }
 }
-
-

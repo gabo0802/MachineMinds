@@ -2,105 +2,130 @@ using System;
 using UnityEngine;
 using Pathfinding;
 
-public class EnemyBehavior : MonoBehaviour{
-    public GameObject cannonHead;
-    
-    public GameObject tireThreads;
-    private float tireThreadRevealTimer = 0f;
-    public float tireThreadRevealInterval = 0.5f;
-
+public class EnemyBehavior : MonoBehaviour
+{
     private Rigidbody2D rb;
     int layerMask;
 
     private AIPath path;
-    private bool canShoot;
+
+    private Vector2 patrolDestination;
     private Vector2 lastPosition;
     private float stuckCheckTimer = 0f;
     private float stuckCheckInterval = 0.5f;
 
-    private GameObject targetPlayer;
-    private GameObject currentActualTarget;
-    private GameObject levelManager;
-    private Vector2 patrolDestination;
-    
-    public float enemyMoveSpeed = 1f;
-    private float enemyMoveSpeedSlowMultiplier = 1f;
+    public GameObject cannonHead;
+    private float turretRotationSpeedMultiplier = 1f;
+
+    public GameObject tireThreads;
+    public float tireThreadCreateInterval = 0.5f;
+    private float tireThreadCreateTimer = 0f;
 
     public int maxEnemyHealth; //# bullets they can survive
     private int currentEnemyHealth;
 
+    public float enemyMoveSpeed = 1f;
+    private float enemyMoveSpeedMultiplier = 1f;
+
     public GameObject enemyBullet;
-    public float bulletShotSpawnOffset = 0.5f;
+    public float enemyShootInterval = 5f;
+    private float enemyShootTimer = 0f;
+    private float bulletShotSpawnOffset;
     public bool shootIfCannotSeePlayer = false;
 
-    public float enemyFireRate = 5f;
-    private float enemyFireTimer = 0f;
+    public float pointsWorth = 100;
+    private int currentDifficulty = 1;
+    private GameObject levelManager;
 
-    //public float distanceToPlayer = 5f;
-
-    public float pointsWorth;
-
+    private GameObject currentAlivePlayer;
     private const string playerName = "player";
 
-    private int currentDifficulty = 0;
+    private GameObject currentTarget;
+    public bool isBoss = false;
 
-    public void AffectSlowdownSpeed(float newMultiplier){
-        enemyMoveSpeedSlowMultiplier = newMultiplier;
+    public void AffectSpeed(float newMultiplier)
+    {
+        enemyMoveSpeedMultiplier = newMultiplier;
     }
 
-    public void SetGameObjects(GameObject[] parameters){
+    public void SetGameObjects(GameObject[] parameters)
+    {
         levelManager = parameters[0];
-        targetPlayer = parameters[1];
+        currentAlivePlayer = parameters[1];
     }
 
-    public void SetDifficultyLevel(int newDifficultyLevel){
+    public void SetDifficultyLevel(int newDifficultyLevel)
+    {
         currentDifficulty = newDifficultyLevel;
-        Debug.Log("Enemy Difficulty " + currentDifficulty);
+        currentEnemyHealth *= currentDifficulty;
     }
 
-    void OnExplosionHit(){
+    void OnExplosionHit()
+    {
         Debug.Log(gameObject.name + " got hit be explosion");
 
         currentEnemyHealth -= 1; //could make explosions instant kills?
 
-        if(currentEnemyHealth <= 0){
-            if(levelManager){
-                levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
+        if (currentEnemyHealth <= 0)
+        {
+            if (levelManager)
+            {
+                levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
             }
             Destroy(gameObject);
         }
     }
 
-    void OnBulletHit(GameObject bullet){
-        //string bulletType = bullet.name;
-        //Debug.Log("Enemy Bullet Hit" + bulletType);
-        if(!currentActualTarget && cannonHead){
-            cannonHead.transform.up = bullet.transform.position - transform.position;
+    void OnBulletHit(GameObject bullet)
+    {
+        if (!currentTarget)
+        {
+            if (enemyMoveSpeed > 0f)
+            {
+                patrolDestination = (Vector2)currentAlivePlayer.transform.position;
+            }
+            else
+            {
+                currentTarget = currentAlivePlayer;
+            }
         }
 
-        if(bullet){
+        if (bullet)
+        {
             Destroy(bullet);
         }
 
         currentEnemyHealth -= 1;
+        if (isBoss)
+        {
+            levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
+        }
 
-        if(currentEnemyHealth <= 0){
-            if(levelManager){
-                levelManager.transform.SendMessageUpwards("OnEnemyDeath", pointsWorth);
+        if (currentEnemyHealth <= 0)
+        {
+            if (levelManager)
+            {
+                levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
             }
             Destroy(gameObject);
         }
     }
 
-    private void PathFindingStuckFix(bool isPatrolling){
-        if(stuckCheckTimer <= 0){
-            Vector2 latestPosition = (Vector2) transform.position;
+    private void PathFindingStuckFix(bool isPatrolling)
+    {
+        if (stuckCheckTimer <= 0)
+        {
+            Vector2 latestPosition = (Vector2)transform.position;
             stuckCheckTimer = stuckCheckInterval;
 
-            if(Vector2.Distance(latestPosition, lastPosition) <= 0.01f){
-                if(isPatrolling){
+            if (Vector2.Distance(latestPosition, lastPosition) <= 0.01f)
+            {
+                if (isPatrolling)
+                {
                     patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
-                }else{
+                }
+                else
+                {
                     Debug.Log("Stuck");
                     transform.Rotate(0, 0, 180f);
                     //rb.AddForce(-transform.up * 5000f);
@@ -113,15 +138,116 @@ public class EnemyBehavior : MonoBehaviour{
         stuckCheckTimer -= Time.deltaTime;
     }
 
+
+    private float currentAngle;
+    private float turnTimer;
+
+    private void PatrolBehavior()
+    {
+        float rotationSpeed = 60f * turretRotationSpeedMultiplier;
+        cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * rotationSpeed, 160) - 80); //(-80, 80)
+
+        RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+        RaycastHit2D lookForPlayerRay2 = Physics2D.Raycast(transform.position + (transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
+
+        Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
+        Debug.DrawLine(transform.position, transform.position + (transform.up * 100f), Color.blue);
+
+        if (lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
+        {
+            currentTarget = currentAlivePlayer;
+            cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
+        else if (lookForPlayerRay2 && lookForPlayerRay2.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
+        {
+            currentTarget = currentAlivePlayer;
+            cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
+
+        if (!currentTarget && enemyMoveSpeed > 0f)
+        {
+            path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedMultiplier;
+            if (Vector2.Distance(transform.position, patrolDestination) <= 2f)
+            {
+                patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
+            }
+            PathFindingStuckFix(true);
+            path.destination = patrolDestination;
+        }
+    }
+
+    private void TargetPlayerBehavior()
+    {
+        cannonHead.transform.up = currentTarget.transform.position - transform.position;
+        cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
+
+        RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+
+        if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName))
+        {
+            if (enemyMoveSpeed > 0f)
+            {
+                path.maxSpeed = 0.01f;
+            }
+        }
+        else
+        {
+            if (enemyMoveSpeed > 0f)
+            {
+                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedMultiplier;
+                path.destination = currentTarget.transform.position;
+            }
+
+            PathFindingStuckFix(false);
+        }
+
+        if (enemyShootTimer >= enemyShootInterval / currentDifficulty)
+        {
+            //Debug.Log(hit.transform.gameObject.name);
+            if (shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)))
+            {
+                GameObject currentBullet = currentBullet = (GameObject)Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                currentBullet.SendMessageUpwards("SetTarget", currentAlivePlayer);
+
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
+                Color.green, enemyShootInterval / 2);
+                enemyShootTimer = 0f;
+            }
+            else if (scanAhead)
+            {
+                Debug.Log(scanAhead.transform.gameObject.name);
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
+                Color.red, enemyShootInterval / 2);
+                enemyShootTimer = enemyShootInterval / (currentDifficulty * 2f);
+            }
+            else
+            {
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * 100f),
+                Color.white, enemyShootInterval / 2);
+                enemyShootTimer = enemyShootInterval / (currentDifficulty * 2f);
+            }
+        }
+        else
+        {
+            enemyShootTimer += Time.deltaTime;
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start(){
+    void Start()
+    {
         layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
 
-        if(currentDifficulty < 1){
+        if (currentDifficulty < 1)
+        {
             currentDifficulty = 1;
         }
 
-        if(maxEnemyHealth < 1){
+        if (maxEnemyHealth < 1)
+        {
             maxEnemyHealth = 1;
         }
 
@@ -130,109 +256,53 @@ public class EnemyBehavior : MonoBehaviour{
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
 
-        lastPosition = (Vector2) transform.position;
-        patrolDestination = (Vector2) transform.position;
-
+        lastPosition = (Vector2)transform.position;
+        patrolDestination = (Vector2)transform.position;
     }
-    
+
 
     // Update is called once per frame
-    void Update(){
-        if(tireThreads){
-            if(path.maxSpeed > 0.01f && tireThreadRevealTimer < 0){
-                tireThreadRevealTimer = tireThreadRevealInterval;
+    void Update()
+    {
+        if (isBoss)
+        {
+            if (levelManager)
+            {
+                levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
+            }
+        }
+
+        if (tireThreads)
+        {
+            if (path.maxSpeed > 0.01f && tireThreadCreateTimer < 0)
+            {
+                tireThreadCreateTimer = tireThreadCreateInterval;
                 Instantiate(tireThreads, transform.position, transform.rotation);
-            }else{
-                tireThreadRevealTimer -= Time.deltaTime;
+            }
+            else
+            {
+                tireThreadCreateTimer -= Time.deltaTime;
             }
         }
-        if(currentActualTarget){
-            if(cannonHead){
-                cannonHead.transform.up = currentActualTarget.transform.position - transform.position;
-            }
 
-            RaycastHit2D scanAhead;
-            if(cannonHead){
-                scanAhead = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
-            }else{
-                scanAhead = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
-            }
-
-            //Target Player:
-            /*transform.up = currentActualTarget.transform.position - transform.position;
-            if (Vector2.Distance(transform.position, currentActualTarget.transform.position) > distanceToPlayer){
-                rb.linearVelocity = transform.up * enemyMoveSpeed;
-            }else{
-                rb.linearVelocity = transform.up * 0.000001f;
-            }*/
-
-            if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)){
-                path.maxSpeed = 0.01f;
-            }else{
-                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedSlowMultiplier;
-                path.destination = currentActualTarget.transform.position;
-
-                PathFindingStuckFix(false);
-            }
-
-            //Shoot Player:
-            if(enemyFireTimer >= enemyFireRate / currentDifficulty){                
-                //Debug.Log(hit.transform.gameObject.name);
-                if(shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName))){
-                    GameObject currentBullet;
-                    if(cannonHead){
-                        currentBullet = (GameObject) Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
-                    }else{
-                        currentBullet = (GameObject) Instantiate(enemyBullet, transform.position + (transform.up * bulletShotSpawnOffset), transform.rotation);
-                    }
-                    currentBullet.SendMessageUpwards("SetTarget", targetPlayer);
-                     
-                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * scanAhead.distance), Color.red, enemyFireRate / 2);
-                }else{
-                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white, enemyFireRate / 2);
-                }
-                
-                enemyFireTimer = 0f;
-            }else{
-                enemyFireTimer += Time.deltaTime;
-            }
-        }else if(!targetPlayer){
-            //Celebrate?
+        if (!currentAlivePlayer)
+        {
+            //Player is Dead
+            path.maxSpeed = 0f;
+            path.destination = transform.position;
             transform.Rotate(0, 0, 1f);
-        }else{
-            RaycastHit2D lookForPlayerRay;
 
-            for(int i = 0; i < 4; i++){          
-                if(i == 0){
-                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
-                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
-                    cannonHead.transform.Rotate(new Vector3(0, 0, 1f));
-                }else if(i == 2){
-                    lookForPlayerRay = Physics2D.Raycast(transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
-                    Debug.DrawLine(transform.position + (transform.up * bulletShotSpawnOffset), transform.position + (transform.up * 100f), Color.blue);
-                }else if(i == 3){
-                    lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position - (transform.up * bulletShotSpawnOffset), -cannonHead.transform.up, Mathf.Infinity, layerMask);
-                    Debug.DrawLine(cannonHead.transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position - (cannonHead.transform.up * 100f), Color.white);
-                }else{
-                    lookForPlayerRay = Physics2D.Raycast(transform.position - (cannonHead.transform.up * bulletShotSpawnOffset), -transform.up, Mathf.Infinity, layerMask);
-                    Debug.DrawLine(transform.position - (transform.up * bulletShotSpawnOffset), transform.position - (transform.up * 100f), Color.blue);
-                }
-
-                if(lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(targetPlayer.transform.gameObject.name)){
-                    currentActualTarget = targetPlayer;
-                }
-            }
-            
-            if(!currentActualTarget){
-                path.maxSpeed = enemyMoveSpeed * currentDifficulty * enemyMoveSpeedSlowMultiplier;
-                if(Vector2.Distance(transform.position, patrolDestination) <= 2f){
-                    patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
-                }
-                PathFindingStuckFix(true);
-                path.destination = patrolDestination;
-            }
         }
-
-        
+        else if (!currentTarget)
+        {
+            //Patrol Behavior
+            PatrolBehavior();
+        }
+        else
+        {
+            //Target Player Behavior
+            TargetPlayerBehavior();
+        }
     }
+
 }

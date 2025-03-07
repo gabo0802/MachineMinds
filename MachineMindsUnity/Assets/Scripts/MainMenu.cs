@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-//using UnityEditor; //only for testing, remove when building
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine.UI;
 using static WebGLSaveSystem;
 using System.IO;
@@ -32,7 +34,15 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
-        //EditorApplication.ExitPlaymode(); //only for testing, remove when building
+        if (Application.isEditor)
+        {
+            Debug.Log("Quitting game in editor");
+            // EditorApplication.ExitPlaymode();
+        }
+        else
+        {
+            Debug.Log("Quitting game in build");
+            Application.Quit();
+        }
     }
 }
