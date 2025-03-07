@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 
-public class LevelManagerNew : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
     public GameObject surveyObject;
     private GameObject activeSurvey;
