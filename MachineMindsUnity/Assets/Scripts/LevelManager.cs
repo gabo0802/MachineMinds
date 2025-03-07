@@ -602,6 +602,10 @@ public class LevelManager : MonoBehaviour
 
                 if (wonLevel)
                 {
+                    
+                    bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+                    bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+                    bossUIBarText.text = "";
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                     levelMessageUI.text = "You Won";
