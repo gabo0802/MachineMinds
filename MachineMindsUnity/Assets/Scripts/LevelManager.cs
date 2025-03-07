@@ -549,9 +549,15 @@ public class LevelManager : MonoBehaviour
         bossUIBarText.text = "";
     }
 
+    bool freezeGame = false;
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            freezeGame = !freezeGame;
+            Time.timeScale = freezeGame ? 0f : 1f;
+        }
+
         if (activeSurvey)
         {
             Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
@@ -578,7 +584,7 @@ public class LevelManager : MonoBehaviour
             }
             Debug.Log("Components on active survey: " + string.Join(", ", componentNames));
         }
-        if (!activeSurvey)
+        if (!activeSurvey && Time.timeScale != 0f)
         {
             if (currentAlivePlayer)
             {
