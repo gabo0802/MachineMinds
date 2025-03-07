@@ -173,7 +173,7 @@ public class PlayerControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameObject)
+        if (gameObject && Time.timeScale != 0f)
         {
             //Move Cannon to Mouse Position
             Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
