@@ -1,12 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.IO;
 //using UnityEditor; //only for testing, remove when building
 
 public class EndScreenScript : MonoBehaviour{
     public TMPro.TextMeshProUGUI finalPointsUI = null;
-    private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
+    private const string SAVE_KEY = "GameState";
 
     public void MainMenuButton(){
         SceneManager.LoadScene("Scenes/MainMenu", LoadSceneMode.Single);
@@ -18,20 +17,14 @@ public class EndScreenScript : MonoBehaviour{
     }
 
     void Start(){
-        if (File.Exists(saveFilePath)){
-            string saveFileData = "";
-            using (StreamReader saveFile = File.OpenText(saveFilePath)){
-                string currentLine;
-                while ((currentLine = saveFile.ReadLine()) != null){
-                    saveFileData += currentLine + "\n";
-                }
-            }
-
+        if (WebGLSaveSystem.FileExists(SAVE_KEY)){
+            string saveFileData = WebGLSaveSystem.ReadAllText(SAVE_KEY);
+            
             string[] fileArray = saveFileData.Split('\n');
             string totalPoints = fileArray[1];
-
+            
             finalPointsUI.text = "Final Score: " + totalPoints;
             //test comment
-         }
+        }
     }
 }

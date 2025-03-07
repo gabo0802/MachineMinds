@@ -1,11 +1,11 @@
 using UnityEngine;
-using System.IO;
 using UnityEngine.SceneManagement;
 
 public class SurveyScript : MonoBehaviour
 {
-    private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
-    private string aiTrainingFilePath = Application.dataPath + "/Resources/game_data.csv";
+    private string saveFilePath = "GameState";
+
+    private string aiTrainingFilePath = "GameData";
 
     private string[] fileData;
     private int currentDifficulty = 1;
@@ -19,43 +19,38 @@ public class SurveyScript : MonoBehaviour
     //Functions:
     private string[] getFileData(string filePath)
     {
-        string saveFileData = "";
-
-        using (StreamReader saveFile = File.OpenText(filePath))
+        if (PlayerPrefs.HasKey(filePath))
         {
-            string currentLine;
-
-            while ((currentLine = saveFile.ReadLine()) != null)
-            {
-                saveFileData += currentLine + "\n";
-            }
+            string saveFileData = PlayerPrefs.GetString(filePath);
+            return saveFileData.Split('\n');
         }
-
-        return saveFileData.Split('\n');
+        return new string[0];
     }
 
     private void writeFileData(string filePath, string[] newFileData, bool overwriteExistingFileData)
     {
-        if (overwriteExistingFileData)
+        string content = "";
+        
+        if (!overwriteExistingFileData && PlayerPrefs.HasKey(filePath))
         {
-            using (StreamWriter sw = File.CreateText(filePath))
+            content = PlayerPrefs.GetString(filePath);
+            if (!content.EndsWith("\n") && content.Length > 0)
             {
-                for (int i = 0; i < newFileData.Length; i++)
-                {
-                    sw.WriteLine(newFileData[i]);
-                }
+                content += "\n";
             }
         }
-        else
+        
+        for (int i = 0; i < newFileData.Length; i++)
         {
-            using (TextWriter tw = new StreamWriter(filePath, true))
+            content += newFileData[i];
+            if (i < newFileData.Length - 1)
             {
-                for (int i = 0; i < newFileData.Length; i++)
-                {
-                    tw.WriteLine(newFileData[i]);
-                }
+                content += "\n";
             }
         }
+        
+        PlayerPrefs.SetString(filePath, content);
+        PlayerPrefs.Save();
     }
 
     private void saveAITrainingData(int newDifficulty)
@@ -69,7 +64,7 @@ public class SurveyScript : MonoBehaviour
             newDifficulty = maxDifficulty;
         }
 
-        if (!File.Exists(aiTrainingFilePath))
+        if (!PlayerPrefs.HasKey(aiTrainingFilePath))
         {
             writeFileData(aiTrainingFilePath, new string[]{
                 "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,levelsBeat,newDifficulty",
@@ -87,6 +82,13 @@ public class SurveyScript : MonoBehaviour
     private void adjustDifficulty(int newDifficulty)
     {
         string[] currentFileData = getFileData(saveFilePath);
+
+        // Ensure we have enough data in the file
+        if (currentFileData.Length < 4)
+        {
+            Debug.LogWarning("Save file does not contain enough data");
+            return;
+        }
 
         if (newDifficulty < 1)
         {

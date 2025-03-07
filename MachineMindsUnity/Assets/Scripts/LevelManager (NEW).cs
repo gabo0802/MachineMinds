@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LevelManagerNew : MonoBehaviour
 {
     public GameObject surveyObject;
     private GameObject activeSurvey;
-    private string saveFilePath = Application.dataPath + "/Resources/GameState.save";
-    private string aiTrainingFilePath = Application.dataPath + "/Resources/game_data.csv";
+    private string saveKey = "GameState";
+    private string aiTrainingKey = "GameTrainingData";
     private bool isTrainingMode = true;
 
     public int numberLevelsCheckpoint = 3;
@@ -76,45 +76,36 @@ public class LevelManagerNew : MonoBehaviour
     public TMPro.TextMeshProUGUI bossUIBarText;
 
     //Functions:
-    private string[] getFileData(string filePath)
+    private string[] getFileData(string key)
     {
-        string saveFileData = "";
-
-        using (StreamReader saveFile = File.OpenText(filePath))
+        if (PlayerPrefs.HasKey(key))
         {
-            string currentLine;
-
-            while ((currentLine = saveFile.ReadLine()) != null)
-            {
-                saveFileData += currentLine + "\n";
-            }
+            string saveFileData = PlayerPrefs.GetString(key);
+            return saveFileData.Split('\n');
         }
-
-        return saveFileData.Split('\n');
+        return new string[0];
     }
 
-    private void writeFileData(string filePath, string[] newFileData, bool overwriteExistingFileData)
+    private void writeFileData(string key, string[] newFileData, bool overwriteExistingFileData)
     {
-        if (overwriteExistingFileData)
+        string saveData = "";
+
+        if (!overwriteExistingFileData && PlayerPrefs.HasKey(key))
         {
-            using (StreamWriter sw = File.CreateText(filePath))
+            saveData = PlayerPrefs.GetString(key) + "\n";
+        }
+
+        for (int i = 0; i < newFileData.Length; i++)
+        {
+            saveData += newFileData[i];
+            if (i < newFileData.Length - 1)
             {
-                for (int i = 0; i < newFileData.Length; i++)
-                {
-                    sw.WriteLine(newFileData[i]);
-                }
+                saveData += "\n";
             }
         }
-        else
-        {
-            using (TextWriter tw = new StreamWriter(filePath, true))
-            {
-                for (int i = 0; i < newFileData.Length; i++)
-                {
-                    tw.WriteLine(newFileData[i]);
-                }
-            }
-        }
+
+        PlayerPrefs.SetString(key, saveData);
+        PlayerPrefs.Save();
     }
 
     private void UpdateLivesUI()
@@ -156,7 +147,7 @@ public class LevelManagerNew : MonoBehaviour
 
     private void NewGameData()
     {
-        writeFileData(saveFilePath, new string[]{
+        writeFileData(saveKey, new string[]{
             "" + maxPlayerLives, //currentPlayerLives
             "0", //totalPoints
             "0", //totalEnemiesKilled
@@ -168,17 +159,23 @@ public class LevelManagerNew : MonoBehaviour
 
     private void LoadGameData()
     {
-        if (File.Exists(saveFilePath))
+        if (PlayerPrefs.HasKey(saveKey))
         {
-            string[] fileDataArray = getFileData(saveFilePath);
+            string[] fileDataArray = getFileData(saveKey);
 
-            currentPlayerLives = System.Int32.Parse(fileDataArray[0]);
-            totalPoints = System.Single.Parse(fileDataArray[1]);
-            totalEnemiesKilled = System.Int32.Parse(fileDataArray[2]);
-            currentDifficulty = System.Int32.Parse(fileDataArray[3]);
-            playerLifeTimer = System.Single.Parse(fileDataArray[4]);
-            isTrainingMode = bool.Parse(fileDataArray[5]);
-
+            if (fileDataArray.Length >= 6)
+            {
+                currentPlayerLives = System.Int32.Parse(fileDataArray[0]);
+                totalPoints = System.Single.Parse(fileDataArray[1]);
+                totalEnemiesKilled = System.Int32.Parse(fileDataArray[2]);
+                currentDifficulty = System.Int32.Parse(fileDataArray[3]);
+                playerLifeTimer = System.Single.Parse(fileDataArray[4]);
+                isTrainingMode = bool.Parse(fileDataArray[5]);
+            }
+            else
+            {
+                NewGameData();
+            }
         }
         else
         {
@@ -268,7 +265,7 @@ public class LevelManagerNew : MonoBehaviour
             adjustGameDifficulty();
         }
 
-        writeFileData(saveFilePath, new string[]{
+        writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
             "" + totalEnemiesKilled, //totalEnemiesKilled
@@ -279,17 +276,99 @@ public class LevelManagerNew : MonoBehaviour
 
         if (isTrainingMode)
         {
-            activeSurvey = (GameObject)Instantiate(surveyObject);
+            Debug.Log("Training mode active, creating survey...");
+
+            if (surveyObject == null)
+            {
+                Debug.LogError("Cannot create survey: surveyObject is null!");
+                // Fallback to loading next level directly
+                SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
+                return;
+            }
+
+            // Check if survey prefab has a SurveyScript component
+            bool hasSurveyScript = surveyObject.GetComponent<MonoBehaviour>() != null &&
+                                surveyObject.GetComponent<MonoBehaviour>().GetType().Name.Contains("SurveyScript");
+
+            if (!hasSurveyScript)
+            {
+                Debug.LogWarning("Survey prefab doesn't have a SurveyScript component! Check that it's properly set up.");
+
+                // Log all components on the survey prefab
+                Component[] components = surveyObject.GetComponents<Component>();
+                string[] componentNames = new string[components.Length];
+                for (int i = 0; i < components.Length; i++)
+                {
+                    componentNames[i] = components[i].GetType().Name;
+                }
+                Debug.Log("Components on survey prefab: " + string.Join(", ", componentNames));
+            }
+
+            // Determine if survey is a UI element or a regular GameObject
+            bool isUIElement = surveyObject.GetComponent<RectTransform>() != null;
+
+            if (isUIElement)
+            {
+                // Create the survey as a child of the main canvas
+                Canvas mainCanvas = FindObjectOfType<Canvas>();
+                if (mainCanvas == null)
+                {
+                    Debug.LogError("No Canvas found in scene! Creating a new Canvas for the UI survey.");
+                    mainCanvas = new GameObject("MainCanvas").AddComponent<Canvas>();
+                    mainCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    mainCanvas.gameObject.AddComponent<UnityEngine.UI.CanvasScaler>();
+                    mainCanvas.gameObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+                }
+
+                activeSurvey = Instantiate(surveyObject, mainCanvas.transform);
+
+                // Set the survey's position to the center of the screen
+                RectTransform surveyRect = activeSurvey.GetComponent<RectTransform>();
+                if (surveyRect != null)
+                {
+                    surveyRect.anchoredPosition = Vector2.zero;
+                    surveyRect.anchorMin = new Vector2(0.5f, 0.5f);
+                    surveyRect.anchorMax = new Vector2(0.5f, 0.5f);
+                    surveyRect.pivot = new Vector2(0.5f, 0.5f);
+                    Debug.Log($"UI Survey positioned at center of screen: {surveyRect.anchoredPosition}");
+                }
+            }
+            else
+            {
+                // For non-UI objects, instantiate in world space
+                activeSurvey = Instantiate(surveyObject);
+
+                // Position at center of the screen in world space
+                Camera mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    // Place it in front of the camera
+                    Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 10);
+                    Vector3 worldPos = mainCamera.ScreenToWorldPoint(screenCenter);
+                    activeSurvey.transform.position = worldPos;
+                    Debug.Log($"Non-UI Survey positioned at world position: {worldPos}");
+                }
+                else
+                {
+                    // Fallback position if no camera is found
+                    activeSurvey.transform.position = Vector3.zero;
+                    Debug.LogWarning("No main camera found. Positioning survey at world origin.");
+                }
+            }
+
+            Debug.Log($"Survey instantiated: {activeSurvey.name}, Active: {activeSurvey.activeInHierarchy}");
+
             activeSurvey.SendMessage("SetFileData", new string[]{
-            "" + currentPlayerLives, //currentPlayerLives
-            "" + totalPoints, //totalPoints
-            "" + totalEnemiesKilled, //totalEnemiesKilled
-            "" + currentDifficulty,  //currentDifficulty
-            "" + playerLifeTimer,  //playerLifeTimer
-            "" + currentLevelNumber //levelsBeat
+                "" + currentPlayerLives, //currentPlayerLives
+                "" + totalPoints, //totalPoints
+                "" + totalEnemiesKilled, //totalEnemiesKilled
+                "" + currentDifficulty,  //currentDifficulty
+                "" + playerLifeTimer,  //playerLifeTimer
+                "" + currentLevelNumber //levelsBeat
             });
 
             activeSurvey.SendMessage("SetNextLevel", currentLevelNumber + 1);
+            Debug.Log("Survey data and next level set successfully.");
         }
         else
         {
@@ -313,17 +392,17 @@ public class LevelManagerNew : MonoBehaviour
 
     private void goRetryCurrentLevel()
     {
-        string[] currentSaveData = getFileData(saveFilePath);
+        string[] currentSaveData = getFileData(saveKey);
 
         //adjustGameDifficulty();
 
-        writeFileData(saveFilePath, new string[]{
+        writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
-            currentSaveData[1], //totalPoints
-            currentSaveData[2], //totalEnemiesKilled
+            currentSaveData.Length > 1 ? currentSaveData[1] : "0", //totalPoints
+            currentSaveData.Length > 2 ? currentSaveData[2] : "0", //totalEnemiesKilled
             currentDifficulty + "",  //currentDifficulty
-            currentSaveData[4],  //playerLifeTimer
-            currentSaveData[5] //isTrainingMode
+            currentSaveData.Length > 4 ? currentSaveData[4] : "0",  //playerLifeTimer
+            currentSaveData.Length > 5 ? currentSaveData[5] : "false" //isTrainingMode
         }, true);
 
         SceneManager.LoadScene(currentLevelNumber, LoadSceneMode.Single);
@@ -407,6 +486,48 @@ public class LevelManagerNew : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (surveyObject == null)
+        {
+            Debug.LogError("Survey object is not assigned in LevelManagerNew! The survey will not display at the end of levels.");
+        }
+        else
+        {
+            Debug.Log($"Survey prefab assigned: {surveyObject.name}");
+
+            // Check if survey prefab has a SurveyScript component
+            bool hasSurveyScript = surveyObject.GetComponent<MonoBehaviour>() != null &&
+                                surveyObject.GetComponent<MonoBehaviour>().GetType().Name.Contains("SurveyScript");
+
+            if (!hasSurveyScript)
+            {
+                Debug.LogError("Survey prefab doesn't have a SurveyScript component! It won't function properly.");
+
+                // Log all components on the survey prefab
+                Component[] components = surveyObject.GetComponents<Component>();
+                string[] componentNames = new string[components.Length];
+                for (int i = 0; i < components.Length; i++)
+                {
+                    componentNames[i] = components[i].GetType().Name;
+                }
+                Debug.Log("Components on survey prefab: " + string.Join(", ", componentNames));
+            }
+
+            // Check if it's a UI element
+            bool isUIElement = surveyObject.GetComponent<RectTransform>() != null;
+            if (isUIElement)
+            {
+                Debug.Log("Survey prefab is a UI element.");
+                if (surveyObject.GetComponent<CanvasRenderer>() == null)
+                {
+                    Debug.LogWarning("Survey prefab is missing CanvasRenderer component which is typically needed for UI elements.");
+                }
+            }
+            else
+            {
+                Debug.Log("Survey prefab is a non-UI GameObject. It will be positioned in world space.");
+            }
+        }
+
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
@@ -431,6 +552,32 @@ public class LevelManagerNew : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (activeSurvey)
+        {
+            Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
+
+            // Determine if survey is a UI element
+            RectTransform rt = activeSurvey.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                Debug.Log($"UI Survey position: {rt.anchoredPosition}, Size: {rt.sizeDelta}, Scale: {rt.localScale}");
+                Debug.Log($"Survey anchors: min={rt.anchorMin}, max={rt.anchorMax}, pivot={rt.pivot}");
+            }
+            else
+            {
+                // For non-UI surveys, log the world position
+                Debug.Log($"Non-UI Survey world position: {activeSurvey.transform.position}, rotation: {activeSurvey.transform.rotation}");
+            }
+
+            // Log all components on the active survey for debugging
+            Component[] components = activeSurvey.GetComponents<Component>();
+            string[] componentNames = new string[components.Length];
+            for (int i = 0; i < components.Length; i++)
+            {
+                componentNames[i] = components[i].GetType().Name;
+            }
+            Debug.Log("Components on active survey: " + string.Join(", ", componentNames));
+        }
         if (!activeSurvey)
         {
             if (currentAlivePlayer)
