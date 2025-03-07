@@ -48,8 +48,9 @@ public class LevelManager : MonoBehaviour
     //Player Shooting Variables:
     public TMPro.TextMeshProUGUI ammoUI = null;
     public int maxBulletsInMagazine = 5;
-    public float bulletReloadRatio = 0.1f;
-    private float currentBulletsInMagazine;
+    public float bulletReloadTime = 0.1f;
+    private float bulletReloadTimer = 0.1f;
+    private int currentBulletsInMagazine;
     public int totalPlayerBullets = 10;
     private int currentPlayerBullets;
 
@@ -185,18 +186,24 @@ public class LevelManager : MonoBehaviour
 
     private void tryPlayerShoot()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && (int)currentBulletsInMagazine > 0 && currentPlayerBullets > 0)
-        {
-            currentPlayerBullets--;
-            currentBulletsInMagazine -= 1f;
-            currentAlivePlayer.SendMessage("ShootBullet");
+        if(currentBulletsInMagazine > 0){
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
+            {
+                currentPlayerBullets--;
+                currentBulletsInMagazine--;
+                currentAlivePlayer.SendMessage("ShootBullet");
+            }
+        }else{
+            if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
+            {
+                bulletReloadTimer = 0;
+                currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+            }else{
+                bulletReloadTimer += Time.deltaTime;
+            }
         }
 
-        if (currentBulletsInMagazine < maxBulletsInMagazine && currentBulletsInMagazine < currentPlayerBullets)
-        {
-            currentBulletsInMagazine += Time.deltaTime * bulletReloadRatio;
-        }
-        ammoUI.text = (int)currentBulletsInMagazine + " / " + currentPlayerBullets;
+        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
     }
 
     private void tryBoostPlayer()
