@@ -121,9 +121,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3253252805117901523}
-        m_TargetAssemblyTypeName: SurveyScript, Assembly-CSharp
-        m_MethodName: TooHardAdjustment
+      - m_Target: {fileID: 951637765856022705}
+        m_TargetAssemblyTypeName: PauseMenuScript, Assembly-CSharp
+        m_MethodName: onQuitButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3001314140948248649}
-  - component: {fileID: 3253252805117901523}
+  - component: {fileID: 951637765856022705}
   m_Layer: 0
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -302,7 +302,7 @@ Transform:
   - {fileID: 6791865899800518020}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3253252805117901523
+--- !u!114 &951637765856022705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -311,10 +311,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4227258372502546876}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aaf49db1fe526348b179655f615407b, type: 3}
+  m_Script: {fileID: 11500000, guid: d4d7b740f5186714e9559a870ff4bba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contextMessage: {fileID: 5040646624034637626}
 --- !u!1 &5255807499174678197
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,9 +676,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3253252805117901523}
-        m_TargetAssemblyTypeName: SurveyScript, Assembly-CSharp
-        m_MethodName: TooEasyAdjustment
+      - m_Target: {fileID: 951637765856022705}
+        m_TargetAssemblyTypeName: PauseMenuScript, Assembly-CSharp
+        m_MethodName: onContinueButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
