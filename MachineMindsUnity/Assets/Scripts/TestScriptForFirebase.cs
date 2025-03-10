@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -10,9 +11,17 @@ public class Test : MonoBehaviour
     {
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            AddDocument("test-collection", "{\"testField\": \"testValue\"}", gameObject.name, "OnRequestSuccess", "OnRequestFailed");
-            Debug.Log("WebGL");
+            StartCoroutine(TryFirebaseOperation());
         }
+    }
+
+    private IEnumerator TryFirebaseOperation()
+    {
+        // Wait for page to fully load
+        yield return new WaitForSeconds(3.0f);
+
+        Debug.Log("Attempting Firebase operation");
+        AddDocument("test-collection", "{\"testField\": \"testValue\"}", gameObject.name, "OnRequestSuccess", "OnRequestFailed");
     }
 
     private void OnRequestSuccess(string data)
@@ -22,9 +31,10 @@ public class Test : MonoBehaviour
 
     private void OnRequestFailed(string data)
     {
-        Debug.Log("Request Failed: " + data);
+        Debug.LogError("Request Failed: " + data);
     }
 }
+
 
 /*
 AddDocument: function (collectionPath, value, objectName, callback, fallback) {
