@@ -552,9 +552,10 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Instantiate(pauseButton);
+            freezeGame = !freezeGame;
+            Time.timeScale = freezeGame ? 0f : 1f;
         }
 
         if (Time.timeScale != 0f)
