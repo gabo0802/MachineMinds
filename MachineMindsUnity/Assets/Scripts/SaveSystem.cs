@@ -1,13 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
 
 /// <summary>
-/// Provides utility methods for handling save/load operations on the WebGL platform.
-/// Uses PlayerPrefs as an alternative to file I/O operations.
+/// Provides utility methods for handling save/load operations across platforms.
+/// Uses PlayerPrefs for local storage and Firebase for WebGL.
 /// </summary>
 public static class SaveSystem
 {
+
+    // Collection paths for Firebase
+    private const string SAVE_COLLECTION = "player-saves";
+    private const string TRAINING_COLLECTION = "ai-training-data";
+
     /// <summary>
     /// Determines if the application is running on the WebGL platform.
     /// </summary>
@@ -52,6 +56,12 @@ public static class SaveSystem
     {
         PlayerPrefs.SetString(filePath, content);
         PlayerPrefs.Save();
+
+        // If on WebGL, also save to Firebase
+        if (IsWebGLPlatform())
+        {
+            SendDataToFirebase(filePath, content);
+        }
     }
 
     /// <summary>
@@ -76,10 +86,6 @@ public static class SaveSystem
     public static string[] GetFiles(string directoryPath, string searchPattern = "*")
     {
         // Since PlayerPrefs doesn't support listing keys, we need to track them manually
-        // This is a helper method to retrieve a list of keys that would represent "files" 
-        // in a specific "directory". Implementation would require additional tracking.
-
-        // Get the index of keys from a special tracking key
         string keysIndex = PlayerPrefs.GetString("SaveSystem_KeysIndex", "");
         List<string> allKeys = new List<string>(keysIndex.Split(new char[] { '|' }, System.StringSplitOptions.RemoveEmptyEntries));
 
@@ -89,8 +95,6 @@ public static class SaveSystem
         {
             if (key.StartsWith(directoryPath))
             {
-                // Further filter based on searchPattern if needed
-                // Simple implementation just returns all keys in the "directory"
                 matchingKeys.Add(key);
             }
         }
@@ -133,7 +137,7 @@ public static class SaveSystem
     }
 
     /// <summary>
-    /// Saves the current game state to PlayerPrefs storage.
+    /// Saves the current game state to storage.
     /// </summary>
     /// <param name="lives">The number of player lives remaining.</param>
     /// <param name="points">The total points accumulated by the player.</param>
@@ -145,10 +149,17 @@ public static class SaveSystem
     {
         string content = $"{lives}\n{points}\n{enemiesKilled}\n{difficulty}\n{lifeTimer}\n{trainingMode}";
         WriteAllText("GameState", content);
+
+        if (IsWebGLPlatform())
+        {
+            // Create a structured JSON object for Firebase
+            string json = $"{{\"lives\":{lives},\"points\":{points},\"enemiesKilled\":{enemiesKilled},\"difficulty\":{difficulty},\"lifeTimer\":{lifeTimer},\"trainingMode\":{trainingMode.ToString().ToLower()}}}";
+            SaveSystemHelper.Instance.SendGameStateToFirebase(json);
+        }
     }
 
     /// <summary>
-    /// Loads the game state from PlayerPrefs storage.
+    /// Loads the game state from storage.
     /// </summary>
     /// <returns>A dictionary containing the game state parameters, or null if no saved state exists.</returns>
     /// <remarks>
@@ -182,7 +193,7 @@ public static class SaveSystem
     }
 
     /// <summary>
-    /// Saves AI training data to PlayerPrefs storage.
+    /// Saves AI training data to storage.
     /// </summary>
     /// <param name="fileData">Array containing game state parameters in the following order:
     /// [0] currentPlayerLives, [1] totalPoints, [2] totalEnemiesKilled, 
@@ -205,6 +216,49 @@ public static class SaveSystem
             string newLine = $"{fileData[0]},{fileData[1]},{fileData[2]},{fileData[3]},{fileData[4]},{fileData[5]},{newDifficulty}";
             WriteAllText("GameData", existingData + "\n" + newLine);
         }
+
+        if (IsWebGLPlatform())
+        {
+            // Create a structured JSON object for Firebase
+            string json = $"{{\"currentPlayerLives\":{fileData[0]},\"totalPoints\":{fileData[1]},\"totalEnemiesKilled\":{fileData[2]},\"currentDifficulty\":{fileData[3]},\"playerLifeTimer\":{fileData[4]},\"levelsBeat\":{fileData[5]},\"newDifficulty\":{newDifficulty}}}";
+            SaveSystemHelper.Instance.SendTrainingDataToFirebase(json);
+        }
     }
 
+    /// <summary>
+    /// Sends data to Firebase if running on WebGL.
+    /// </summary>
+    /// <param name="key">The key/path for the data.</param>
+    /// <param name="data">The data to send.</param>
+    private static void SendDataToFirebase(string key, string data)
+    {
+        if (IsWebGLPlatform())
+        {
+            // Convert data format based on the key
+            if (key == "GameState")
+            {
+                string[] lines = data.Split('\n');
+                if (lines.Length >= 6)
+                {
+                    string json = $"{{\"lives\":{lines[0]},\"points\":{lines[1]},\"enemiesKilled\":{lines[2]},\"difficulty\":{lines[3]},\"lifeTimer\":{lines[4]},\"trainingMode\":{lines[5].ToLower()}}}";
+                    SaveSystemHelper.Instance.SendGameStateToFirebase(json);
+                }
+            }
+            else if (key == "GameData")
+            {
+                // For training data, we'll send the last line only (most recent)
+                string[] lines = data.Split('\n');
+                if (lines.Length > 1) // Skip header
+                {
+                    string lastLine = lines[lines.Length - 1];
+                    string[] values = lastLine.Split(',');
+                    if (values.Length >= 7)
+                    {
+                        string json = $"{{\"currentPlayerLives\":{values[0]},\"totalPoints\":{values[1]},\"totalEnemiesKilled\":{values[2]},\"currentDifficulty\":{values[3]},\"playerLifeTimer\":{values[4]},\"levelsBeat\":{values[5]},\"newDifficulty\":{values[6]}}}";
+                        SaveSystemHelper.Instance.SendTrainingDataToFirebase(json);
+                    }
+                }
+            }
+        }
+    }
 }
