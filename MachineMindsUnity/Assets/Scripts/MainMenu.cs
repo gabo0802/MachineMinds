@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 using UnityEngine.UI;
-using static WebGLSaveSystem;
+using static SaveSystem;
 using System.IO;
 
 public class GameManager : MonoBehaviour
@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public void PlayGame()
     {
         string content = "3\n0\n0\n1\n0\nfalse";
-        WebGLSaveSystem.WriteAllText(filePath, content);
+        SaveSystem.WriteAllText(filePath, content);
 
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public void LoadGame()
     {
         string content = "3\n0\n0\n1\n0\ntrue";
-        WebGLSaveSystem.WriteAllText(filePath, content);
+        SaveSystem.WriteAllText(filePath, content);
 
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }

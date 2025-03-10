@@ -146,37 +146,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void NewGameData()
-    {
-        writeFileData(saveKey, new string[]{
-            "" + maxPlayerLives, //currentPlayerLives
-            "0", //totalPoints
-            "0", //totalEnemiesKilled
-            "" + currentDifficulty,  //currentDifficulty
-            "0",  //playerLifeTimer
-            "" + isTrainingMode //isTrainingMode
-        }, true);
-    }
-
     private void LoadGameData()
     {
-        if (PlayerPrefs.HasKey(saveKey))
+        var gameState = SaveSystem.LoadGameState();
+        if (gameState != null)
         {
-            string[] fileDataArray = getFileData(saveKey);
-
-            if (fileDataArray.Length >= 6)
-            {
-                currentPlayerLives = System.Int32.Parse(fileDataArray[0]);
-                totalPoints = System.Single.Parse(fileDataArray[1]);
-                totalEnemiesKilled = System.Int32.Parse(fileDataArray[2]);
-                currentDifficulty = System.Int32.Parse(fileDataArray[3]);
-                playerLifeTimer = System.Single.Parse(fileDataArray[4]);
-                isTrainingMode = bool.Parse(fileDataArray[5]);
-            }
-            else
-            {
-                NewGameData();
-            }
+            currentPlayerLives = (int)gameState["lives"];
+            totalPoints = (float)gameState["points"];
+            totalEnemiesKilled = (int)gameState["enemiesKilled"];
+            currentDifficulty = (int)gameState["difficulty"];
+            playerLifeTimer = (float)gameState["lifeTimer"];
+            isTrainingMode = (bool)gameState["trainingMode"];
         }
         else
         {
@@ -184,21 +164,31 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void NewGameData()
+    {
+        SaveSystem.SaveGameState(maxPlayerLives, 0, 0, currentDifficulty, 0, isTrainingMode);
+    }
+
     private void tryPlayerShoot()
     {
-        if(currentBulletsInMagazine > 0){
+        if (currentBulletsInMagazine > 0)
+        {
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
             {
                 currentPlayerBullets--;
                 currentBulletsInMagazine--;
                 currentAlivePlayer.SendMessage("ShootBullet");
             }
-        }else{
+        }
+        else
+        {
             if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
-            }else{
+            }
+            else
+            {
                 bulletReloadTimer += Time.deltaTime;
             }
         }
@@ -560,7 +550,8 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             freezeGame = !freezeGame;
             Time.timeScale = freezeGame ? 0f : 1f;
         }
@@ -602,7 +593,7 @@ public class LevelManager : MonoBehaviour
 
                 if (wonLevel)
                 {
-                    
+
                     bossUIBar.color = new Color(1f, 1f, 1f, 0f);
                     bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
                     bossUIBarText.text = "";
