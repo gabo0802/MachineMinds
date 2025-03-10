@@ -24,6 +24,7 @@ public class PlayerControls : MonoBehaviour
     private bool pressA = false;
     private bool pressS = false;
     private bool pressD = false;
+    public float wallHitGlitchDistance = 0.225f;
 
     public void UpPress()
     {
@@ -59,8 +60,15 @@ public class PlayerControls : MonoBehaviour
 
     public void ShootBullet()
     {   
-        float wallHitDistance = 0.1f;
-        RaycastHit2D shootWallGlitchPrevention = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.up, wallHitDistance, layerMask);
+        bool shootWallGlitchPrevention = false;
+        Vector3 originPoint = cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance);
+
+        Collider2D[] possibleWallHitArray = Physics2D.OverlapCircleAll(originPoint, wallHitGlitchDistance, layerMask);
+        foreach (Collider2D collider in possibleWallHitArray){
+            if(collider.name.ToLower().Contains("wall")){
+                shootWallGlitchPrevention = true;
+            }
+        }
 
         if(!shootWallGlitchPrevention){
             Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
