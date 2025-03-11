@@ -252,7 +252,8 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
-        currentEnemyHealth = maxEnemyHealth * currentDifficulty;
+        maxEnemyHealth *= currentDifficulty; 
+        currentEnemyHealth = maxEnemyHealth;
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
 
