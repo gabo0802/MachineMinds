@@ -303,6 +303,7 @@ MonoBehaviour:
   playerBullet: {fileID: 8642936227962931598, guid: 4c2b68a3422cb7244aca4d84c04fbd66, type: 3}
   bulletShootDistance: 0.5
   useTankControlMovement: 0
+  wallHitGlitchDistance: 0.225
 --- !u!1 &4003085438632798142
 GameObject:
   m_ObjectHideFlags: 0

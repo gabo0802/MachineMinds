@@ -31,9 +31,9 @@ public class EndScreenScript : MonoBehaviour
 
     void Start()
     {
-        if (WebGLSaveSystem.FileExists(SAVE_KEY))
+        if (SaveSystem.FileExists(SAVE_KEY))
         {
-            string saveFileData = WebGLSaveSystem.ReadAllText(SAVE_KEY);
+            string saveFileData = SaveSystem.ReadAllText(SAVE_KEY);
 
             string[] fileArray = saveFileData.Split('\n');
             string totalPoints = fileArray[1];

@@ -7,6 +7,9 @@ public class LevelManager : MonoBehaviour
 {
     public GameObject surveyObject;
     private GameObject activeSurvey;
+
+    public GameObject pauseButton;
+
     private string saveKey = "GameState";
     private string aiTrainingKey = "GameTrainingData";
     private bool isTrainingMode = true;
@@ -146,37 +149,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void NewGameData()
-    {
-        writeFileData(saveKey, new string[]{
-            "" + maxPlayerLives, //currentPlayerLives
-            "0", //totalPoints
-            "0", //totalEnemiesKilled
-            "" + currentDifficulty,  //currentDifficulty
-            "0",  //playerLifeTimer
-            "" + isTrainingMode //isTrainingMode
-        }, true);
-    }
-
     private void LoadGameData()
     {
-        if (PlayerPrefs.HasKey(saveKey))
+        var gameState = SaveSystem.LoadGameState();
+        if (gameState != null)
         {
-            string[] fileDataArray = getFileData(saveKey);
-
-            if (fileDataArray.Length >= 6)
-            {
-                currentPlayerLives = System.Int32.Parse(fileDataArray[0]);
-                totalPoints = System.Single.Parse(fileDataArray[1]);
-                totalEnemiesKilled = System.Int32.Parse(fileDataArray[2]);
-                currentDifficulty = System.Int32.Parse(fileDataArray[3]);
-                playerLifeTimer = System.Single.Parse(fileDataArray[4]);
-                isTrainingMode = bool.Parse(fileDataArray[5]);
-            }
-            else
-            {
-                NewGameData();
-            }
+            currentPlayerLives = (int)gameState["lives"];
+            totalPoints = (float)gameState["points"];
+            totalEnemiesKilled = (int)gameState["enemiesKilled"];
+            currentDifficulty = (int)gameState["difficulty"];
+            playerLifeTimer = (float)gameState["lifeTimer"];
+            isTrainingMode = (bool)gameState["trainingMode"];
         }
         else
         {
@@ -184,21 +167,31 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void NewGameData()
+    {
+        SaveSystem.SaveGameState(maxPlayerLives, 0, 0, currentDifficulty, 0, isTrainingMode);
+    }
+
     private void tryPlayerShoot()
     {
-        if(currentBulletsInMagazine > 0){
+        if (currentBulletsInMagazine > 0)
+        {
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
             {
                 currentPlayerBullets--;
                 currentBulletsInMagazine--;
                 currentAlivePlayer.SendMessage("ShootBullet");
             }
-        }else{
+        }
+        else
+        {
             if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
-            }else{
+            }
+            else
+            {
                 bulletReloadTimer += Time.deltaTime;
             }
         }
@@ -556,87 +549,89 @@ public class LevelManager : MonoBehaviour
         bossUIBarText.text = "";
     }
 
-    bool freezeGame = false;
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
-            freezeGame = !freezeGame;
-            Time.timeScale = freezeGame ? 0f : 1f;
+        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)
+        {
+            Instantiate(pauseButton);
         }
 
-        if (activeSurvey)
+        if (Time.timeScale != 0f)
         {
-            Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
-
-            // Determine if survey is a UI element
-            RectTransform rt = activeSurvey.GetComponent<RectTransform>();
-            if (rt != null)
+            if (activeSurvey)
             {
-                Debug.Log($"UI Survey position: {rt.anchoredPosition}, Size: {rt.sizeDelta}, Scale: {rt.localScale}");
-                Debug.Log($"Survey anchors: min={rt.anchorMin}, max={rt.anchorMax}, pivot={rt.pivot}");
-            }
-            else
-            {
-                // For non-UI surveys, log the world position
-                Debug.Log($"Non-UI Survey world position: {activeSurvey.transform.position}, rotation: {activeSurvey.transform.rotation}");
-            }
+                Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
 
-            // Log all components on the active survey for debugging
-            Component[] components = activeSurvey.GetComponents<Component>();
-            string[] componentNames = new string[components.Length];
-            for (int i = 0; i < components.Length; i++)
-            {
-                componentNames[i] = components[i].GetType().Name;
-            }
-            Debug.Log("Components on active survey: " + string.Join(", ", componentNames));
-        }
-        if (!activeSurvey && Time.timeScale != 0f)
-        {
-            if (currentAlivePlayer)
-            {
-                tryBoostPlayer();
-                tryPlayerShoot();
-
-                playerLifeTimer += Time.deltaTime;
-
-                if (wonLevel)
+                // Determine if survey is a UI element
+                RectTransform rt = activeSurvey.GetComponent<RectTransform>();
+                if (rt != null)
                 {
-                    
-                    bossUIBar.color = new Color(1f, 1f, 1f, 0f);
-                    bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
-                    bossUIBarText.text = "";
-                    backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
-                    countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
-                    levelMessageUI.text = "You Won";
-
-                    if (currentWinTime > playerCelebrateTime)
-                    {
-                        levelMessageUI.text = "Loading...";
-                        countdownUI.text = "";
-                        goNextLevel();
-                    }
-                    else
-                    {
-                        currentWinTime += Time.deltaTime;
-                    }
-                }
-            }
-            else
-            {
-                backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
-                countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
-                levelMessageUI.text = "You Lost";
-
-                if (currentDeadTime > playerRespawnTime)
-                {
-                    levelMessageUI.text = "Loading...";
-                    countdownUI.text = "";
-                    onPlayerDeath();
+                    Debug.Log($"UI Survey position: {rt.anchoredPosition}, Size: {rt.sizeDelta}, Scale: {rt.localScale}");
+                    Debug.Log($"Survey anchors: min={rt.anchorMin}, max={rt.anchorMax}, pivot={rt.pivot}");
                 }
                 else
                 {
-                    currentDeadTime += Time.deltaTime;
+                    // For non-UI surveys, log the world position
+                    Debug.Log($"Non-UI Survey world position: {activeSurvey.transform.position}, rotation: {activeSurvey.transform.rotation}");
+                }
+
+                // Log all components on the active survey for debugging
+                Component[] components = activeSurvey.GetComponents<Component>();
+                string[] componentNames = new string[components.Length];
+                for (int i = 0; i < components.Length; i++)
+                {
+                    componentNames[i] = components[i].GetType().Name;
+                }
+                Debug.Log("Components on active survey: " + string.Join(", ", componentNames));
+            }
+            if (!activeSurvey)
+            {
+                if (currentAlivePlayer)
+                {
+                    tryBoostPlayer();
+                    tryPlayerShoot();
+
+                    playerLifeTimer += Time.deltaTime;
+
+                    if (wonLevel)
+                    {
+
+                        bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+                        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+                        bossUIBarText.text = "";
+                        backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                        countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
+                        levelMessageUI.text = "You Won";
+
+                        if (currentWinTime > playerCelebrateTime)
+                        {
+                            levelMessageUI.text = "Loading...";
+                            countdownUI.text = "";
+                            goNextLevel();
+                        }
+                        else
+                        {
+                            currentWinTime += Time.deltaTime;
+                        }
+                    }
+                }
+                else
+                {
+                    backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                    countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
+                    levelMessageUI.text = "You Lost";
+
+                    if (currentDeadTime > playerRespawnTime)
+                    {
+                        levelMessageUI.text = "Loading...";
+                        countdownUI.text = "";
+                        onPlayerDeath();
+                    }
+                    else
+                    {
+                        currentDeadTime += Time.deltaTime;
+                    }
                 }
             }
         }
