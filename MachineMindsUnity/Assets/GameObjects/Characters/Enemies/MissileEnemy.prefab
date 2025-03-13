@@ -459,12 +459,13 @@ MonoBehaviour:
   cannonHead: {fileID: 801905346945509414}
   tireThreads: {fileID: 0}
   tireThreadCreateInterval: 0.5
-  maxEnemyHealth: 3
+  maxEnemyHealth: 4
   enemyMoveSpeed: 0.75
   enemyBullet: {fileID: 8642936227962931598, guid: 462042516cdf1054383ad5ffaef5bb97, type: 3}
   enemyShootInterval: 1.5
   shootIfCannotSeePlayer: 0
   pointsWorth: 150
+  isBoss: 0
 --- !u!50 &7701055470618375241
 Rigidbody2D:
   serializedVersion: 5
