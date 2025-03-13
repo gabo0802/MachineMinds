@@ -36,8 +36,14 @@ public class GameManager : MonoBehaviour
     {
         if (Application.isEditor)
         {
-            Debug.Log("Quitting game in editor");
-            // EditorApplication.ExitPlaymode();
+#if UNITY_EDITOR
+            EditorApplication.ExitPlaymode();
+#endif
+            return;
+        }
+        else if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            Debug.Log("Quitting game in WebGL is not supported.");
         }
         else
         {
