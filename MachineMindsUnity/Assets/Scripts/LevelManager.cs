@@ -533,7 +533,10 @@ public class LevelManager : MonoBehaviour
         LoadGameData();
 
         currentPlayerBullets = totalPlayerBullets * currentDifficulty;
+        
+        maxBulletsInMagazine *= currentDifficulty;
         currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+        
         playerBoostTimer = timePlayerCanBoost;
 
         findAllLevelObjects();
