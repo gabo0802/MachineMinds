@@ -375,9 +375,10 @@ MonoBehaviour:
   maxEnemyHealth: 3
   enemyMoveSpeed: 0
   enemyBullet: {fileID: 8642936227962931598, guid: cd0fb3dc6ba48ef4b96f566d5e576c70, type: 3}
-  enemyShootInterval: 5
+  enemyShootInterval: 3
   shootIfCannotSeePlayer: 0
   pointsWorth: 100
+  isBoss: 0
 --- !u!50 &6735878823126603655
 Rigidbody2D:
   serializedVersion: 5

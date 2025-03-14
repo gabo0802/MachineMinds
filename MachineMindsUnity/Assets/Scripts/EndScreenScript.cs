@@ -20,7 +20,13 @@ public class EndScreenScript : MonoBehaviour
         if (Application.isEditor)
         {
             Debug.Log("Quitting game in editor");
-            // EditorApplication.ExitPlaymode();
+#if UNITY_EDITOR
+            EditorApplication.ExitPlaymode();
+#endif
+        }
+        else if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            Debug.Log("Quitting game in WebGL is not supported.");
         }
         else
         {
@@ -31,9 +37,9 @@ public class EndScreenScript : MonoBehaviour
 
     void Start()
     {
-        if (WebGLSaveSystem.FileExists(SAVE_KEY))
+        if (SaveSystem.FileExists(SAVE_KEY))
         {
-            string saveFileData = WebGLSaveSystem.ReadAllText(SAVE_KEY);
+            string saveFileData = SaveSystem.ReadAllText(SAVE_KEY);
 
             string[] fileArray = saveFileData.Split('\n');
             string totalPoints = fileArray[1];

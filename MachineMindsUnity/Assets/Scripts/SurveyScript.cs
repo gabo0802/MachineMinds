@@ -30,7 +30,7 @@ public class SurveyScript : MonoBehaviour
     private void writeFileData(string filePath, string[] newFileData, bool overwriteExistingFileData)
     {
         string content = "";
-        
+
         if (!overwriteExistingFileData && PlayerPrefs.HasKey(filePath))
         {
             content = PlayerPrefs.GetString(filePath);
@@ -39,7 +39,7 @@ public class SurveyScript : MonoBehaviour
                 content += "\n";
             }
         }
-        
+
         for (int i = 0; i < newFileData.Length; i++)
         {
             content += newFileData[i];
@@ -48,7 +48,7 @@ public class SurveyScript : MonoBehaviour
                 content += "\n";
             }
         }
-        
+
         PlayerPrefs.SetString(filePath, content);
         PlayerPrefs.Save();
     }
@@ -64,19 +64,7 @@ public class SurveyScript : MonoBehaviour
             newDifficulty = maxDifficulty;
         }
 
-        if (!PlayerPrefs.HasKey(aiTrainingFilePath))
-        {
-            writeFileData(aiTrainingFilePath, new string[]{
-                "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,levelsBeat,newDifficulty",
-                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+"," +fileData[4]+","+fileData[5]+","+newDifficulty
-            }, true);
-        }
-        else
-        {
-            writeFileData(aiTrainingFilePath, new string[]{
-                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+","+fileData[4]+","+fileData[5]+","+newDifficulty
-            }, false);
-        }
+        SaveSystem.SaveTrainingData(fileData, newDifficulty);
     }
 
     private void adjustDifficulty(int newDifficulty)
