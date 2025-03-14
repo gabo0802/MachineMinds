@@ -4,6 +4,7 @@ using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    private const float difficultyScale = 1.15f;
     private Rigidbody2D rb;
     int layerMask;
 
@@ -57,7 +58,7 @@ public class EnemyBehavior : MonoBehaviour
     public void SetDifficultyLevel(int newDifficultyLevel)
     {
         currentDifficulty = newDifficultyLevel;
-        currentEnemyHealth = (int)(currentEnemyHealth * Mathf.Pow(1.25f, currentDifficulty - 1));
+        currentEnemyHealth = (int)(currentEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
     }
 
@@ -167,7 +168,7 @@ public class EnemyBehavior : MonoBehaviour
 
         if (!currentTarget && enemyMoveSpeed > 0f)
         {
-            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(1.25f, currentDifficulty - 1);
+            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
             if (Vector2.Distance(transform.position, patrolDestination) <= 2f)
             {
                 patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
@@ -195,14 +196,14 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (enemyMoveSpeed > 0f)
             {
-                path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(1.25f, currentDifficulty - 1);
+                path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
                 path.destination = currentTarget.transform.position;
             }
 
             PathFindingStuckFix(false);
         }
 
-        if (enemyShootTimer >= enemyShootInterval / Mathf.Pow(1.25f, currentDifficulty - 1))
+        if (enemyShootTimer >= enemyShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1))
         {
             //Debug.Log(hit.transform.gameObject.name);
             if (shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)))
@@ -253,7 +254,7 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
-        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(1.25f, currentDifficulty - 1)); 
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1)); 
         currentEnemyHealth = maxEnemyHealth;
         Debug.Log("Current Health: " + currentEnemyHealth);
         rb = GetComponent<Rigidbody2D>();

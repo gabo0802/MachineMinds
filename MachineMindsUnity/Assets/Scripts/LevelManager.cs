@@ -534,7 +534,7 @@ public class LevelManager : MonoBehaviour
 
         currentPlayerBullets = totalPlayerBullets * currentDifficulty;
         
-        maxBulletsInMagazine *= currentDifficulty;
+        maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(1.15f, currentDifficulty - 1));
         currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
         
         playerBoostTimer = timePlayerCanBoost;
