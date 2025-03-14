@@ -4,15 +4,13 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
-public class ControlMenuScript : MonoBehaviour
+public class ControlsMenuScriptMenuScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
-        Time.timeScale = 0f;
     }
 
     public void onBackButtonPress(){
-        Time.timeScale = 1f;
         Destroy(gameObject);
     }
 
