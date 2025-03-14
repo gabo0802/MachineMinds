@@ -12,6 +12,8 @@ using System.IO;
 public class GameManager : MonoBehaviour
 {
     public Button loadGameButton;
+     public GameObject controlsMenuPrefab;
+    
     private string filePath = "GameState";
     private int lastLevelNumber = 1;
 
@@ -51,4 +53,9 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
+    public void LoadControls()
+    {
+        Instantiate(controlsMenuPrefab);
+    }
+
 }
