@@ -250,8 +250,8 @@ public class LevelManager : MonoBehaviour
             bossBarSizeMulitplier /= bossMaxHealth;
         }
 
-        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 35);
-        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth), 30);
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 30);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth) - 85, 30);
 
         bossUIBar.color = new Color(1f, 1f, 1f, 1f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
@@ -373,6 +373,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
+
         }
     }
 
@@ -533,15 +534,16 @@ public class LevelManager : MonoBehaviour
         LoadGameData();
 
         currentPlayerBullets = totalPlayerBullets * currentDifficulty;
-        
+
         maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(1.15f, currentDifficulty - 1));
         currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
-        
+
         playerBoostTimer = timePlayerCanBoost;
 
         findAllLevelObjects();
 
         pointsUI.text = totalPoints + " pts";
+        ammoUI.text = currentPlayerBullets + " / " + currentPlayerBullets;
         countdownUI.text = "";
         levelMessageUI.text = "";
         backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 0f);
