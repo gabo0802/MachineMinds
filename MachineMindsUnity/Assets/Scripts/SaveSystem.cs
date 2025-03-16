@@ -56,12 +56,6 @@ public static class SaveSystem
     {
         PlayerPrefs.SetString(filePath, content);
         PlayerPrefs.Save();
-
-        // If on WebGL, also save to Firebase
-        if (IsWebGLPlatform())
-        {
-            SendDataToFirebase(filePath, content);
-        }
     }
 
     /// <summary>
