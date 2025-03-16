@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
     //Player Boost Variables:
     public UnityEngine.UI.Image fuelBar = null;
     private float fuelBarSizeMuliplier = 175f;
-    private const float bossBarSizeMax = 725f;
+    private const float bossBarSizeMax = 830f;
     private float bossBarSizeMulitplier = 725f;
 
     public float boostCooldownRatio = 0.1f;
@@ -201,10 +201,11 @@ public class LevelManager : MonoBehaviour
 
     private void tryBoostPlayer()
     {
-        if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift))
+        if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
         {
             playerBoostTimer -= Time.deltaTime;
             currentAlivePlayer.SendMessage("AffectBoostSpeed", playerBoostSpeedMultiplier);
+
         }
         else
         {
@@ -245,18 +246,26 @@ public class LevelManager : MonoBehaviour
         int bossCurrentHealth = bossParameters[0];
         int bossMaxHealth = bossParameters[1];
 
-        if (bossBarSizeMulitplier > bossBarSizeMax / bossMaxHealth)
-        {
-            bossBarSizeMulitplier /= bossMaxHealth;
-        }
+        // Calculate health percentage (0.0 to 1.0)
+        float healthPercentage = (float)bossCurrentHealth / bossMaxHealth;
 
-        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(bossBarSizeMulitplier * bossCurrentHealth, 30);
-        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2((bossBarSizeMulitplier * 0.9f) * (bossCurrentHealth - bossMaxHealth) - 85, 30);
+        // Use a constant maximum width for the health bar regardless of difficulty
+        float maxBarWidth = bossBarSizeMax;  // Fixed maximum width
 
+        // Set the bar width based on the health percentage
+        bossUIBarPercent.rectTransform.sizeDelta = new Vector2(maxBarWidth * healthPercentage, 30);
+
+        // Fixed position calculation that works for all health values
+        float positionX = (maxBarWidth * (1 - healthPercentage) * -0.9f);
+        bossUIBarPercent.rectTransform.anchoredPosition = new Vector2(positionX, 30);
+
+        // Set colors and text
         bossUIBar.color = new Color(1f, 1f, 1f, 1f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
         bossUIBarText.text = "Boss Health";
     }
+
+
 
     private void goNextLevel()
     {
