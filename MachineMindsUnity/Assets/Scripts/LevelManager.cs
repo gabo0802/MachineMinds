@@ -533,7 +533,8 @@ public class LevelManager : MonoBehaviour
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
 
-        currentPlayerBullets = totalPlayerBullets * currentDifficulty;
+        currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(1.15f, currentDifficulty - 1));
+        totalPlayerBullets = currentPlayerBullets;
 
         maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(1.15f, currentDifficulty - 1));
         currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
@@ -543,7 +544,7 @@ public class LevelManager : MonoBehaviour
         findAllLevelObjects();
 
         pointsUI.text = totalPoints + " pts";
-        ammoUI.text = currentPlayerBullets + " / " + currentPlayerBullets;
+        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
         countdownUI.text = "";
         levelMessageUI.text = "";
         backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 0f);
