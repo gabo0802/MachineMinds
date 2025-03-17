@@ -59,18 +59,21 @@ public class PlayerControls : MonoBehaviour
     }
 
     public void ShootBullet()
-    {   
+    {
         bool shootWallGlitchPrevention = false;
         Vector3 originPoint = cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance);
 
         Collider2D[] possibleWallHitArray = Physics2D.OverlapCircleAll(originPoint, wallHitGlitchDistance, layerMask);
-        foreach (Collider2D collider in possibleWallHitArray){
-            if(collider.name.ToLower().Contains("wall")){
+        foreach (Collider2D collider in possibleWallHitArray)
+        {
+            if (collider.name.ToLower().Contains("wall"))
+            {
                 shootWallGlitchPrevention = true;
             }
         }
 
-        if(!shootWallGlitchPrevention){
+        if (!shootWallGlitchPrevention)
+        {
             Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
         }
     }
@@ -137,6 +140,16 @@ public class PlayerControls : MonoBehaviour
             currentPlayerVelocity += transform.right;
             currentPlayerRotationString += "D";
         }
+        // Speed change on editor for screenshots.
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.Q)) {
+            if (Time.timeScale == 0.1f) {
+                Time.timeScale = 1f;
+            } else {
+                Time.timeScale = 0.1f;
+            }
+        }
+#endif
 
         rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
 
