@@ -7,32 +7,26 @@ using UnityEditor;
 public class PauseMenuScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start(){
+    void Start()
+    {
         Time.timeScale = 0f;
     }
 
-    public void onContinueButtonPress(){
+    public void onContinueButtonPress()
+    {
         Time.timeScale = 1f;
         Destroy(gameObject);
     }
 
-    public void onQuitButtonPress(){
+    public void MainMenuButtoon()
+    {
         Time.timeScale = 1f;
-
-        if (Application.isEditor)
-        {
-            Debug.Log("Quitting game in editor");
-            // EditorApplication.ExitPlaymode();
-        }
-        else
-        {
-            Debug.Log("Quitting game in build");
-            Application.Quit();
-        }
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     // Update is called once per frame
-    void Update(){
-        
+    void Update()
+    {
+
     }
 }
