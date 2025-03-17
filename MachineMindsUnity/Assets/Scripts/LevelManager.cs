@@ -259,6 +259,9 @@ public class LevelManager : MonoBehaviour
         float positionX = (maxBarWidth * (1 - healthPercentage) * -0.9f);
         bossUIBarPercent.rectTransform.anchoredPosition = new Vector2(positionX, 30);
 
+        Debug.Log($"Boss Health: {bossCurrentHealth}/{bossMaxHealth}, Percentage: {healthPercentage}, Width: {maxBarWidth * healthPercentage}");
+        Debug.Log($"Boss Health Bar: Position: {positionX}, Size: {maxBarWidth * healthPercentage}");
+
         // Set colors and text
         bossUIBar.color = new Color(1f, 1f, 1f, 1f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);

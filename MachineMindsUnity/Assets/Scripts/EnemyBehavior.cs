@@ -58,7 +58,8 @@ public class EnemyBehavior : MonoBehaviour
     public void SetDifficultyLevel(int newDifficultyLevel)
     {
         currentDifficulty = newDifficultyLevel;
-        currentEnemyHealth = (int)(currentEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+        currentEnemyHealth = maxEnemyHealth;
         Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
     }
 
@@ -254,7 +255,7 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
-        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1)); 
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
         Debug.Log("Current Health: " + currentEnemyHealth);
         rb = GetComponent<Rigidbody2D>();
