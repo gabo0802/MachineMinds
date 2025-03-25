@@ -31,7 +31,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject enemyBullet;
     public float enemyShootInterval = 5f;
     private float enemyShootTimer = 0f;
-    private float bulletShotSpawnOffset;
+    public float bulletShotSpawnOffset;
     public bool shootIfCannotSeePlayer = false;
 
     public float pointsWorth = 100;
@@ -254,7 +254,7 @@ public class EnemyBehavior : MonoBehaviour
             maxEnemyHealth = 1;
         }
 
-        bulletShotSpawnOffset = (transform.localScale.magnitude / 2) + 0.1f;
+        bulletShotSpawnOffset += (transform.localScale.magnitude / 2) + 0.1f;
         maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
         Debug.Log("Current Health: " + currentEnemyHealth);
