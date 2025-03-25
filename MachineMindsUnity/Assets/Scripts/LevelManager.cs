@@ -5,6 +5,8 @@ using System.Linq;
 
 public class LevelManager : MonoBehaviour
 {
+    private const float difficultyScale = 1.25f;
+
     public GameObject surveyObject;
     private GameObject activeSurvey;
 
@@ -545,10 +547,10 @@ public class LevelManager : MonoBehaviour
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
 
-        currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(1.15f, currentDifficulty - 1));
+        currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         totalPlayerBullets = currentPlayerBullets;
 
-        maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(1.15f, currentDifficulty - 1));
+        maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
 
         playerBoostTimer = timePlayerCanBoost;
