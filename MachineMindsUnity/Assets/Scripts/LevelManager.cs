@@ -624,7 +624,7 @@ public class LevelManager : MonoBehaviour
 
                         if (currentWinTime > playerCelebrateTime)
                         {
-                            levelMessageUI.text = "Loading...";
+                            levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint": "Loading Next Level";
                             countdownUI.text = "";
                             goNextLevel();
                         }
@@ -642,7 +642,7 @@ public class LevelManager : MonoBehaviour
 
                     if (currentDeadTime > playerRespawnTime)
                     {
-                        levelMessageUI.text = "Loading...";
+                        levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3"  : "Loading Checkpoint";
                         countdownUI.text = "";
                         onPlayerDeath();
                     }
