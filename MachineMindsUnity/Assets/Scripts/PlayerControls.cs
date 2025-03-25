@@ -66,7 +66,7 @@ public class PlayerControls : MonoBehaviour
         Collider2D[] possibleWallHitArray = Physics2D.OverlapCircleAll(originPoint, wallHitGlitchDistance, layerMask);
         foreach (Collider2D collider in possibleWallHitArray)
         {
-            if (collider.name.ToLower().Contains("wall"))
+            if (collider.name.ToLower().Contains("wall") && !collider.name.ToLower().Contains("break"))
             {
                 shootWallGlitchPrevention = true;
             }
