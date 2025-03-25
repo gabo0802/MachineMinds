@@ -81,6 +81,8 @@ public class LevelManager : MonoBehaviour
     public UnityEngine.UI.Image bossUIBarPercent;
     public TMPro.TextMeshProUGUI bossUIBarText;
 
+    public AIModelInterface aiModel;
+
     //Functions:
     private string[] getFileData(string key)
     {
@@ -494,8 +496,15 @@ public class LevelManager : MonoBehaviour
 
     private void adjustGameDifficulty()
     {
-        //call AI
-        //currentDifficulty = getAIData();
+        aiModel.currentDifficulty = currentDifficulty;
+        aiModel.currentPlayerLives = currentPlayerLives;
+        aiModel.levelsBeat = currentLevelNumber;
+        aiModel.playerLifeTimer = playerLifeTimer;
+        aiModel.totalEnemiesKilled = totalEnemiesKilled;
+        aiModel.totalPoints = totalPoints;
+
+        currentDifficulty += aiModel.GetPredictedDifficulty();
+        Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -546,6 +555,7 @@ public class LevelManager : MonoBehaviour
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
+        aiModel = new AIModelInterface();
 
         currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         totalPlayerBullets = currentPlayerBullets;
@@ -626,7 +636,7 @@ public class LevelManager : MonoBehaviour
 
                         if (currentWinTime > playerCelebrateTime)
                         {
-                            levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint": "Loading Next Level";
+                            levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint" : "Loading Next Level";
                             countdownUI.text = "";
                             goNextLevel();
                         }
@@ -644,7 +654,7 @@ public class LevelManager : MonoBehaviour
 
                     if (currentDeadTime > playerRespawnTime)
                     {
-                        levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3"  : "Loading Checkpoint";
+                        levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3" : "Loading Checkpoint";
                         countdownUI.text = "";
                         onPlayerDeath();
                     }

@@ -23,20 +23,33 @@ public class AIModelInterface : MonoBehaviour
     private string GetPythonPath()
     {
 #if UNITY_EDITOR
-        return "python"; // Use system Python in editor
+#if UNITY_EDITOR_WIN
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python.exe");
+#elif UNITY_EDITOR_OSX
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python");
 #else
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python");
+#endif
+#else
+#if UNITY_STANDALONE_WIN
         return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python.exe");
+#elif UNITY_STANDALONE_OSX
+        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
+#else
+        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
+#endif
 #endif
     }
 
     private string GetScriptPath()
     {
 #if UNITY_EDITOR
-        return "run_model.py"; // Use local script in editor
+    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #else
         return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif
     }
+
 
 
     private void RunPythonModel()
@@ -44,7 +57,7 @@ public class AIModelInterface : MonoBehaviour
         // Create process
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = pythonPath,
+            FileName = GetPythonPath(),
             Arguments = $"-W ignore {GetScriptPath()} {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
             UseShellExecute = false,
             RedirectStandardOutput = true,

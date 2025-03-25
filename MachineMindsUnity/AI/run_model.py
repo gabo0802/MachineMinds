@@ -2,10 +2,16 @@ from joblib import load
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 import sys
+import os
 
 def get_ai_model_value(x_data):
     dt = DecisionTreeClassifier()
+    current_directory = os.getcwd()
+    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))   
+    os.chdir(__location__) # ensure that the working directory is where this script is located.
     dt = load('filename.joblib')
+    os.chdir(current_directory) # go back to the original working directory
+
     return dt.predict(x_data)[0]
 
 if __name__ == "__main__":
