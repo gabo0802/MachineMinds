@@ -463,9 +463,10 @@ MonoBehaviour:
   enemyMoveSpeed: 0.1
   enemyBullet: {fileID: 5493826410686333668, guid: 64d68f18a77a89241b289e8f20b3b9d9, type: 3}
   enemyShootInterval: 5
-  bulletShotSpawnOffset: 1
+  bulletShotSpawnOffset: 0
   shootIfCannotSeePlayer: 1
   pointsWorth: 175
+  currentTarget: {fileID: 0}
   isBoss: 0
 --- !u!50 &7701055470618375241
 Rigidbody2D:

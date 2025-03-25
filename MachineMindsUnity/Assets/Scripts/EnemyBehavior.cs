@@ -41,7 +41,7 @@ public class EnemyBehavior : MonoBehaviour
     private GameObject currentAlivePlayer;
     private const string playerName = "player";
 
-    private GameObject currentTarget;
+    public GameObject currentTarget;
     public bool isBoss = false;
 
     public void AffectSpeed(float newMultiplier)
