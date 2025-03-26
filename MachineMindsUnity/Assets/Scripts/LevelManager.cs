@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     public UnityEngine.UI.Image backgroundImage;
     public TMPro.TextMeshProUGUI countdownUI;
     public TMPro.TextMeshProUGUI levelMessageUI;
+    public TMPro.TextMeshProUGUI levelDifficultyUI;
 
     private GameObject currentAlivePlayer;
 
@@ -498,13 +499,20 @@ public class LevelManager : MonoBehaviour
     {
         aiModel.currentDifficulty = currentDifficulty;
         aiModel.currentPlayerLives = currentPlayerLives;
+        //aiModel.levelsBeat = wonLevel ? currentLevelNumber : currentLevelNumber - 1;
         aiModel.levelsBeat = currentLevelNumber;
         aiModel.playerLifeTimer = playerLifeTimer;
         aiModel.totalEnemiesKilled = totalEnemiesKilled;
         aiModel.totalPoints = totalPoints;
 
-        currentDifficulty += aiModel.GetPredictedDifficulty();
-        Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
+        int predictedDifficulyChangeValue = aiModel.GetPredictedDifficulty();
+
+        if(predictedDifficulyChangeValue == -101){
+            Debug.Log("Issue With Script");
+        }else{
+            currentDifficulty += aiModel.GetPredictedDifficulty();
+            Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -582,6 +590,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        levelDifficultyUI.text = currentDifficulty + "";
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)
         {
             Instantiate(pauseButton);

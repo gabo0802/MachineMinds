@@ -60,12 +60,12 @@ public class EnemyBehavior : MonoBehaviour
         currentDifficulty = newDifficultyLevel;
         maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
-        Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
+        //Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
     }
 
     void OnExplosionHit()
     {
-        Debug.Log(gameObject.name + " got hit be explosion");
+        //Debug.Log(gameObject.name + " got hit be explosion");
 
         currentEnemyHealth -= 1; //could make explosions instant kills?
 
@@ -129,7 +129,7 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Stuck");
+                    //Debug.Log("Stuck");
                     transform.Rotate(0, 0, 180f);
                     //rb.AddForce(-transform.up * 5000f);
                 }
@@ -257,7 +257,7 @@ public class EnemyBehavior : MonoBehaviour
         bulletShotSpawnOffset += (transform.localScale.magnitude / 2) + 0.1f;
         maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
-        Debug.Log("Current Health: " + currentEnemyHealth);
+        //Debug.Log("Current Health: " + currentEnemyHealth);
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
 

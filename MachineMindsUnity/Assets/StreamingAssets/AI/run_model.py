@@ -9,7 +9,7 @@ def get_ai_model_value(x_data):
     current_directory = os.getcwd()
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))   
     os.chdir(__location__) # ensure that the working directory is where this script is located.
-    dt = load('filename.joblib')
+    dt = load('difficultyaimodelweights1.joblib')
     os.chdir(current_directory) # go back to the original working directory
 
     return dt.predict(x_data)[0]
@@ -30,5 +30,8 @@ if __name__ == "__main__":
         x_value['totalEnemiesKilled'] = [sys.argv[5]]
         x_value['totalPoints'] = [sys.argv[6]]
 
-        #print(x_value)
         print(get_ai_model_value(x_value))
+        
+        #columns_drop_name = ['totalPoints', 'playerLifeTimer']
+        #x_value_2 = x_value.drop(columns_drop_name, axis='columns')
+        #print(get_ai_model_value(x_value_2))

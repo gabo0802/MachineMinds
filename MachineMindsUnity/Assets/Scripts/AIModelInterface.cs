@@ -11,7 +11,7 @@ public class AIModelInterface : MonoBehaviour
     public float playerLifeTimer = 0;
     public int totalEnemiesKilled = 0;
     public float totalPoints = 0;
-    private int predictedDifficulty = 1;
+    private int predictedDifficulty = -101;
 
     // Call this method whenever you need to get a prediction
     public int GetPredictedDifficulty()
@@ -24,19 +24,19 @@ public class AIModelInterface : MonoBehaviour
     {
 #if UNITY_EDITOR
 #if UNITY_EDITOR_WIN
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python.exe");
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\bin\\python.exe");
 #elif UNITY_EDITOR_OSX
         return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python");
 #else
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python");
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\bin\\python.exe");
 #endif
 #else
 #if UNITY_STANDALONE_WIN
-        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python.exe");
+        return Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\bin\\python.exe");
 #elif UNITY_STANDALONE_OSX
         return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
 #else
-        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
+        return Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\bin\\python");
 #endif
 #endif
     }
@@ -44,7 +44,7 @@ public class AIModelInterface : MonoBehaviour
     private string GetScriptPath()
     {
 #if UNITY_EDITOR
-    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+    return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\run_model.py");
 #else
         return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif
@@ -64,6 +64,8 @@ public class AIModelInterface : MonoBehaviour
             RedirectStandardError = true,
             CreateNoWindow = true
         };
+
+        UnityEngine.Debug.Log(currentDifficulty + " " + currentPlayerLives + " " + levelsBeat + " " + playerLifeTimer + " " + totalEnemiesKilled + " " + totalPoints);
 
         // Execute process and get output
         using (Process process = new Process { StartInfo = startInfo })
