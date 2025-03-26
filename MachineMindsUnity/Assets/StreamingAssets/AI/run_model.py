@@ -9,10 +9,13 @@ def get_ai_model_value(x_data):
     current_directory = os.getcwd()
     __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))   
     os.chdir(__location__) # ensure that the working directory is where this script is located.
-    dt = load('difficultyaimodelweights1.joblib')
+    
+    #dt = load('difficultyaimodelweights.joblib1')
+    dt = load('filename.joblib') #load model weights
+    
     os.chdir(current_directory) # go back to the original working directory
 
-    return dt.predict(x_data)[0]
+    return dt.predict(x_data)[0] #predict data
 
 if __name__ == "__main__":
     #command syntax: 'python -W ignore run_model.py currentDifficulty currentPlayerLives levelsBeat totalEnemiesKilled totalPoints

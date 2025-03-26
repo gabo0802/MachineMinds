@@ -79,3 +79,4 @@ crashlytics-build.properties
 ./Assets/Sprites/Textures/snow_super_dark.png
 ./Assets/Resources/game_data.csv
 ./Assets/AstarPathfindingProject/*
+./Assets/StreamingAssets/AI/API_Key.json
