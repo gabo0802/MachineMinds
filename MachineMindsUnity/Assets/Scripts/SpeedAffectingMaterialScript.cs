@@ -7,7 +7,8 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
     public enum MaterialType
     {
         SlowSand,
-        SlipperyIce
+        SlipperyIce,
+        None
     }
     public MaterialType materialType;
 
@@ -20,6 +21,8 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
                 break;
             case MaterialType.SlipperyIce:
                 speedAffect = 1.5f;
+                break;
+            case default:
                 break;
         }
     }
