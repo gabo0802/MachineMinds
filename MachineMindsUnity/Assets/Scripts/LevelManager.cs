@@ -647,8 +647,11 @@ public class LevelManager : MonoBehaviour
                         countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                         levelMessageUI.text = "You Won";
 
-                        if (currentWinTime > playerCelebrateTime)
-                        {
+                        if (currentWinTime > playerCelebrateTime - 0.5 && currentWinTime < playerCelebrateTime){
+                            levelMessageUI.text = "Updating Difficulty Level";
+                            countdownUI.text = "";
+                            currentWinTime += Time.deltaTime;
+                        }else if (currentWinTime > playerCelebrateTime){
                             levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint" : "Loading Next Level";
                             countdownUI.text = "";
                             goNextLevel();
@@ -664,9 +667,13 @@ public class LevelManager : MonoBehaviour
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                     levelMessageUI.text = "You Lost";
+                    
+                    if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime){
+                        levelMessageUI.text = "Updating Difficulty Level";
+                        countdownUI.text = "";
+                        currentDeadTime += Time.deltaTime;
 
-                    if (currentDeadTime > playerRespawnTime)
-                    {
+                    }else if (currentDeadTime > playerRespawnTime){
                         levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3" : "Loading Checkpoint";
                         countdownUI.text = "";
                         onPlayerDeath();

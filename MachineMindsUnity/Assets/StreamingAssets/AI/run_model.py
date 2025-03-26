@@ -11,7 +11,7 @@ def get_ai_model_value(x_data):
     os.chdir(__location__) # ensure that the working directory is where this script is located.
     
     #dt = load('difficultyaimodelweights.joblib1')
-    dt = load('filename.joblib') #load model weights
+    dt = load('difficulty_ai_weights_no_data_preprocessing.joblib') #load model weights
     
     os.chdir(current_directory) # go back to the original working directory
 
