@@ -53,6 +53,10 @@ public class AIModelInterface : MonoBehaviour
     return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\run_model.py");
 #elif UNITY_EDITOR_OSX
     return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+#elif UNITY_STANDALONE_WIN
+    return Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py");
+#elif UNITY_STANDALONE_OSX
+        return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #else
         return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif

@@ -507,9 +507,12 @@ public class LevelManager : MonoBehaviour
 
         int predictedDifficulyChangeValue = aiModel.GetPredictedDifficulty();
 
-        if(predictedDifficulyChangeValue == -101){
+        if (predictedDifficulyChangeValue == -101)
+        {
             Debug.Log("Issue With Script");
-        }else{
+        }
+        else
+        {
             currentDifficulty += aiModel.GetPredictedDifficulty();
             Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
         }
@@ -590,7 +593,8 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        levelDifficultyUI.text = currentDifficulty + "";
+        // We already have a debug for this but going to keep it for Debugging the actual build
+        levelDifficultyUI.text = "Current Difficulty: " + currentDifficulty + "";
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)
         {
             Instantiate(pauseButton);
