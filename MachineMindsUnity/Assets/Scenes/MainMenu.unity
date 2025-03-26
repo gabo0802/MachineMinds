@@ -289,7 +289,6 @@ RectTransform:
   m_Children:
   - {fileID: 1608648435}
   - {fileID: 1977826676}
-  - {fileID: 903733207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -806,11 +805,11 @@ RectTransform:
   m_Children:
   - {fileID: 825416481}
   - {fileID: 1314512297}
-  m_Father: {fileID: 623245751}
+  m_Father: {fileID: 1977826676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.9999695, y: -52}
+  m_AnchoredPosition: {x: 0.0000500679, y: -9.399994}
   m_SizeDelta: {x: 210, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &992299803
@@ -1133,7 +1132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadGameButton: {fileID: 0}
-  controlsMenuPrefab: {fileID: 0}
+  controlsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
 --- !u!4 &1212095357
 Transform:
   m_ObjectHideFlags: 0
@@ -1232,9 +1231,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1212095355}
+      - m_Target: {fileID: 1212095356}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: LoadControls
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1520,6 +1519,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 108160507}
+  - {fileID: 903733207}
   - {fileID: 276769630}
   m_Father: {fileID: 623245751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
