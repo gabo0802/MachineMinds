@@ -108,7 +108,7 @@ public class EnemyBehavior : MonoBehaviour
             float xScaleNew = 1.75f * ((float)currentEnemyHealth / (float)maxEnemyHealth);
             
             enemyHealthBarComponents[0].transform.localScale = new Vector3(xScaleNew, enemyHealthBarComponents[0].transform.localScale.y, enemyHealthBarComponents[0].transform.localScale.z);
-            enemyHealthBarComponents[0].transform.position += new Vector3(-xScaleNew / maxEnemyHealth, 0, 0);
+            //enemyHealthBarComponents[0].transform.position += new Vector3(-xScaleNew / maxEnemyHealth, 0, 0);
             enemyHealthBarComponents[0].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
             enemyHealthBarComponents[1].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
         }
