@@ -93,6 +93,7 @@ MonoBehaviour:
   pointsWorth: 200
   currentTarget: {fileID: 0}
   isBoss: 0
+  enemyHealthBarComponents: []
 --- !u!50 &1506500029996170173
 Rigidbody2D:
   serializedVersion: 5
