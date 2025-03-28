@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class WallBehavior : MonoBehaviour{
+public class WallBehavior : MonoBehaviour
+{
     public bool isDestroyable = false;
     public bool isExplodable = false;
-    public bool slowsCharacter = false;
-
-    void OnExplosionHit(){
+    void OnExplosionHit()
+    {
         Debug.Log(gameObject.name + " got hit be explosion");
 
-        if(isExplodable){
+        if (isExplodable)
+        {
             Destroy(gameObject);
-            AstarPath.active.Scan();           
+            AstarPath.active.Scan();
         }
     }
 
-    void OnBulletHit(GameObject bulletType){
-        if(isDestroyable){
+    void OnBulletHit(GameObject bulletType)
+    {
+        if (isDestroyable)
+        {
             Destroy(gameObject);
             Destroy(bulletType);
-            AstarPath.active.Scan();           
+            AstarPath.active.Scan();
         }
     }
 }

@@ -13,7 +13,7 @@ TagManager:
   - UI
   - InteractableGround
   - Bullets
-  - 
+  - SeeThroughWall
   - 
   - 
   - 
@@ -40,6 +40,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Obstacle
+    uniqueID: 2560844577
+    locked: 0
+  - name: SeeThroughWall
+    uniqueID: 3446850993
+    locked: 0
+  - name: InteractableGround
+    uniqueID: 4005718791
+    locked: 0
+  - name: Bullets
+    uniqueID: 1522026409
     locked: 0
   m_RenderingLayers:
   - Default

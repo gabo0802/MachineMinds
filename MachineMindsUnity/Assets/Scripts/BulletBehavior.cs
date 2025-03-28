@@ -97,13 +97,7 @@ public class BulletBehavior : MonoBehaviour
         // Raycast ahead to check if a collision will happen before moving
         int layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
 
-        /*RaycastHit2D hit = Physics2D.Raycast(
-            transform.position + (transform.up * ((transform.localScale.magnitude / 2) + 0.1f)),
-            moveDirection, 
-            moveDistance, 
-            layerMask);*/
-
-        //Debug.Log(bulletDiameter);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Bullets"), LayerMask.NameToLayer("InteractableGround"), true);
 
         float bulletOffset = 0.1f;
 
