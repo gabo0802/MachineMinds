@@ -44,7 +44,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject currentTarget;
     public bool isBoss = false;
 
-    public GameObject[] enemyHealthBarComponents; 
+    public GameObject[] enemyHealthBarComponents;
 
     public void AffectSpeed(float newMultiplier)
     {
@@ -104,11 +104,28 @@ public class EnemyBehavior : MonoBehaviour
         if (isBoss)
         {
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
-        }else if (enemyHealthBarComponents.Length == 3){
+        }
+        else if (enemyHealthBarComponents.Length == 3)
+        {
             float xScaleNew = 1.75f * ((float)currentEnemyHealth / (float)maxEnemyHealth);
-            
-            enemyHealthBarComponents[0].transform.localScale = new Vector3(xScaleNew, enemyHealthBarComponents[0].transform.localScale.y, enemyHealthBarComponents[0].transform.localScale.z);
-            //enemyHealthBarComponents[0].transform.position += new Vector3(-xScaleNew / maxEnemyHealth, 0, 0);
+            Vector3 originalScale = enemyHealthBarComponents[0].transform.localScale;
+
+            // Set the new scale
+            enemyHealthBarComponents[0].transform.localScale = new Vector3(xScaleNew, originalScale.y, originalScale.z);
+            enemyHealthBarComponents[0].transform.position += new Vector3(-xScaleNew / maxEnemyHealth, 0, 0);
+
+            // Ensure both bars have identical local rotation relative to their parent
+            enemyHealthBarComponents[0].transform.localRotation = Quaternion.identity;
+            enemyHealthBarComponents[1].transform.localRotation = Quaternion.identity;
+
+            // Make sure both bars are at the same height/z-position
+            float yPos = enemyHealthBarComponents[1].transform.position.y;
+            enemyHealthBarComponents[0].transform.position = new Vector3(
+                enemyHealthBarComponents[0].transform.position.x,
+                yPos,
+                enemyHealthBarComponents[0].transform.position.z
+            );
+
             enemyHealthBarComponents[0].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
             enemyHealthBarComponents[1].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
         }
@@ -318,7 +335,8 @@ public class EnemyBehavior : MonoBehaviour
             TargetPlayerBehavior();
         }
 
-        if(enemyHealthBarComponents.Length == 3){
+        if (enemyHealthBarComponents.Length == 3)
+        {
             enemyHealthBarComponents[2].transform.rotation = Quaternion.Euler(0, 0, -transform.rotation.z);
         }
     }
