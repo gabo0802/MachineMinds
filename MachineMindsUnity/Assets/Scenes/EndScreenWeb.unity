@@ -397,7 +397,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4288304208502958332, guid: c661e06d040dd41a1aa498b81b5c8ef3, type: 3}
       propertyPath: m_text
-      value: RESTART
+      value: Restart
       objectReference: {fileID: 0}
     - target: {fileID: 4291464813176167919, guid: c661e06d040dd41a1aa498b81b5c8ef3, type: 3}
       propertyPath: m_Name
