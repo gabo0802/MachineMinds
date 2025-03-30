@@ -12,7 +12,20 @@ public class PauseMenuScript : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitPause();
+        }
+    }
+
     public void onContinueButtonPress()
+    {
+        QuitPause();
+    }
+
+    private void QuitPause()
     {
         Time.timeScale = 1f;
         Destroy(gameObject);
@@ -22,11 +35,5 @@ public class PauseMenuScript : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0, LoadSceneMode.Single);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
