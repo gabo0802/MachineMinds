@@ -36,13 +36,15 @@ public class AIModelInterface : MonoBehaviour
 #else
 #if UNITY_STANDALONE_WIN 
         UnityEngine.Debug.Log("Setting python path on Windows");
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\Scripts\\python.exe");
+        UnityEngine.Debug.Log("Path: [" + Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python.exe") + "]");
+        return Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python.exe");
 #elif UNITY_STANDALONE_OSX
         UnityEngine.Debug.Log("Setting python path on OSX");
         return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
 #else
         UnityEngine.Debug.Log("Setting python path on other platform");
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\Scripts\\python");
+        //UnityEngine.Debug.Log(Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python"));
+        return Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python");
 #endif
 #endif
     }
@@ -54,11 +56,12 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_EDITOR_OSX
     return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #elif UNITY_STANDALONE_WIN
-    return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\run_model.py");
+    UnityEngine.Debug.Log("Path 2: [" + Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py") + "]");
+    return Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py");
 #elif UNITY_STANDALONE_OSX
     return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #else
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #endif
     }
 
@@ -70,7 +73,7 @@ public class AIModelInterface : MonoBehaviour
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = GetPythonPath(),
-            Arguments = $"-W ignore {GetScriptPath()} {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
+            Arguments = $"-W ignore \"{GetScriptPath()}\" {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
