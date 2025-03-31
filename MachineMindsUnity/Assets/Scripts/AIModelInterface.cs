@@ -58,7 +58,7 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_OSX
     return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #else
-    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #endif
     }
 
@@ -95,7 +95,7 @@ public class AIModelInterface : MonoBehaviour
                 if (int.TryParse(output.Trim(), out int result))
                 {
                     predictedDifficulty = result;
-                    UnityEngine.Debug.Log($"Predicted difficulty: {predictedDifficulty}");
+                    UnityEngine.Debug.Log($"Predicted difficulty change: {predictedDifficulty}");
                 }
                 else
                 {

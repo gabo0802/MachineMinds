@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+
 
 public class LevelManager : MonoBehaviour
 {
@@ -82,7 +84,14 @@ public class LevelManager : MonoBehaviour
     public UnityEngine.UI.Image bossUIBarPercent;
     public TMPro.TextMeshProUGUI bossUIBarText;
 
+    // AI Model
     public AIModelInterface aiModel;
+
+    private Thread adjustDifficultyThread;
+    private bool adjustmentInProgress = false;
+    private Mutex adjustmentMutex = new Mutex();
+
+    private bool updatedDifficulty = false;
 
     //Functions:
     private string[] getFileData(string key)
@@ -277,11 +286,6 @@ public class LevelManager : MonoBehaviour
 
     private void goNextLevel()
     {
-        if (!isTrainingMode)
-        {
-            adjustGameDifficulty();
-        }
-
         writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
@@ -290,7 +294,6 @@ public class LevelManager : MonoBehaviour
             "" + playerLifeTimer,  //playerLifeTimer
             "" + isTrainingMode //isTrainingMode
         }, true);
-
         if (isTrainingMode)
         {
             Debug.Log("Training mode active, creating survey...");
@@ -400,6 +403,7 @@ public class LevelManager : MonoBehaviour
 
         if (currentPlayerLives > 0)
         {
+            updatedDifficulty = false;
             goRetryCurrentLevel();
         }
         else
@@ -411,8 +415,6 @@ public class LevelManager : MonoBehaviour
     private void goRetryCurrentLevel()
     {
         string[] currentSaveData = getFileData(saveKey);
-
-        //adjustGameDifficulty();
 
         writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
@@ -513,7 +515,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            currentDifficulty += aiModel.GetPredictedDifficulty();
+            currentDifficulty += predictedDifficulyChangeValue;
             Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
         }
     }
@@ -646,14 +648,50 @@ public class LevelManager : MonoBehaviour
                         backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                         countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                         levelMessageUI.text = "You Won";
+                        if (!adjustmentInProgress && !updatedDifficulty)
+                        {
+                            adjustmentInProgress = true;
+                            updatedDifficulty = true;
+                            adjustDifficultyThread = new Thread(() =>
+                            {
+                                try
+                                {
+                                    adjustmentMutex.WaitOne();
+                                    adjustGameDifficulty();
+                                }
+                                finally
+                                {
+                                    adjustmentMutex.ReleaseMutex();
+                                    adjustmentInProgress = false;
+                                    updatedDifficulty = true;
+                                }
+                            });
 
-                        if (currentWinTime > playerCelebrateTime - 0.5 && currentWinTime < playerCelebrateTime){
+                            if (!isTrainingMode)
+                            {
+                                adjustDifficultyThread.Start();
+                            }
+                        }
+
+                        if (currentWinTime > playerCelebrateTime - 0.5 && currentWinTime < playerCelebrateTime)
+                        {
                             levelMessageUI.text = "Updating Difficulty Level";
                             countdownUI.text = "";
                             currentWinTime += Time.deltaTime;
-                        }else if (currentWinTime > playerCelebrateTime){
+                        }
+                        else if (currentWinTime > playerCelebrateTime)
+                        {
                             levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint" : "Loading Next Level";
                             countdownUI.text = "";
+                            if (!isTrainingMode && adjustDifficultyThread != null)
+                            {
+                                // Wait for thread to complete if it's still running
+                                if (adjustDifficultyThread.IsAlive)
+                                {
+                                    adjustDifficultyThread.Join();
+                                }
+                            }
+                            updatedDifficulty = false;
                             goNextLevel();
                         }
                         else
@@ -667,13 +705,16 @@ public class LevelManager : MonoBehaviour
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                     levelMessageUI.text = "You Lost";
-                    
-                    if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime){
+
+                    if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime)
+                    {
                         levelMessageUI.text = "Updating Difficulty Level";
                         countdownUI.text = "";
                         currentDeadTime += Time.deltaTime;
 
-                    }else if (currentDeadTime > playerRespawnTime){
+                    }
+                    else if (currentDeadTime > playerRespawnTime)
+                    {
                         levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3" : "Loading Checkpoint";
                         countdownUI.text = "";
                         onPlayerDeath();
