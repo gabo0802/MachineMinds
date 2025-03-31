@@ -34,12 +34,12 @@ public class AIModelInterface : MonoBehaviour
         return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\Scripts\\python.exe");
 #endif
 #else
-#if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN 
         UnityEngine.Debug.Log("Setting python path on Windows");
         return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\Scripts\\python.exe");
 #elif UNITY_STANDALONE_OSX
         UnityEngine.Debug.Log("Setting python path on OSX");
-        return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/in_game_env/bin/python");
+        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
 #else
         UnityEngine.Debug.Log("Setting python path on other platform");
         return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\in_game_env\\Scripts\\python");
@@ -56,7 +56,7 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_WIN
     return Path.Combine(Directory.GetCurrentDirectory(), "Assets\\StreamingAssets\\AI\\run_model.py");
 #elif UNITY_STANDALONE_OSX
-    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+    return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #else
         return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
 #endif
