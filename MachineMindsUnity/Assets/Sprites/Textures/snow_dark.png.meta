@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d98da30715081448d8b3c384229133da
+guid: d869993d3d1974fd5a0013fd0f5d9d4e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3528820129422945910
-    second: Grass_corrupted_left_0
+      213: 3573560427020075563
+    second: snow_super_dark_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Grass_corrupted_left_0
+      name: snow_super_dark_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a815f7de9cc170fc0800000000000000
-      internalID: -3528820129422945910
+      spriteID: b22cceb5646d79130800000000000000
+      internalID: 3573560427020075563
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Grass_corrupted_left_0: -3528820129422945910
+      snow_super_dark_0: 3573560427020075563
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
