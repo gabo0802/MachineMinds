@@ -44,7 +44,7 @@ public class AIModelInterface : MonoBehaviour
 #else
         UnityEngine.Debug.Log("Setting python path on other platform");
         //UnityEngine.Debug.Log(Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python"));
-        return Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python");
+        return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python"); ;
 #endif
 #endif
     }
@@ -61,7 +61,7 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_OSX
     return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #else
-    return Path.Combine(Directory.GetCurrentDirectory(), "Assets/StreamingAssets/AI/run_model.py");
+        return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif
     }
 

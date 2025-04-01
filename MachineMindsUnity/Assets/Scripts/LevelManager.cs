@@ -12,7 +12,7 @@ public class LevelManager : MonoBehaviour
     public GameObject surveyObject;
     private GameObject activeSurvey;
     public GameObject checkpointMessageObject;
-    
+
     public GameObject pauseButton;
 
     private string saveKey = "GameState";
@@ -95,7 +95,7 @@ public class LevelManager : MonoBehaviour
     private bool updatedDifficulty = false;
 
     public AudioSource musicPlayer;
-    
+
     public AudioSource playerSoundEffects_Gun;
     public AudioClip gunShotSound;
     public AudioClip gunEmptySound;
@@ -209,11 +209,15 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))){
-                if (currentPlayerBullets <= 0){
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
+            {
+                if (currentPlayerBullets <= 0)
+                {
                     playerSoundEffects_Gun.clip = gunEmptySound;
                     playerSoundEffects_Gun.Play();
-                }else{
+                }
+                else
+                {
                     playerSoundEffects_Gun.clip = gunEmptySound;
                     playerSoundEffects_Gun.Play();
                 }
@@ -225,7 +229,7 @@ public class LevelManager : MonoBehaviour
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
             }
             else
-            {   
+            {
                 bulletReloadTimer += Time.deltaTime;
             }
         }
@@ -236,8 +240,9 @@ public class LevelManager : MonoBehaviour
     private void tryBoostPlayer()
     {
         if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
-        {   
-            if(!playerSoundEffects_Boost.isPlaying){
+        {
+            if (!playerSoundEffects_Boost.isPlaying)
+            {
                 playerSoundEffects_Boost.Play();
             }
             playerBoostTimer -= Time.deltaTime;
@@ -245,7 +250,7 @@ public class LevelManager : MonoBehaviour
 
         }
         else
-        {   
+        {
             playerSoundEffects_Boost.Stop();
             currentAlivePlayer.SendMessage("AffectBoostSpeed", 1f);
 
@@ -615,9 +620,9 @@ public class LevelManager : MonoBehaviour
         bossUIBarText.text = "";
 
         //Show Level Start
-        GameObject beforeLevelObject = (GameObject) Instantiate(checkpointMessageObject);
+        GameObject beforeLevelObject = (GameObject)Instantiate(checkpointMessageObject);
         beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
-        beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[]{currentLevelNumber, currentDifficulty});
+        beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[] { currentLevelNumber, currentDifficulty });
         beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
         Time.timeScale = 0f;
     }
@@ -634,7 +639,8 @@ public class LevelManager : MonoBehaviour
 
         if (Time.timeScale != 0f)
         {
-            if(!musicPlayer.isPlaying){
+            if (!musicPlayer.isPlaying)
+            {
                 musicPlayer.Play();
             }
 
@@ -682,19 +688,23 @@ public class LevelManager : MonoBehaviour
                         backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                         countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                         levelMessageUI.text = "You Won";
+                        Debug.Log("Attempting to Adjust diffuculty.");
                         if (!adjustmentInProgress && !updatedDifficulty)
                         {
+                            Debug.Log("Entering diffuculty adjustment thread.");
                             adjustmentInProgress = true;
                             updatedDifficulty = true;
                             adjustDifficultyThread = new Thread(() =>
                             {
                                 try
                                 {
+                                    Debug.Log("Acquiring mutex and adjusting difficulty.");
                                     adjustmentMutex.WaitOne();
                                     adjustGameDifficulty();
                                 }
                                 finally
                                 {
+                                    Debug.Log("Releasing mutex and setting flags.");
                                     adjustmentMutex.ReleaseMutex();
                                     adjustmentInProgress = false;
                                     updatedDifficulty = true;
@@ -735,7 +745,7 @@ public class LevelManager : MonoBehaviour
                     }
                 }
                 else
-                {   
+                {
                     playerSoundEffects_Boost.Stop();
                     playerSoundEffects_Gun.Stop();
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
