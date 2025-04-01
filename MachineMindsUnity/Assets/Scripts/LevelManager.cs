@@ -430,7 +430,7 @@ public class LevelManager : MonoBehaviour
 
     private void goBackToCheckpointLevel()
     {
-        int goLevelNumber = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
+        int goLevelNumber = (currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint)) + 1;
 
         if (isTrainingMode)
         {
@@ -444,7 +444,6 @@ public class LevelManager : MonoBehaviour
             "" + (currentLevelNumber - 1) //levelsBeat
             });
 
-            int nextLevel = currentLevelNumber < numberLevelsCheckpoint ? 1 : currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint);
             activeSurvey.SendMessage("SetNextLevel", goLevelNumber);
             NewGameData();
         }
@@ -681,7 +680,7 @@ public class LevelManager : MonoBehaviour
                         }
                         else if (currentWinTime > playerCelebrateTime)
                         {
-                            levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 0 ? "Saving Checkpoint" : "Loading Next Level";
+                            levelMessageUI.text = ((currentLevelNumber + 1) % numberLevelsCheckpoint) == 1 ? "Saving Checkpoint" : "Loading Next Level";
                             countdownUI.text = "";
                             if (!isTrainingMode && adjustDifficultyThread != null)
                             {
