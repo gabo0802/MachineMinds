@@ -47,4 +47,9 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
             other.transform.SendMessage("AffectSpeed", 1f);
         }
     }
+
+    void OnExplosionHit()
+    {
+        Debug.Log(gameObject.name + " got hit be explosion, but cannot get destroyed");
+    }
 }

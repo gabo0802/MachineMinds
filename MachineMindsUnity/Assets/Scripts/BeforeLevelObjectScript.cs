@@ -1,7 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class BeforeLevelObjectScript : MonoBehaviour{
+public class BeforeLevelObjectScript : MonoBehaviour
+{
     private const int levelsPerCheckpoint = 5;
 
     public TMPro.TextMeshProUGUI levelNumberUI;
@@ -55,46 +56,57 @@ public class BeforeLevelObjectScript : MonoBehaviour{
         }
     }
 
-    public void OnContinueButtonPress(){
+    public void OnContinueButtonPress()
+    {
         Time.timeScale = 1f;
         Destroy(gameObject);
     }
 
-    void setPlayerLives(int newLives){
+    void setPlayerLives(int newLives)
+    {
         currentPlayerLives = newLives;
         UpdateLivesUI();
     }
 
-    void setLevelParameters(int[] levelParameters){
+    void setLevelParameters(int[] levelParameters)
+    {
         currentLevelNumber = levelParameters[0];
 
-        if(currentLevelNumber == 10){
+        if (currentLevelNumber == 10)
+        {
             levelNumberUI.text = "Level #10 - Boss Battle";
             currentLevelBackground.sprite = allLevelBackgrounds[4];
-        }else if (currentLevelNumber == 20){
+        }
+        else if (currentLevelNumber == 20)
+        {
             levelNumberUI.text = "Level #20 - Boss Battle";
             currentLevelBackground.sprite = allLevelBackgrounds[5];
-        }else{
+        }
+        else
+        {
             levelNumberUI.text = "Level #" + currentLevelNumber;
             currentLevelBackground.sprite = allLevelBackgrounds[currentLevelNumber == 0 ? 0 : ((currentLevelNumber - 1) / levelsPerCheckpoint)];
         }
 
         currentDifficulty = levelParameters[1];
-        levelDifficultyUI.text = "Current Difficulty: [" + currentDifficulty + "]";
+        levelDifficultyUI.text = "Current Difficulty: " + currentDifficulty;
     }
 
-    void setIsCheckpoint(bool isCheckpoint){
-        isCheckpointUI.text = isCheckpoint ? "[Checkpoint]" : "";
+    void setIsCheckpoint(bool isCheckpoint)
+    {
+        isCheckpointUI.text = isCheckpoint ? "Checkpoint Reached!" : "";
     }
-    
-    private IEnumerator Timer(float timeInSeconds) {
+
+    private IEnumerator Timer(float timeInSeconds)
+    {
         Debug.Log("Timer start");
         yield return new WaitForSecondsRealtime(timeInSeconds);
         Debug.Log("Timer end");
         OnContinueButtonPress();
     }
 
-    void Start(){
+    void Start()
+    {
         StartCoroutine(Timer(3));
     }
 }
