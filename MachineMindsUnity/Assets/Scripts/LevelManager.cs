@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
     private string aiTrainingKey = "GameTrainingData";
     private bool isTrainingMode = true;
 
-    public int numberLevelsCheckpoint = 3;
+    private int numberLevelsCheckpoint = 5;
 
     //Current Level Variables:  
     private const string playerName = "player";

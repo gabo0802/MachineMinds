@@ -4,7 +4,7 @@ using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    private const float difficultyScale = 1.10f;
+    private const float difficultyScale = 1.117f;
     private Rigidbody2D rb;
     int layerMask;
 
@@ -23,6 +23,7 @@ public class EnemyBehavior : MonoBehaviour
     private float tireThreadCreateTimer = 0f;
 
     public int maxEnemyHealth; //# bullets they can survive
+    private int defaultEnemyHealth;
     private int currentEnemyHealth;
 
     public float enemyMoveSpeed = 1f;
@@ -60,9 +61,12 @@ public class EnemyBehavior : MonoBehaviour
     public void SetDifficultyLevel(int newDifficultyLevel)
     {
         currentDifficulty = newDifficultyLevel;
-        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
-        currentEnemyHealth = maxEnemyHealth;
-        //Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
+
+        if(maxEnemyHealth == defaultEnemyHealth){
+            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+            currentEnemyHealth = maxEnemyHealth;
+        }
+        Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
     }
 
     void OnExplosionHit()
@@ -269,6 +273,7 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        defaultEnemyHealth = maxEnemyHealth;
         layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
 
         if (currentDifficulty < 1)
