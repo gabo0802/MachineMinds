@@ -107,23 +107,24 @@ public class EnemyBehavior : MonoBehaviour
         }
         else if (enemyHealthBarComponents.Length == 3)
         {
-            float xScaleNew = 1.75f * ((float)currentEnemyHealth / (float)maxEnemyHealth);
+            float xScaleNew = 1.5f * ((float)currentEnemyHealth / (float)maxEnemyHealth);
             Vector3 originalScale = enemyHealthBarComponents[0].transform.localScale;
 
             // Set the new scale
             enemyHealthBarComponents[0].transform.localScale = new Vector3(xScaleNew, originalScale.y, originalScale.z);
-            enemyHealthBarComponents[0].transform.position += new Vector3(-xScaleNew / maxEnemyHealth, 0, 0);
 
             // Ensure both bars have identical local rotation relative to their parent
             enemyHealthBarComponents[0].transform.localRotation = Quaternion.identity;
             enemyHealthBarComponents[1].transform.localRotation = Quaternion.identity;
 
+            float xPositionNew = (1.5f / (maxEnemyHealth * 2f)) * (currentEnemyHealth - maxEnemyHealth);
+
             // Make sure both bars are at the same height/z-position
-            float yPos = enemyHealthBarComponents[1].transform.position.y;
-            enemyHealthBarComponents[0].transform.position = new Vector3(
-                enemyHealthBarComponents[0].transform.position.x,
+            float yPos = enemyHealthBarComponents[1].transform.localPosition.y;
+            enemyHealthBarComponents[0].transform.localPosition = new Vector3(
+                xPositionNew,
                 yPos,
-                enemyHealthBarComponents[0].transform.position.z
+                enemyHealthBarComponents[0].transform.localPosition.z
             );
 
             enemyHealthBarComponents[0].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
