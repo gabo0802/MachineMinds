@@ -17811,6 +17811,14 @@ PrefabInstance:
       propertyPath: playerRespawnTime
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: d1e6168ee3dfd9441aaae049e32bae56, type: 3}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: d1e6168ee3dfd9441aaae049e32bae56, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

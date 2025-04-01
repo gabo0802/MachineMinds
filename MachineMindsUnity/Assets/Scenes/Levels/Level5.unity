@@ -5144,6 +5144,14 @@ PrefabInstance:
       propertyPath: playerRespawnTime
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: b10047460d494e34297de768c8fb21cb, type: 3}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b10047460d494e34297de768c8fb21cb, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6468,7 +6476,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!114 &1706599036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6957,7 +6964,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &1971873779
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -8504,7 +8510,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &2118306899
 CompositeCollider2D:
   m_ObjectHideFlags: 0

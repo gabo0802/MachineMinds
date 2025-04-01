@@ -381,7 +381,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &19959812
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -3853,7 +3852,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &283273649
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -9576,7 +9574,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &1083514636
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -11473,7 +11470,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!114 &1706599036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11564,6 +11560,14 @@ PrefabInstance:
       propertyPath: data.dataString
       value: UEsDBBQAAAgIAACYn+u8n/yqaAIAACAFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMziVjA02c3lpCSA9JmJBOLr4IaY01yJJHHwGS4b9XK9vYodMTy9u3u28/5E8ilK2BOW2WRvBHzYH8GBG0ybdR73yAA91qtRYf0HHeBHclkmjkvFAndMBTDLO6AmcE+6m2EslJAL0ShTbVgm9hrq2zAS6otBBcRjuMVgH6HJFD+BnfYsgxWJMbtD6CdZuMTsFkoByYATWdXH1vyWlLbZheMUmrGjjK7gMmXeq0oanQUMvAeKalFLZVQ9yxjt2u6xIMYLtc0NBcVID0EsS2dJh2GPtcFBZc27mhxzthwoyapOSXbgZXUbtrZL1T6bFMFgU1KR//8Y7T6C6Mrh66qmmCFVwp2O6FHhm1bjDXIXz3VbZXeyp3dCPhrQT1pJdGe8WD0xmPod7C5K7/e25sXgLb9Xgj9QL0dT/s8xqvptksza6n14txctOuCRs6xUEc5lJUG+RfzRpgLXWcfDwEMGFHv4P6eCa2zRtQlPTHwivdDu+pddwLY11wtS0r1LrR3iCV3AcDl8C8m2ujwAwT1KCodMdVSOMut3nh+3/UPcWX0xZvfd2DuAiJcM9PkgvXSu/Pm7Ol3j+CLZ+9k0JBP3Z0PIU5zbVSzbENW+rC1t4UlA3Ctl7wr3dGWMKn02yzgYzNZkCLMbudACsgy/iMwuY6IfEQhQp9UrlqhLbjCVtTfXIVjq77oIyWhtbx8Lmh+6X4qLTtmUIVes0MgHpuMpyFgwlFwvvkCy7CgNbgnFBx3+QzJ1KzHfD8nCiPnS4OztC8z5KTWrxrh0hO5vELkhOEz4e9MvAuYI/Fu2QncvoLUEsDBBQAAAgIAACYn+vwgxshbQAAAHgAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM011FQSi9KLMgoBooYgjilmSkgdrRSskGKsbFFUlKqRbKJSWpimm6ypVFqclqqhUWKSWJqkpmBUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAACYn+u8n/yqaAIAACAFAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAACYn+vwgxshbQAAAHgAAAAJACQAAAAAAAAAAAAAALUCAABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwUGAAAAAAIAAgC4AAAAbQMAAAAA
       objectReference: {fileID: 0}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 522291b53eef66443adb0a5f2c2867c0, type: 3}
+    - target: {fileID: 7448136419361291889, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 522291b53eef66443adb0a5f2c2867c0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11831,7 +11835,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
-  slowsCharacter: 0
 --- !u!66 &1971873779
 CompositeCollider2D:
   m_ObjectHideFlags: 0

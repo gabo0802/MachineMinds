@@ -94,6 +94,13 @@ public class LevelManager : MonoBehaviour
 
     private bool updatedDifficulty = false;
 
+    public AudioSource musicPlayer;
+    
+    public AudioSource playerSoundEffects_Gun;
+    public AudioClip gunShotSound;
+    public AudioClip gunEmptySound;
+    public AudioSource playerSoundEffects_Boost;
+
     //Functions:
     private string[] getFileData(string key)
     {
@@ -193,6 +200,8 @@ public class LevelManager : MonoBehaviour
         {
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
             {
+                playerSoundEffects_Gun.clip = gunShotSound;
+                playerSoundEffects_Gun.Play();
                 currentPlayerBullets--;
                 currentBulletsInMagazine--;
                 currentAlivePlayer.SendMessage("ShootBullet");
@@ -200,13 +209,23 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))){
+                if (currentPlayerBullets <= 0){
+                    playerSoundEffects_Gun.clip = gunEmptySound;
+                    playerSoundEffects_Gun.Play();
+                }else{
+                    playerSoundEffects_Gun.clip = gunEmptySound;
+                    playerSoundEffects_Gun.Play();
+                }
+            }
+
             if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
             }
             else
-            {
+            {   
                 bulletReloadTimer += Time.deltaTime;
             }
         }
@@ -217,13 +236,17 @@ public class LevelManager : MonoBehaviour
     private void tryBoostPlayer()
     {
         if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
-        {
+        {   
+            if(!playerSoundEffects_Boost.isPlaying){
+                playerSoundEffects_Boost.Play();
+            }
             playerBoostTimer -= Time.deltaTime;
             currentAlivePlayer.SendMessage("AffectBoostSpeed", playerBoostSpeedMultiplier);
 
         }
         else
-        {
+        {   
+            playerSoundEffects_Boost.Stop();
             currentAlivePlayer.SendMessage("AffectBoostSpeed", 1f);
 
             if (playerBoostTimer < timePlayerCanBoost)
@@ -611,6 +634,10 @@ public class LevelManager : MonoBehaviour
 
         if (Time.timeScale != 0f)
         {
+            if(!musicPlayer.isPlaying){
+                musicPlayer.Play();
+            }
+
             if (activeSurvey)
             {
                 Debug.Log($"Survey is active: {activeSurvey.name}, visible: {activeSurvey.activeInHierarchy}");
@@ -708,7 +735,9 @@ public class LevelManager : MonoBehaviour
                     }
                 }
                 else
-                {
+                {   
+                    playerSoundEffects_Boost.Stop();
+                    playerSoundEffects_Gun.Stop();
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                     levelMessageUI.text = "You Lost";

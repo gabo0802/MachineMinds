@@ -46,6 +46,7 @@ public class EnemyBehavior : MonoBehaviour
     public bool isBoss = false;
 
     public GameObject[] enemyHealthBarComponents;
+    public AudioSource enemyShootSoundPlayer;
 
     public void AffectSpeed(float newMultiplier)
     {
@@ -247,6 +248,7 @@ public class EnemyBehavior : MonoBehaviour
                 cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
                 Color.green, enemyShootInterval / 2);
                 enemyShootTimer = 0f;
+                enemyShootSoundPlayer.Play();
             }
             else if (scanAhead)
             {
