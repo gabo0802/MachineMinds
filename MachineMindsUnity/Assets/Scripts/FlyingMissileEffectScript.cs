@@ -14,19 +14,39 @@ public class FlyingMissileEffectScript : MonoBehaviour{
     
     private float worldScale = 2.0f;
     private float angleChangeScale = 10f;
-    private float sizeChangeScale = 0.1f;
+    private float sizeChangeScale = 0.02f;
     private float speedScale = 0.05f;
     
 
-    void Start(){
-        //targetPosition = new Vector3(Random.Range(-20, 0), Random.Range(-5, 5), 0);
-        targetPosition = (Vector3)((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
+    void setTargetPosition(Vector3 newPosition){
+        targetPosition = newPosition;
+
         currentReticle = Instantiate(targetReticle, targetPosition, new Quaternion(0, 0, 0, 0));
 
         totalDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
         transform.up = targetPosition - transform.position;
         angleChangeScale /= totalDistanceToTarget;
         sizeChangeScale /= totalDistanceToTarget;
+    }
+
+    void setSpeedScale(float newSpeed){
+        speedScale = newSpeed;
+    }
+
+    void setAngleChangeSpeed(float newSpeed){
+        angleChangeScale = newSpeed;
+        angleChangeScale /= totalDistanceToTarget;
+    }
+
+    void Start(){
+        /*targetPosition = new Vector3(Random.Range(-20, 0), Random.Range(-5, 5), 0);
+        //targetPosition = (Vector3)((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        currentReticle = Instantiate(targetReticle, targetPosition, new Quaternion(0, 0, 0, 0));
+
+        totalDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        transform.up = targetPosition - transform.position;
+        angleChangeScale /= totalDistanceToTarget;
+        sizeChangeScale /= totalDistanceToTarget;*/
     }
 
     void EndOfPath(){

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class BeforeLevelObjectScript : MonoBehaviour{
     private const int levelsPerCheckpoint = 5;
@@ -79,5 +80,16 @@ public class BeforeLevelObjectScript : MonoBehaviour{
 
     void setIsCheckpoint(bool isCheckpoint){
         isCheckpointUI.text = isCheckpoint ? "[Checkpoint]" : "";
+    }
+    
+    private IEnumerator Timer(float timeInSeconds) {
+        Debug.Log("Timer start");
+        yield return new WaitForSecondsRealtime(timeInSeconds);
+        Debug.Log("Timer end");
+        OnContinueButtonPress();
+    }
+
+    void Start(){
+        StartCoroutine(Timer(3));
     }
 }

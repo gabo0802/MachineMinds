@@ -42,8 +42,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e43b15f7aa51b784bb84ad95ba8c9cbe, type: 3}
-  m_Resource: {fileID: 8300000, guid: e43b15f7aa51b784bb84ad95ba8c9cbe, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ac4a327c36d950a448b38c556610d40c, type: 3}
+  m_Resource: {fileID: 8300000, guid: ac4a327c36d950a448b38c556610d40c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 0.4
@@ -51,7 +51,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 45
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -154,14 +154,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801905346945509414}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.95886695, w: 0.28385597}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9149134044122630352}
   m_Father: {fileID: 6798315737942583264}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 222333}
 --- !u!212 &2919954348381303660
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.37315273, g: 0, b: 1, a: 1}
+  m_Color: {r: 0.5176471, g: 0, b: 0.039215688, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -294,7 +294,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.37254903, g: 0, b: 0.9960785, a: 1}
+  m_Color: {r: 0.5188679, g: 0, b: 0.037149932, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -381,7 +381,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.37254903, g: 0, b: 0.9960785, a: 1}
+  m_Color: {r: 0.5176471, g: 0, b: 0.039215688, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -468,7 +468,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.37254903, g: 0, b: 0.9960785, a: 1}
+  m_Color: {r: 0.5176471, g: 0, b: 0.039215688, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -488,13 +488,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6798315737942583264}
   - component: {fileID: 8594610551508255133}
-  - component: {fileID: 1488456212683028382}
   - component: {fileID: 7701055470618375241}
-  - component: {fileID: 4594330870723099318}
-  - component: {fileID: 6361910439809864366}
   - component: {fileID: 6435409441677232502}
+  - component: {fileID: 2975582685043472461}
   m_Layer: 0
-  m_Name: BossTestEnemy
+  m_Name: BossBattleEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -574,32 +572,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1488456212683028382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6279392409009837609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9d057c951e6a3b45a26b32af53fbb73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cannonHead: {fileID: 801905346945509414}
-  tireThreads: {fileID: 0}
-  tireThreadCreateInterval: 0.5
-  maxEnemyHealth: 10
-  enemyMoveSpeed: 0.05
-  enemyBullet: {fileID: 5493826410686333668, guid: e9961a5a212abd7439b324adbe08b495, type: 3}
-  enemyShootInterval: 5
-  bulletShotSpawnOffset: 0
-  shootIfCannotSeePlayer: 1
-  pointsWorth: 5000
-  currentTarget: {fileID: 0}
-  isBoss: 1
-  enemyHealthBarComponents: []
-  enemyShootSoundPlayer: {fileID: 5173863988851505300}
 --- !u!50 &7701055470618375241
 Rigidbody2D:
   serializedVersion: 5
@@ -627,76 +599,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4594330870723099318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6279392409009837609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  drawGizmos: 1
-  detailedGizmos: 0
-  startEndModifier:
-    addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
-    useRaycasting: 0
-    mask:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    useGraphRaycasting: 0
-  traversableTags: -1
-  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  graphMask:
-    value: -1
---- !u!114 &6361910439809864366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6279392409009837609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6eb1402c17e84a9282a7f0f62eb584f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5
-  radius: 1
-  height: 2
-  canMove: 1
-  maxSpeed: 1
-  gravity: {x: NaN, y: NaN, z: NaN}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  centerOffsetCompatibility: NaN
-  repathRateCompatibility: NaN
-  canSearchCompability: 0
-  orientation: 1
-  enableRotation: 1
-  autoRepath:
-    mode: 2
-    interval: 0.5
-    sensitivity: 10
-    maximumInterval: 2
-    visualizeSensitivity: 0
-  targetCompatibility: {fileID: 0}
-  maxAcceleration: -2.5
-  rotationSpeed: 360
-  slowdownDistance: 0.6
-  pickNextWaypointDist: 2
-  endReachedDistance: 0.2
-  alwaysDrawGizmos: 0
-  slowWhenNotFacingTarget: 1
-  whenCloseToDestination: 0
-  constrainInsideGraph: 1
 --- !u!58 &6435409441677232502
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -733,3 +635,26 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.75
+--- !u!114 &2975582685043472461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6279392409009837609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98be9ae8d830334a8aedb06e9213e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cannonHead: {fileID: 801905346945509414}
+  maxEnemyHealth: 20
+  pointsWorth: 10000
+  missileObject: {fileID: 801812182257050566, guid: acbf8d51e9eeb8b41bcbf1d233389cbc, type: 3}
+  numMissiles: 10
+  enemyMissileShootInterval: 5
+  lazerBeamObject: {fileID: 3197045168176285340, guid: a463d76513fb8ac45beb0f2e92d06237, type: 3}
+  enemyLazerShootInterval: 20
+  enemyLazerShootDuration: 5
+  rotationSpeed: 50
+  bossSoundEffects: {fileID: 5173863988851505300}
