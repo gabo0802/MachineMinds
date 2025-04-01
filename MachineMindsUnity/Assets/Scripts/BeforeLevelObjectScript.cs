@@ -5,11 +5,13 @@ public class BeforeLevelObjectScript : MonoBehaviour{
     private const int levelsPerCheckpoint = 5;
 
     public TMPro.TextMeshProUGUI levelNumberUI;
+    public TMPro.TextMeshProUGUI levelDifficultyUI;
     public TMPro.TextMeshProUGUI isCheckpointUI;
     public UnityEngine.UI.Image currentLevelBackground;
     public Sprite[] allLevelBackgrounds;
 
     private int currentLevelNumber;
+    private int currentDifficulty;
 
     public UnityEngine.UI.Image[] playerHearts;
     private int currentPlayerLives = 3;
@@ -63,8 +65,8 @@ public class BeforeLevelObjectScript : MonoBehaviour{
         UpdateLivesUI();
     }
 
-    void setLevelNumber(int newLevelNumber){
-        currentLevelNumber = newLevelNumber;
+    void setLevelParameters(int[] levelParameters){
+        currentLevelNumber = levelParameters[0];
 
         if(currentLevelNumber == 10){
             levelNumberUI.text = "Level #10 - Boss Battle";
@@ -76,6 +78,9 @@ public class BeforeLevelObjectScript : MonoBehaviour{
             levelNumberUI.text = "Level #" + currentLevelNumber;
             currentLevelBackground.sprite = allLevelBackgrounds[currentLevelNumber == 0 ? 0 : ((currentLevelNumber - 1) / levelsPerCheckpoint)];
         }
+
+        currentDifficulty = levelParameters[1];
+        levelDifficultyUI.text = "Current Difficulty: [" + currentDifficulty + "]";
     }
 
     void setIsCheckpoint(bool isCheckpoint){

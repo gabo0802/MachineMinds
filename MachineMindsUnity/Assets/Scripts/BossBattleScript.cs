@@ -10,7 +10,7 @@ public class BossBattleScript : MonoBehaviour{
     private int currentEnemyHealth;
 
     private bool isInvulerable = false;
-    private int phaseNumber = 2;
+    private int phaseNumber = 1;
 
     public float pointsWorth = 10000;
     private int currentDifficulty = 1;
@@ -30,7 +30,8 @@ public class BossBattleScript : MonoBehaviour{
     private GameObject currentLazerBeam;
     public float rotationSpeed = 50f;
 
-    public AudioSource bossSoundEffects;
+    public AudioSource bossSoundEffects_Lazer;
+    public AudioSource bossSoundEffects_Gun;
 
     public void SetGameObjects(GameObject[] parameters)
     {
@@ -67,7 +68,8 @@ public class BossBattleScript : MonoBehaviour{
                 if (levelManager){
                     levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
                 }
-                bossSoundEffects.Stop();
+                bossSoundEffects_Lazer.Stop();
+                bossSoundEffects_Gun.Stop();
                 Destroy(gameObject);
             }
         }
@@ -105,8 +107,6 @@ public class BossBattleScript : MonoBehaviour{
         }
 
         if(currentAlivePlayer){
-            phaseNumber = (int)(3 * ((float) currentEnemyHealth / (float) maxEnemyHealth)) + 1;
-
             if(phaseNumber == 1){
                 cannonHead.transform.up = currentAlivePlayer.transform.position - transform.position;
                 cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
@@ -114,9 +114,14 @@ public class BossBattleScript : MonoBehaviour{
 
                 if (enemyShootTimer >= enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
                     enemyShootTimer = 0f;
+                    bossSoundEffects_Gun.Play();
                     ShootMissile(currentAlivePlayer.transform.position);
                 }else{
                     enemyShootTimer += Time.deltaTime;
+                }
+
+                if(currentEnemyHealth < 0.5f * maxEnemyHealth){
+                    phaseNumber = 2;
                 }   
             }else if(phaseNumber == 2){
                 cannonHead.transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime));
@@ -125,14 +130,14 @@ public class BossBattleScript : MonoBehaviour{
                     enemyShootTimer2 -= Time.deltaTime; 
                 }else{
                    if (enemyShootTimer2 >= enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
-                        bossSoundEffects.Stop();
+                        bossSoundEffects_Lazer.Stop();
                         enemyShootTimer2 = enemyLazerShootDuration;
                         currentLazerBeam = Instantiate(lazerBeamObject, cannonHead.transform.position + (cannonHead.transform.up * 10f), cannonHead.transform.rotation);
                         currentLazerBeam.transform.SetParent(cannonHead.transform);
                     }else{
-                        if(enemyShootTimer2 >= (enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1) - 3) && (!bossSoundEffects.isPlaying || bossSoundEffects.time >= 0.1f)){
-                            bossSoundEffects.pitch = 0.75f + (enemyShootTimer2 / enemyLazerShootInterval);
-                            bossSoundEffects.Play();
+                        if(enemyShootTimer2 >= (enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1) - 3) && (!bossSoundEffects_Lazer.isPlaying || bossSoundEffects_Lazer.time >= 0.1f)){
+                            bossSoundEffects_Lazer.pitch = 0.75f + (enemyShootTimer2 / enemyLazerShootInterval);
+                            bossSoundEffects_Lazer.Play();
                         }
 
                         if(currentLazerBeam){
@@ -144,10 +149,11 @@ public class BossBattleScript : MonoBehaviour{
 
                 if (enemyShootTimer >= enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
                     enemyShootTimer = 0f;
-                    
+
                     for(int i = 0; i < numMissiles; i++){
                         Vector3 targetVector = Vector3.zero;
                         
+                        bossSoundEffects_Gun.Play();
                         int randomVal = Random.Range(0, 10);
                         float multiplierVal = 1f;
 

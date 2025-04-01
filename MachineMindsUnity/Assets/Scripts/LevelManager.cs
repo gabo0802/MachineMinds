@@ -454,7 +454,7 @@ public class LevelManager : MonoBehaviour
 
     private void goBackToCheckpointLevel()
     {
-        int goLevelNumber = (currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint)) + 1;
+        int goLevelNumber = currentLevelNumber % numberLevelsCheckpoint != 0 ? (currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint)) + 1 : currentLevelNumber - (numberLevelsCheckpoint - 1);
 
         if (isTrainingMode)
         {
@@ -617,7 +617,7 @@ public class LevelManager : MonoBehaviour
         //Show Level Start
         GameObject beforeLevelObject = (GameObject) Instantiate(checkpointMessageObject);
         beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
-        beforeLevelObject.SendMessageUpwards("setLevelNumber", currentLevelNumber);
+        beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[]{currentLevelNumber, currentDifficulty});
         beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
         Time.timeScale = 0f;
     }
