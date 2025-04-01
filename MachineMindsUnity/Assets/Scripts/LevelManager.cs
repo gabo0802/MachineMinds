@@ -11,7 +11,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject surveyObject;
     private GameObject activeSurvey;
-
+    public GameObject checkpointMessageObject;
+    
     public GameObject pauseButton;
 
     private string saveKey = "GameState";
@@ -589,6 +590,13 @@ public class LevelManager : MonoBehaviour
         bossUIBar.color = new Color(1f, 1f, 1f, 0f);
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
         bossUIBarText.text = "";
+
+        //Show Level Start
+        GameObject beforeLevelObject = (GameObject) Instantiate(checkpointMessageObject);
+        beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
+        beforeLevelObject.SendMessageUpwards("setLevelNumber", currentLevelNumber);
+        beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
+        Time.timeScale = 0f;
     }
 
     // Update is called once per frame
@@ -714,7 +722,7 @@ public class LevelManager : MonoBehaviour
                     }
                     else if (currentDeadTime > playerRespawnTime)
                     {
-                        levelMessageUI.text = currentPlayerLives > 1 ? (currentPlayerLives - 1) + " / 3" : "Loading Checkpoint";
+                        levelMessageUI.text = currentPlayerLives > 1 ? "Reloading Level" : "Loading Checkpoint";
                         countdownUI.text = "";
                         onPlayerDeath();
                     }
