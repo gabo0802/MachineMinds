@@ -206,6 +206,8 @@ MonoBehaviour:
   - {fileID: 4360390788417139489, guid: 718a633f35a1e44738de778660709950, type: 3}
   - {fileID: 21300000, guid: 0d1643dab1a8f4fa0b7a8ccdbbf00047, type: 3}
   - {fileID: 362710969161469818, guid: ef3d572fab262463ab9850e779718ef9, type: 3}
+  - {fileID: 21300000, guid: c66b15eee8f2c4f3da0dc81f3f7884eb, type: 3}
+  - {fileID: 21300000, guid: c66b15eee8f2c4f3da0dc81f3f7884eb, type: 3}
   playerHearts:
   - {fileID: 5534399802243320013}
   - {fileID: 2286635475351640033}

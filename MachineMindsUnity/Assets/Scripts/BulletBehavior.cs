@@ -43,8 +43,9 @@ public class BulletBehavior : MonoBehaviour
             Destroy(bullet);
 
             Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+            
             GameObject currentExplosionObject = (GameObject)Instantiate(explosionObject, transform.position, transform.rotation);
-            currentExplosionObject.transform.localScale = new Vector3(explosionRadius * worldScale, explosionRadius * worldScale, 1);
+            currentExplosionObject.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
 
             foreach (Collider2D currentExplodedObject in allExplodedObjects)
             {
@@ -120,7 +121,7 @@ public class BulletBehavior : MonoBehaviour
             {
                 Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
                 GameObject currentExplosionObject = (GameObject)Instantiate(explosionObject, transform.position, transform.rotation);
-                currentExplosionObject.transform.localScale = new Vector3(explosionRadius * worldScale, explosionRadius * worldScale, 1);
+                currentExplosionObject.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
 
                 Debug.DrawLine(transform.position - new Vector3(explosionRadius, 0, 0), transform.position + new Vector3(explosionRadius, 0, 0), Color.red, 2.5f);
                 Debug.DrawLine(transform.position - new Vector3(0, explosionRadius, 0), transform.position + new Vector3(0, explosionRadius, 0), Color.red, 2.5f);

@@ -64,8 +64,17 @@ public class BeforeLevelObjectScript : MonoBehaviour{
 
     void setLevelNumber(int newLevelNumber){
         currentLevelNumber = newLevelNumber;
-        currentLevelBackground.sprite = allLevelBackgrounds[currentLevelNumber == 0 ? 0 : ((currentLevelNumber - 1) / levelsPerCheckpoint)];
-        levelNumberUI.text = "Level #" + currentLevelNumber;
+
+        if(currentLevelNumber == 10){
+            levelNumberUI.text = "Level #10 - Boss Battle";
+            currentLevelBackground.sprite = allLevelBackgrounds[4];
+        }else if (currentLevelNumber == 20){
+            levelNumberUI.text = "Level #20 - Boss Battle";
+            currentLevelBackground.sprite = allLevelBackgrounds[5];
+        }else{
+            levelNumberUI.text = "Level #" + currentLevelNumber;
+            currentLevelBackground.sprite = allLevelBackgrounds[currentLevelNumber == 0 ? 0 : ((currentLevelNumber - 1) / levelsPerCheckpoint)];
+        }
     }
 
     void setIsCheckpoint(bool isCheckpoint){
