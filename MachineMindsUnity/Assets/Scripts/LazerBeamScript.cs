@@ -13,8 +13,10 @@ public class LazerBeamScript : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other){
-        GameObject tempGameObject = new GameObject();
-        other.transform.SendMessage("OnBulletHit", tempGameObject);
+        if(!other.transform.name.ToLower().Contains("boss") && !other.transform.name.ToLower().Contains("wall") ){
+            GameObject tempGameObject = new GameObject();
+            other.transform.SendMessage("OnBulletHit", tempGameObject);
+        }
     }
 
 }
