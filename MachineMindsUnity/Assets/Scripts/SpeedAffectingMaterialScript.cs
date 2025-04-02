@@ -20,7 +20,7 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
                 speedAffect = 0.5f;
                 break;
             case MaterialType.SlipperyIce:
-                speedAffect = 1.5f;
+                speedAffect = 5f;
                 break;
             case MaterialType.None:
                 break;

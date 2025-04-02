@@ -151,7 +151,11 @@ public class PlayerControls : MonoBehaviour
         }
 #endif
 
-        rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
+        if(playerMoveSpeedMultiplier == 5f){
+            rb.AddForce(currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+        }else{
+            rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
+        }
 
         //Rotation:
         if (currentPlayerRotationString == "WA" || currentPlayerRotationString == "SD")
