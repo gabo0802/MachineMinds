@@ -66,19 +66,23 @@ public class FlyingMissileEffectScript : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         currentDistanceFromTarget = Vector3.Distance(transform.position, targetPosition);
+        float sizeChangeScaleWeighted = sizeChangeScale * Time.deltaTime * 500f;
+        float speedScaleWeighted = speedScale * Time.deltaTime * 500f;
+        float angleChangeScaleWeighted = angleChangeScale * Time.deltaTime * 500f;
+
         if(currentDistanceFromTarget > totalDistanceToTarget / 2){
-            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x + sizeChangeScale, 
-                                                missileObject.transform.localScale.y + sizeChangeScale,
-                                                missileObject.transform.localScale.z + sizeChangeScale);
+            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x + sizeChangeScaleWeighted, 
+                                                missileObject.transform.localScale.y + sizeChangeScaleWeighted,
+                                                missileObject.transform.localScale.z + sizeChangeScaleWeighted);
 
-            transform.position += transform.up * speedScale;
+            transform.position += transform.up * speedScaleWeighted;
         }else if(currentDistanceFromTarget > 0.1f){
-            missileObject.transform.Rotate(angleChangeScale, 0, 0);
+            missileObject.transform.Rotate(angleChangeScaleWeighted, 0, 0);
 
-            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x - sizeChangeScale, 
-                                                missileObject.transform.localScale.y - sizeChangeScale,
-                                                missileObject.transform.localScale.z - sizeChangeScale);
-            transform.position += transform.up * speedScale;
+            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x - sizeChangeScaleWeighted, 
+                                                missileObject.transform.localScale.y - sizeChangeScaleWeighted,
+                                                missileObject.transform.localScale.z - sizeChangeScaleWeighted);
+            transform.position += transform.up * speedScaleWeighted;
         }else{
                 EndOfPath();
                 Destroy(currentReticle);
