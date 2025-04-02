@@ -211,6 +211,7 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    private const float slipperyIceSpeed = 10f;
     private void TargetPlayerBehavior()
     {
         cannonHead.transform.up = currentTarget.transform.position - transform.position;
@@ -218,7 +219,7 @@ public class EnemyBehavior : MonoBehaviour
 
         RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
 
-        if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName))
+        if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName) && enemyMoveSpeedMultiplier != slipperyIceSpeed)
         {
             if (enemyMoveSpeed > 0f)
             {

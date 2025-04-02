@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerControls : MonoBehaviour
 {
+    public bool godMode = false;
     public GameObject playerBody;
     public GameObject cannonHead;
     int layerMask;
@@ -88,19 +89,31 @@ public class PlayerControls : MonoBehaviour
         playerMoveSpeedBoostMultiplier = newMultiplier;
     }
 
+    private const float slipperyIceSpeed = 10f;
+
     private void tankControlMovement()
     {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || pressW)
         {
-            rb.linearVelocity = transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
+            if(playerMoveSpeedMultiplier == slipperyIceSpeed){
+                rb.AddForce(transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+            }else{
+                rb.linearVelocity = transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
+            }
         }
         else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || pressS)
-        {
-            rb.linearVelocity = transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
-        }
+        {   
+            if(playerMoveSpeedMultiplier == slipperyIceSpeed){
+                rb.AddForce(transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+            }else{
+                rb.linearVelocity = transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
+            }
+        }   
         else
-        {
-            rb.linearVelocity = new Vector2(0, 0);
+        {   
+            if(playerMoveSpeedMultiplier != slipperyIceSpeed){
+                rb.linearVelocity = new Vector2(0, 0);
+            }
         }
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || pressA)
@@ -151,7 +164,7 @@ public class PlayerControls : MonoBehaviour
         }
 #endif
 
-        if(playerMoveSpeedMultiplier == 5f){
+        if(playerMoveSpeedMultiplier == slipperyIceSpeed){
             rb.AddForce(currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
         }else{
             rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
@@ -180,7 +193,9 @@ public class PlayerControls : MonoBehaviour
     {
         //Debug.Log(gameObject.name + " got hit be explosion");
 
-        Destroy(gameObject);
+        if(!godMode){
+            Destroy(gameObject);
+        }
     }
 
     void OnBulletHit(GameObject bullet)
@@ -192,7 +207,9 @@ public class PlayerControls : MonoBehaviour
             Destroy(bullet);
         }
 
-        Destroy(gameObject);
+        if(!godMode){
+            Destroy(gameObject);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
