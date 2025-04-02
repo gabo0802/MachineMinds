@@ -785,10 +785,10 @@ MonoBehaviour:
   pointsWorth: 10000
   missileObject: {fileID: 801812182257050566, guid: acbf8d51e9eeb8b41bcbf1d233389cbc, type: 3}
   numMissiles: 10
-  enemyMissileShootInterval: 5
+  enemyMissileShootInterval: 3
   lazerBeamObject: {fileID: 3197045168176285340, guid: a463d76513fb8ac45beb0f2e92d06237, type: 3}
   lazerBeamObjectHarmless: {fileID: 868991066197437016}
-  enemyLazerShootInterval: 20
+  enemyLazerShootInterval: 15
   enemyLazerShootDuration: 5
   rotationSpeed: 50
   bossSoundEffects_Lazer: {fileID: 5173863988851505300}
@@ -819,11 +819,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
       propertyPath: m_LocalPosition.x

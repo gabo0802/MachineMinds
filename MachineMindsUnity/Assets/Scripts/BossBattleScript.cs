@@ -34,6 +34,7 @@ public class BossBattleScript : MonoBehaviour{
     private float enemyShootTimer2 = 0f;
     private GameObject currentLazerBeam;
     public float rotationSpeed = 50f;
+    private int spinDirection = 1;
 
     public AudioSource bossSoundEffects_Lazer;
     public AudioSource bossSoundEffects_Gun;
@@ -111,11 +112,11 @@ public class BossBattleScript : MonoBehaviour{
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
         }
 
-        if(isInvulerable && invulerabliltyTimer < invulerabliltyTime){
+        if(isInvulerable && invulerabliltyTimer > 0){
             if(!currentInvulerabliltyShieldObject){
                 currentInvulerabliltyShieldObject = (GameObject) Instantiate(invulerabliltyShieldObject, transform.position, transform.rotation);
             }
-            invulerabliltyTimer += Time.deltaTime;
+            invulerabliltyTimer -= Time.deltaTime;
         }else{
             if(currentInvulerabliltyShieldObject){
                 Destroy(currentInvulerabliltyShieldObject);
@@ -128,8 +129,8 @@ public class BossBattleScript : MonoBehaviour{
                 cannonHead.transform.up = currentAlivePlayer.transform.position - transform.position;
                 cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
 
-
-                if (enemyShootTimer >= enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
+                //Missile Attack
+                if (enemyShootTimer >= enemyMissileShootInterval / (Mathf.Pow(difficultyScale, currentDifficulty - 1))){
                     enemyShootTimer = 0f;
                     bossSoundEffects_Gun.Play();
                     ShootMissile(currentAlivePlayer.transform.position);
@@ -137,14 +138,16 @@ public class BossBattleScript : MonoBehaviour{
                     enemyShootTimer += Time.deltaTime;
                 }
 
-                if(currentEnemyHealth < 0.5f * maxEnemyHealth){
+                //Phase Transition
+                if(currentEnemyHealth <= 0.6f * maxEnemyHealth){ // < 60%
                     phaseNumber = 2;
-                    invulerabliltyTimer = 0f;
+                    invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1);
                     isInvulerable = true;
                 }   
             }else if(phaseNumber == 2){
-                cannonHead.transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime));
 
+                //Lazer Beam
+                cannonHead.transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime * spinDirection));
                 if(currentLazerBeam && enemyShootTimer2 > 0){
                     enemyShootTimer2 -= Time.deltaTime; 
                 }else{
@@ -154,24 +157,31 @@ public class BossBattleScript : MonoBehaviour{
                         enemyShootTimer2 = enemyLazerShootDuration;
                         currentLazerBeam = Instantiate(lazerBeamObject, cannonHead.transform.position + (cannonHead.transform.up * 10f), cannonHead.transform.rotation);
                         currentLazerBeam.transform.SetParent(cannonHead.transform);
+                        lazerBeamObjectHarmless.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
                     }else{
                         if(enemyShootTimer2 >= (enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1) - 3) && (!bossSoundEffects_Lazer.isPlaying || bossSoundEffects_Lazer.time >= 0.1f)){
                             Color tempColor = lazerBeamObjectHarmless.GetComponent<SpriteRenderer>().color;
                             tempColor.a += (Time.deltaTime * 4f);
                             lazerBeamObjectHarmless.GetComponent<SpriteRenderer>().color = tempColor;
-                            
+                            lazerBeamObjectHarmless.transform.localScale *= 1.05f;
+
                             bossSoundEffects_Lazer.pitch = 0.75f + (enemyShootTimer2 / enemyLazerShootInterval);
                             bossSoundEffects_Lazer.Play();
                         }
 
                         if(currentLazerBeam){
+                            invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                            isInvulerable = true;
+                            spinDirection *= -1;
                             Destroy(currentLazerBeam);
                         }
                         enemyShootTimer2 += Time.deltaTime;
                     }       
                 } 
 
-                if (enemyShootTimer >= enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
+                //Missile Barrage
+                if (enemyShootTimer >= 2f * (enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1))){
                     enemyShootTimer = 0f;
 
                     for(int i = 0; i < numMissiles; i++){
@@ -202,7 +212,16 @@ public class BossBattleScript : MonoBehaviour{
                     }
                 }else{
                     enemyShootTimer += Time.deltaTime;
-                }   
+                }
+
+                //Phase Transition?
+                /*
+                if(currentEnemyHealth <= 0.3f * maxEnemyHealth){ // < 30%
+
+                }
+                */   
+            }else{
+
             }
         }
     }
