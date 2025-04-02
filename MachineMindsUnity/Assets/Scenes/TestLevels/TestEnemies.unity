@@ -15210,6 +15210,10 @@ PrefabInstance:
       value: LevelManager (MUST BE INCLUDED IN LEVEL)
       objectReference: {fileID: 0}
     - target: {fileID: 4484564812155729530, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
+      propertyPath: isTestLevel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4484564812155729530, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: totalPlayerBullets
       value: 100
       objectReference: {fileID: 0}

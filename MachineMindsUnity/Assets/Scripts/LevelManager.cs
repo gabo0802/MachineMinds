@@ -4,9 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class LevelManager : MonoBehaviour
 {
+    public bool isTestLevel = false;
     private const float difficultyScale = 1.25f;
 
     public GameObject surveyObject;
@@ -102,6 +107,25 @@ public class LevelManager : MonoBehaviour
     public AudioSource playerSoundEffects_Boost;
 
     //Functions:
+    private void testLevelEnd(){
+        if (Application.isEditor)
+        {
+            Debug.Log("Quitting game in editor");
+#if UNITY_EDITOR
+            EditorApplication.ExitPlaymode();
+#endif
+        }
+        else if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            Debug.Log("Quitting game in WebGL is not supported.");
+        }
+        else
+        {
+            Debug.Log("Quitting game in build");
+            Application.Quit();
+        }
+    }
+
     private string[] getFileData(string key)
     {
         if (PlayerPrefs.HasKey(key))
@@ -620,11 +644,13 @@ public class LevelManager : MonoBehaviour
         bossUIBarText.text = "";
 
         //Show Level Start
-        GameObject beforeLevelObject = (GameObject)Instantiate(checkpointMessageObject);
-        beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
-        beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[] { currentLevelNumber, currentDifficulty });
-        beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
-        Time.timeScale = 0f;
+        if(!isTestLevel){
+            GameObject beforeLevelObject = (GameObject)Instantiate(checkpointMessageObject);
+            beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
+            beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[] { currentLevelNumber, currentDifficulty });
+            beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
+            Time.timeScale = 0f;
+        }
     }
 
     // Update is called once per frame
@@ -681,40 +707,43 @@ public class LevelManager : MonoBehaviour
 
                     if (wonLevel)
                     {
-
-                        bossUIBar.color = new Color(1f, 1f, 1f, 0f);
-                        bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
-                        bossUIBarText.text = "";
-                        backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
-                        countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
-                        levelMessageUI.text = "You Won";
-                        Debug.Log("Attempting to Adjust diffuculty.");
-                        if (!adjustmentInProgress && !updatedDifficulty)
-                        {
-                            Debug.Log("Entering diffuculty adjustment thread.");
-                            adjustmentInProgress = true;
-                            updatedDifficulty = true;
-                            adjustDifficultyThread = new Thread(() =>
+                        if(!isTestLevel){
+                            bossUIBar.color = new Color(1f, 1f, 1f, 0f);
+                            bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
+                            bossUIBarText.text = "";
+                            backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
+                            countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
+                            levelMessageUI.text = "You Won";
+                            Debug.Log("Attempting to Adjust diffuculty.");
+                            if (!adjustmentInProgress && !updatedDifficulty)
                             {
-                                try
+                                Debug.Log("Entering diffuculty adjustment thread.");
+                                adjustmentInProgress = true;
+                                updatedDifficulty = true;
+                                adjustDifficultyThread = new Thread(() =>
                                 {
-                                    Debug.Log("Acquiring mutex and adjusting difficulty.");
-                                    adjustmentMutex.WaitOne();
-                                    adjustGameDifficulty();
-                                }
-                                finally
-                                {
-                                    Debug.Log("Releasing mutex and setting flags.");
-                                    adjustmentMutex.ReleaseMutex();
-                                    adjustmentInProgress = false;
-                                    updatedDifficulty = true;
-                                }
-                            });
+                                    try
+                                    {
+                                        Debug.Log("Acquiring mutex and adjusting difficulty.");
+                                        adjustmentMutex.WaitOne();
+                                        adjustGameDifficulty();
+                                    }
+                                    finally
+                                    {
+                                        Debug.Log("Releasing mutex and setting flags.");
+                                        adjustmentMutex.ReleaseMutex();
+                                        adjustmentInProgress = false;
+                                        updatedDifficulty = true;
+                                    }
+                                });
 
-                            if (!isTrainingMode)
-                            {
-                                adjustDifficultyThread.Start();
+                                if (!isTrainingMode)
+                                {
+                                    adjustDifficultyThread.Start();
+                                }
                             }
+                        }else{
+                            testLevelEnd();
                         }
 
                         if (currentWinTime > playerCelebrateTime - 0.5 && currentWinTime < playerCelebrateTime)
@@ -745,29 +774,33 @@ public class LevelManager : MonoBehaviour
                     }
                 }
                 else
-                {
+                {   
                     playerSoundEffects_Boost.Stop();
                     playerSoundEffects_Gun.Stop();
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                     levelMessageUI.text = "You Lost";
 
-                    if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime)
-                    {
-                        levelMessageUI.text = "Updating Difficulty Level";
-                        countdownUI.text = "";
-                        currentDeadTime += Time.deltaTime;
+                    if(!isTestLevel){
+                        if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime)
+                        {
+                            levelMessageUI.text = "Updating Difficulty Level";
+                            countdownUI.text = "";
+                            currentDeadTime += Time.deltaTime;
 
-                    }
-                    else if (currentDeadTime > playerRespawnTime)
-                    {
-                        levelMessageUI.text = currentPlayerLives > 1 ? "Reloading Level" : "Loading Checkpoint";
-                        countdownUI.text = "";
-                        onPlayerDeath();
-                    }
-                    else
-                    {
-                        currentDeadTime += Time.deltaTime;
+                        }
+                        else if (currentDeadTime > playerRespawnTime)
+                        {
+                            levelMessageUI.text = currentPlayerLives > 1 ? "Reloading Level" : "Loading Checkpoint";
+                            countdownUI.text = "";
+                            onPlayerDeath();
+                        }
+                        else
+                        {
+                            currentDeadTime += Time.deltaTime;
+                        }
+                    }else{
+                        testLevelEnd();
                     }
                 }
             }
