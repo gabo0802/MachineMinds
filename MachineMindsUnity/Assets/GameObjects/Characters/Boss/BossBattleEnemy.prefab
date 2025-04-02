@@ -154,14 +154,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 801905346945509414}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.95886695, w: 0.28385597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9149134044122630352}
+  - {fileID: 3860100610782557226}
   m_Father: {fileID: 6798315737942583264}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 222333}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2919954348381303660
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -779,13 +780,107 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cannonHead: {fileID: 801905346945509414}
   maxEnemyHealth: 20
+  invulerabliltyShieldObject: {fileID: 801812182257050566, guid: ed6ee0e8e6d7830428a07ea1d8452075, type: 3}
+  invulerabliltyTime: 5
   pointsWorth: 10000
   missileObject: {fileID: 801812182257050566, guid: acbf8d51e9eeb8b41bcbf1d233389cbc, type: 3}
   numMissiles: 10
   enemyMissileShootInterval: 5
   lazerBeamObject: {fileID: 3197045168176285340, guid: a463d76513fb8ac45beb0f2e92d06237, type: 3}
+  lazerBeamObjectHarmless: {fileID: 868991066197437016}
   enemyLazerShootInterval: 20
   enemyLazerShootDuration: 5
   rotationSpeed: 50
   bossSoundEffects_Lazer: {fileID: 5173863988851505300}
   bossSoundEffects_Gun: {fileID: 6326171401345501564}
+--- !u!1001 &2328758347822099652
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 819030442680042125}
+    m_Modifications:
+    - target: {fileID: 1342404391040793408, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+    - target: {fileID: 1342404391040793408, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1342404391040793408, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 1342404391040793408, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.54212683
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3197045168176285340, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+      propertyPath: m_Name
+      value: LazerBeamEffect (Harmless)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+--- !u!1 &868991066197437016 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3197045168176285340, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+  m_PrefabInstance: {fileID: 2328758347822099652}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3860100610782557226 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1567459845846538478, guid: af52d8e3a3fb0b1429616fdb07029bd8, type: 3}
+  m_PrefabInstance: {fileID: 2328758347822099652}
+  m_PrefabAsset: {fileID: 0}
