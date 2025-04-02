@@ -41,6 +41,8 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_OSX
         UnityEngine.Debug.Log("Setting python path on OSX");
         return Path.Combine(Application.streamingAssetsPath, "AI/in_game_env/bin/python");
+#elif UNITY_STANDALONE_WEBGL
+        UnityEngine.Debug.Log("ERROR, Python path not supported on WebGL yet, must boot up a back end for it");
 #else
         UnityEngine.Debug.Log("Setting python path on other platform");
         //UnityEngine.Debug.Log(Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python"));
@@ -60,6 +62,8 @@ public class AIModelInterface : MonoBehaviour
     return Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py");
 #elif UNITY_STANDALONE_OSX
     return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
+#elif UNITY_STANDALONE_WEBGL
+    UnityEngine.Debug.Log("ERROR, Python not supported on WebGL yet, must boot up a back end for it");
 #else
         return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif
