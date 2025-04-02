@@ -240,15 +240,17 @@ public class EnemyBehavior : MonoBehaviour
         {
             //Debug.Log(hit.transform.gameObject.name);
             if (shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)))
-            {
-                GameObject currentBullet = currentBullet = (GameObject)Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
-                currentBullet.SendMessageUpwards("SetTarget", currentAlivePlayer);
+            {   
+                if(enemyBullet){
+                    GameObject currentBullet = currentBullet = (GameObject)Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                    currentBullet.SendMessageUpwards("SetTarget", currentAlivePlayer);
 
-                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
-                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
-                Color.green, enemyShootInterval / 2);
-                enemyShootTimer = 0f;
-                enemyShootSoundPlayer.Play();
+                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                    cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
+                    Color.green, enemyShootInterval / 2);
+                    enemyShootTimer = 0f;
+                    enemyShootSoundPlayer.Play();
+                }
             }
             else if (scanAhead)
             {
