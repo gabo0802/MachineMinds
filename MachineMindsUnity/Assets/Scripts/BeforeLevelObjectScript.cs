@@ -19,6 +19,9 @@ public class BeforeLevelObjectScript : MonoBehaviour
     public const string spritePath = "DynamicSprites/heart_empty"; // Path inside Resources folder
     public const string spritePathFull = "DynamicSprites/heart_full"; // Path inside Resources folder
 
+    public TMPro.TextMeshProUGUI hintUI;
+    public string[] allHints;
+
     private void UpdateLivesUI()
     {
         // Load New Sprites
@@ -106,7 +109,8 @@ public class BeforeLevelObjectScript : MonoBehaviour
     }
 
     void Start()
-    {
+    {   
+        hintUI.text = allHints[(int)Random.Range(0, allHints.Length)];
         StartCoroutine(Timer(3));
     }
 }
