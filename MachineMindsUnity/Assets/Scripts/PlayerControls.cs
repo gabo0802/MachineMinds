@@ -89,7 +89,7 @@ public class PlayerControls : MonoBehaviour
         playerMoveSpeedBoostMultiplier = newMultiplier;
     }
 
-    private const float slipperyIceSpeed = 10f;
+    private const float slipperyIceSpeed = 5f;
     private const float slideMultiplier = 0.1f;
 
     private void tankControlMovement()

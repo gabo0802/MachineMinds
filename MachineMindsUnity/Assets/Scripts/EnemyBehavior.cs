@@ -211,7 +211,7 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    private const float slipperyIceSpeed = 10f;
+    private const float slipperyIceSpeed = 5f;
     private void TargetPlayerBehavior()
     {
         cannonHead.transform.up = currentTarget.transform.position - transform.position;
