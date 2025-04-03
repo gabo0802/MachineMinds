@@ -17893,7 +17893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4484564812155729530, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: totalPlayerBullets
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6177381822910003595, guid: e276fbe3c125a16458cfd4e081f05dbb, type: 3}
       propertyPath: pointsUI
