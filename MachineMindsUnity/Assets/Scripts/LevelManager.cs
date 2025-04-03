@@ -61,10 +61,12 @@ public class LevelManager : MonoBehaviour
 
     //Player Shooting Variables:
     public TMPro.TextMeshProUGUI ammoUI = null;
-    public int maxBulletsInMagazine = 5;
-    public float bulletReloadTime = 0.1f;
-    private float bulletReloadTimer = 0.1f;
+    
+    private int maxBulletsInMagazine = 1;
+    private float bulletReloadTime = 0.5f;
+    private float bulletReloadTimer = 0.5f;
     private int currentBulletsInMagazine;
+    
     public int totalPlayerBullets = 10;
     private int currentPlayerBullets;
 
@@ -625,8 +627,8 @@ public class LevelManager : MonoBehaviour
         currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(difficultyScale, currentDifficulty - 1));
         totalPlayerBullets = currentPlayerBullets;
 
-        maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(difficultyScale, currentDifficulty - 1));
-        currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+        //maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+        //currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
 
         playerBoostTimer = timePlayerCanBoost;
 
