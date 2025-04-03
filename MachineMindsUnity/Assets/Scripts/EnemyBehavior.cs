@@ -111,12 +111,6 @@ public class EnemyBehavior : MonoBehaviour
         }else{
             currentEnemyHealth -= 1;
         }
-
-
-        if(!currentTarget){
-
-        }
-        currentEnemyHealth -= 1;
         
         if (isBoss)
         {
