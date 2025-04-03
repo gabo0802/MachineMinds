@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class BossBattleScript : MonoBehaviour{
-    private const float difficultyScale = 1.12f;
+    private const float difficultyScaleHealth = 1.12f; //12% increases
+    private const float difficultyScaleFireRate = 1.07f; //7% increases
 
     public GameObject cannonHead;
 
@@ -50,7 +51,7 @@ public class BossBattleScript : MonoBehaviour{
         currentDifficulty = newDifficultyLevel;
 
         if(maxEnemyHealth == defaultEnemyHealth){
-            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
             currentEnemyHealth = maxEnemyHealth;
         }
         Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
@@ -100,7 +101,7 @@ public class BossBattleScript : MonoBehaviour{
             maxEnemyHealth = 1;
         }
 
-        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
     }
 
@@ -130,7 +131,7 @@ public class BossBattleScript : MonoBehaviour{
                 cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
 
                 //Missile Attack
-                if (enemyShootTimer >= enemyMissileShootInterval / (Mathf.Pow(difficultyScale, currentDifficulty - 1))){
+                if (enemyShootTimer >= enemyMissileShootInterval / (Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1))){
                     enemyShootTimer = 0f;
                     bossSoundEffects_Gun.Play();
                     ShootMissile(currentAlivePlayer.transform.position);
@@ -141,7 +142,7 @@ public class BossBattleScript : MonoBehaviour{
                 //Phase Transition
                 if(currentEnemyHealth <= 0.6f * maxEnemyHealth){ // < 60%
                     phaseNumber = 2;
-                    invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                    invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1);
                     isInvulerable = true;
                 }   
             }else if(phaseNumber == 2){
@@ -151,7 +152,7 @@ public class BossBattleScript : MonoBehaviour{
                 if(currentLazerBeam && enemyShootTimer2 > 0){
                     enemyShootTimer2 -= Time.deltaTime; 
                 }else{
-                   if (enemyShootTimer2 >= enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1)){
+                   if (enemyShootTimer2 >= enemyLazerShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1)){
                         lazerBeamObjectHarmless.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f, 0f);
                         bossSoundEffects_Lazer.Stop();
                         enemyShootTimer2 = enemyLazerShootDuration;
@@ -160,7 +161,7 @@ public class BossBattleScript : MonoBehaviour{
                         lazerBeamObjectHarmless.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
                     }else{
-                        if(enemyShootTimer2 >= (enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1) - 3) && (!bossSoundEffects_Lazer.isPlaying || bossSoundEffects_Lazer.time >= 0.1f)){
+                        if(enemyShootTimer2 >= (enemyLazerShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1) - 3) && (!bossSoundEffects_Lazer.isPlaying || bossSoundEffects_Lazer.time >= 0.1f)){
                             Color tempColor = lazerBeamObjectHarmless.GetComponent<SpriteRenderer>().color;
                             tempColor.a += (Time.deltaTime * 4f);
                             lazerBeamObjectHarmless.GetComponent<SpriteRenderer>().color = tempColor;
@@ -171,7 +172,7 @@ public class BossBattleScript : MonoBehaviour{
                         }
 
                         if(currentLazerBeam){
-                            invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                            invulerabliltyTimer = enemyLazerShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1);
                             isInvulerable = true;
                             spinDirection *= -1;
                             Destroy(currentLazerBeam);
@@ -181,7 +182,7 @@ public class BossBattleScript : MonoBehaviour{
                 } 
 
                 //Missile Barrage
-                if (enemyShootTimer >= 2f * (enemyMissileShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1))){
+                if (enemyShootTimer >= 2f * (enemyMissileShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1))){
                     enemyShootTimer = 0f;
 
                     for(int i = 0; i < numMissiles; i++){

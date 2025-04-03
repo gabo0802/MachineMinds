@@ -4,7 +4,8 @@ using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    private const float difficultyScale = 1.12f;
+    private const float difficultyScaleHealth = 1.12f; //12% increases
+    private const float difficultyScaleFireRate = 1.07f; //7% increases
     private Rigidbody2D rb;
     int layerMask;
 
@@ -64,7 +65,7 @@ public class EnemyBehavior : MonoBehaviour
         currentDifficulty = newDifficultyLevel;
 
         if(maxEnemyHealth == defaultEnemyHealth){
-            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
             currentEnemyHealth = maxEnemyHealth;
         }
         Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
@@ -201,7 +202,8 @@ public class EnemyBehavior : MonoBehaviour
 
         if (!currentTarget && enemyMoveSpeed > 0f)
         {
-            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
+            //path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
+            path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;
             if (Vector2.Distance(transform.position, patrolDestination) <= 2f)
             {
                 patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
@@ -230,14 +232,15 @@ public class EnemyBehavior : MonoBehaviour
         {
             if (enemyMoveSpeed > 0f)
             {
-                path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                //path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;                
                 path.destination = currentTarget.transform.position;
             }
 
             PathFindingStuckFix(false);
         }
 
-        if (enemyShootTimer >= enemyShootInterval / Mathf.Pow(difficultyScale, currentDifficulty - 1))
+        if (enemyShootTimer >= enemyShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1))
         {
             //Debug.Log(hit.transform.gameObject.name);
             if (shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)))
@@ -292,7 +295,7 @@ public class EnemyBehavior : MonoBehaviour
         }
 
         bulletShotSpawnOffset += (transform.localScale.magnitude / 2) + 0.1f;
-        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScale, currentDifficulty - 1));
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
         //Debug.Log("Current Health: " + currentEnemyHealth);
         rb = GetComponent<Rigidbody2D>();
