@@ -50,6 +50,7 @@ public class EnemyBehavior : MonoBehaviour
     public AudioSource enemyShootSoundPlayer;
 
     public int stealthBonusDamage = 2;
+    public int redirectBonusDamage = 4;
 
     public void AffectSpeed(float newMultiplier)
     {
@@ -92,7 +93,10 @@ public class EnemyBehavior : MonoBehaviour
     void OnBulletHit(GameObject bullet)
     {   
         if (bullet)
-        {
+        {   
+            if(!bullet.name.ToLower().Contains("player")){
+                currentEnemyHealth -= redirectBonusDamage;
+            }
             Destroy(bullet);
         }
 

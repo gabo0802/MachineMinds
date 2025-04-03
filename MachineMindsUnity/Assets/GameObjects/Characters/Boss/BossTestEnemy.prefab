@@ -600,6 +600,8 @@ MonoBehaviour:
   isBoss: 1
   enemyHealthBarComponents: []
   enemyShootSoundPlayer: {fileID: 5173863988851505300}
+  stealthBonusDamage: 1
+  redirectBonusDamage: 1
 --- !u!50 &7701055470618375241
 Rigidbody2D:
   serializedVersion: 5
