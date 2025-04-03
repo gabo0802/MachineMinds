@@ -49,6 +49,8 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject[] enemyHealthBarComponents;
     public AudioSource enemyShootSoundPlayer;
 
+    public int stealthBonusDamage = 2f;
+
     public void AffectSpeed(float newMultiplier)
     {
         enemyMoveSpeedMultiplier = newMultiplier;
@@ -88,9 +90,14 @@ public class EnemyBehavior : MonoBehaviour
     }
 
     void OnBulletHit(GameObject bullet)
-    {
-        if (!currentTarget)
+    {   
+        if (bullet)
         {
+            Destroy(bullet);
+        }
+
+        if (!currentTarget)
+        {   
             if (enemyMoveSpeed > 0f)
             {
                 patrolDestination = (Vector2)currentAlivePlayer.transform.position;
@@ -99,14 +106,18 @@ public class EnemyBehavior : MonoBehaviour
             {
                 currentTarget = currentAlivePlayer;
             }
+
+            currentEnemyHealth -= stealthBonusDamage;
+        }else{
+            currentEnemyHealth -= 1;
         }
 
-        if (bullet)
-        {
-            Destroy(bullet);
-        }
 
+        if(!currentTarget){
+
+        }
         currentEnemyHealth -= 1;
+        
         if (isBoss)
         {
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
