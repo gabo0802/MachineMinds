@@ -49,7 +49,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject[] enemyHealthBarComponents;
     public AudioSource enemyShootSoundPlayer;
 
-    public int stealthBonusDamage = 2f;
+    public int stealthBonusDamage = 2;
 
     public void AffectSpeed(float newMultiplier)
     {
