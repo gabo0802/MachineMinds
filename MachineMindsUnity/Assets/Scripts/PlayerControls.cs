@@ -90,13 +90,14 @@ public class PlayerControls : MonoBehaviour
     }
 
     private const float slipperyIceSpeed = 10f;
+    private const float slideMultiplier = 0.1f;
 
     private void tankControlMovement()
     {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || pressW)
         {
             if(playerMoveSpeedMultiplier == slipperyIceSpeed){
-                rb.AddForce(transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+                rb.AddForce(transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * slideMultiplier); //slippery ice
             }else{
                 rb.linearVelocity = transform.up * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
             }
@@ -104,7 +105,7 @@ public class PlayerControls : MonoBehaviour
         else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || pressS)
         {   
             if(playerMoveSpeedMultiplier == slipperyIceSpeed){
-                rb.AddForce(transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+                rb.AddForce(transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * slideMultiplier); //slippery ice
             }else{
                 rb.linearVelocity = transform.up * -playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
             }
@@ -165,7 +166,7 @@ public class PlayerControls : MonoBehaviour
 #endif
 
         if(playerMoveSpeedMultiplier == slipperyIceSpeed){
-            rb.AddForce(currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier); //slippery ice
+            rb.AddForce(currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * slideMultiplier); //slippery ice
         }else{
             rb.linearVelocity = currentPlayerVelocity * playerMoveSpeed * playerMoveSpeedBoostMultiplier * playerMoveSpeedMultiplier;
         }
