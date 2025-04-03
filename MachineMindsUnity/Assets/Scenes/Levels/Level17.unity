@@ -14015,7 +14015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6529200955928093130, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: enemyMoveSpeed
-      value: 0.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6798315737942583264, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14023,7 +14023,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6798315737942583264, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.98
+      value: 6.01
       objectReference: {fileID: 0}
     - target: {fileID: 6798315737942583264, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20947,7 +20947,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6529200955928093130, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: enemyMoveSpeed
-      value: 0.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6798315737942583264, guid: 4b940e7875acba04da6a5bbfdb2a4ac2, type: 3}
       propertyPath: m_LocalPosition.x
