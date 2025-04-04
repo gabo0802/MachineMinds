@@ -222,9 +222,11 @@ public class LevelManager : MonoBehaviour
 
     private void tryPlayerShoot()
     {
+        bool pressedShootKey = (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+
         if (currentBulletsInMagazine > 0)
         {
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && currentPlayerBullets > 0)
+            if (pressedShootKey && currentPlayerBullets > 0)
             {
                 playerSoundEffects_Gun.clip = gunShotSound;
                 playerSoundEffects_Gun.Play();
@@ -235,7 +237,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)))
+            if (pressedShootKey)
             {
                 if (currentPlayerBullets <= 0)
                 {
@@ -250,17 +252,20 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        float emptyMagPenalty = currentBulletsInMagazine == 0 ? 1f : 0f;
-        float magRefill = bulletReloadTime * (maxBulletsInMagazine - currentBulletsInMagazine);
-        
+        float magRefillTime = currentBulletsInMagazine == 0 ? 5f: bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
+
+        if(pressedShootKey){
+            Debug.LogWarning("magRefillTime: " + magRefillTime);
+        }
+
         if(currentBulletsInMagazine < maxBulletsInMagazine){
-            if (bulletReloadTimer >= magRefill + emptyMagPenalty && currentPlayerBullets > 0)
+            if (bulletReloadTimer >= magRefillTime && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
             }
             else
-            {
+            {   
                 bulletReloadTimer += Time.deltaTime;
             }
         }
@@ -282,7 +287,7 @@ public class LevelManager : MonoBehaviour
 
         }
         else
-        {
+            {
             playerSoundEffects_Boost.Stop();
             currentAlivePlayer.SendMessage("AffectBoostSpeed", 1f);
 
