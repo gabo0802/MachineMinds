@@ -37,7 +37,7 @@ public class EnemyBehavior : MonoBehaviour
     public bool shootIfCannotSeePlayer = false;
 
     public float pointsWorth = 100;
-    private int currentDifficulty = 1;
+    public int currentDifficulty = 1;
     private GameObject levelManager;
 
     private GameObject currentAlivePlayer;
