@@ -365,8 +365,8 @@ MonoBehaviour:
   - Did you know? This game is actually a Senior Project.
   - Did you know? After beating 5 levels, you'll get a checkpoint.
   - Did you know? This game uses Machine Learning to adjust the difficulty level.
-  - Did you know? Ice will make you slippery and enemies faster.
-  - Did you know? Mud will slow down both enemies and you.
+  - Ice will make you slippery and enemies faster.
+  - Mud will slow down both enemies and you.
   - Need a boost? Press "Shift" to have a speed boost. Be warned you have limited
     fuel, and it takes a while for it to recharge.
   - Did you know? Every 5 levels, there's a different world theme. Tutorial, Desert,
@@ -375,7 +375,8 @@ MonoBehaviour:
     them all?
   - Did you know? Every 10 levels there is a boss battle. Be prepared.
   - Did you know? Each level you have a limited amount of bullets. Use them wisely.
-  - :)
+  - Avoid water and spikes. Both will instantly kill you.
+  - Did you know? The more you spam bullets the longer you have to wait to reload.
 --- !u!1 &5104665268324966757
 GameObject:
   m_ObjectHideFlags: 0
