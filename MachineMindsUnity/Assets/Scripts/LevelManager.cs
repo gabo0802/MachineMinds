@@ -633,6 +633,11 @@ public class LevelManager : MonoBehaviour
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
+        if(currentDifficulty < 1){
+            currentDifficulty = 1;
+        }else if (currentDifficulty > 11){
+            currentDifficulty = 11;
+        }
         aiModel = new AIModelInterface();
 
         currentPlayerBullets = (int)(totalPlayerBullets * Mathf.Pow(difficultyScale, currentDifficulty - 1));
