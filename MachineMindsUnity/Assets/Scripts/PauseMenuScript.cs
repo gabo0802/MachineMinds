@@ -7,6 +7,10 @@ using UnityEditor;
 public class PauseMenuScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public GameObject controlsMenuPrefab;
+    public GameObject optionsMenuPrefab;
+        private GameObject additionalMenu;
     void Start()
     {
         Time.timeScale = 0f;
@@ -14,7 +18,7 @@ public class PauseMenuScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!additionalMenu && Input.GetKeyDown(KeyCode.Escape))
         {
             QuitPause();
         }
@@ -22,7 +26,19 @@ public class PauseMenuScript : MonoBehaviour
 
     public void onContinueButtonPress()
     {
-        QuitPause();
+        if(!additionalMenu){
+            QuitPause();
+        }
+    }
+
+    public void onOptionsButtonPress()
+    {
+        additionalMenu = (GameObject) Instantiate(optionsMenuPrefab);
+    }
+
+    public void onControlsButtonPress()
+    {
+        additionalMenu = (GameObject) Instantiate(controlsMenuPrefab);
     }
 
     private void QuitPause()

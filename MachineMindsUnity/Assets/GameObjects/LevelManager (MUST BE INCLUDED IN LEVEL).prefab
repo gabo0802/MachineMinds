@@ -1015,6 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773fb7ed00b008f4b9699bc389972250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTestLevel: 0
   surveyObject: {fileID: 4227258372502546876, guid: 6b558d19a9add2b41a0b8dd6c059ad6e, type: 3}
   checkpointMessageObject: {fileID: 4227258372502546876, guid: 1c7830ce53cbeea4e92a2028d3b383eb, type: 3}
   pauseButton: {fileID: 4227258372502546876, guid: 9491fe7395e76574e9cb1152ce62b517, type: 3}
@@ -1028,8 +1029,6 @@ MonoBehaviour:
   pointsUI: {fileID: 2405148518289923300}
   difficultyMultiplier: 2
   ammoUI: {fileID: 3986388341209005611}
-  maxBulletsInMagazine: 3
-  bulletReloadTime: 1.5
   totalPlayerBullets: 10
   fuelBar: {fileID: 3409819311176132308}
   boostCooldownRatio: 0.5
@@ -1048,6 +1047,7 @@ MonoBehaviour:
   playerSoundEffects_Gun: {fileID: 1535700511016016948}
   gunShotSound: {fileID: 8300000, guid: e43b15f7aa51b784bb84ad95ba8c9cbe, type: 3}
   gunEmptySound: {fileID: 8300000, guid: 7e5cca77827ec49469a9f4675f2b8ba8, type: 3}
+  gunJammedSound: {fileID: 8300000, guid: b1f2dc46c26673e40939b92c275b64af, type: 3}
   playerSoundEffects_Boost: {fileID: 2439316181113643297}
 --- !u!1 &4945128392221643693
 GameObject:

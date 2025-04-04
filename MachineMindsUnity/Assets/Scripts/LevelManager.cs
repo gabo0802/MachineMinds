@@ -106,6 +106,8 @@ public class LevelManager : MonoBehaviour
     public AudioSource playerSoundEffects_Gun;
     public AudioClip gunShotSound;
     public AudioClip gunEmptySound;
+    public AudioClip gunJammedSound;
+
     public AudioSource playerSoundEffects_Boost;
 
     //Functions:
@@ -257,7 +259,7 @@ public class LevelManager : MonoBehaviour
                 }
                 else
                 {
-                    playerSoundEffects_Gun.clip = gunEmptySound;
+                    playerSoundEffects_Gun.clip = gunJammedSound;
                     playerSoundEffects_Gun.Play();
                 }
             }

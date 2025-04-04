@@ -10,6 +10,13 @@ public class EndScreenScript : MonoBehaviour
     public TMPro.TextMeshProUGUI finalPointsUI = null;
     private const string SAVE_KEY = "GameState";
 
+    public AudioSource musicPlayer;
+
+    private void volumeAdjustments(){
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
+            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume");
+        }
+    }
     public void MainMenuButton()
     {
         SceneManager.LoadScene(0, LoadSceneMode.Single);
@@ -36,7 +43,8 @@ public class EndScreenScript : MonoBehaviour
     }
 
     void Start()
-    {
+    {   
+        volumeAdjustments();
         if (SaveSystem.FileExists(SAVE_KEY))
         {
             string saveFileData = SaveSystem.ReadAllText(SAVE_KEY);
