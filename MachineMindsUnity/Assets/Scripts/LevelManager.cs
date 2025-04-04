@@ -12,7 +12,7 @@ using UnityEditor;
 public class LevelManager : MonoBehaviour
 {
     public bool isTestLevel = false;
-    private const float difficultyScale = 1.25f;
+    private const float difficultyScale = 1.20f; //20% increases
 
     public GameObject surveyObject;
     private GameObject activeSurvey;

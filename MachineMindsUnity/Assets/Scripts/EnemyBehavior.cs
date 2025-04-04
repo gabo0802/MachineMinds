@@ -4,8 +4,8 @@ using Pathfinding;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    private const float difficultyScaleHealth = 1.12f; //12% increases
-    private const float difficultyScaleFireRate = 1.07f; //7% increases
+    private const float difficultyScaleHealth = 1.15f; //15% increases
+    private const float difficultyScaleFireRate = 1.12f; //12% increases
     private Rigidbody2D rb;
     int layerMask;
 
