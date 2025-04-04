@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 281886003}
   - component: {fileID: 281886002}
   m_Layer: 0
-  m_Name: Audio Source
+  m_Name: EndScreenMusic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1099,6 +1099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalPointsUI: {fileID: 1059090629}
+  musicPlayer: {fileID: 281886002}
 --- !u!4 &1770193896
 Transform:
   m_ObjectHideFlags: 0
