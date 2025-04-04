@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour
     //Player Shooting Variables:
     public TMPro.TextMeshProUGUI ammoUI = null;
     
-    private int maxBulletsInMagazine = 1;
+    private int maxBulletsInMagazine = 5;
     private float bulletReloadTime = 0.5f;
     private float bulletReloadTimer = 0.5f;
     private int currentBulletsInMagazine;
@@ -248,8 +248,13 @@ public class LevelManager : MonoBehaviour
                     playerSoundEffects_Gun.Play();
                 }
             }
+        }
 
-            if (bulletReloadTimer >= bulletReloadTime && currentPlayerBullets > 0)
+        float emptyMagPenalty = currentBulletsInMagazine == 0 ? 1f : 0f;
+        float magRefill = bulletReloadTime * (maxBulletsInMagazine - currentBulletsInMagazine);
+        
+        if(currentBulletsInMagazine < maxBulletsInMagazine){
+            if (bulletReloadTimer >= magRefill + emptyMagPenalty && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
@@ -259,6 +264,7 @@ public class LevelManager : MonoBehaviour
                 bulletReloadTimer += Time.deltaTime;
             }
         }
+        
 
         ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
     }
@@ -628,7 +634,7 @@ public class LevelManager : MonoBehaviour
         totalPlayerBullets = currentPlayerBullets;
 
         //maxBulletsInMagazine = (int)(maxBulletsInMagazine * Mathf.Pow(difficultyScale, currentDifficulty - 1));
-        //currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+        currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
 
         playerBoostTimer = timePlayerCanBoost;
 
