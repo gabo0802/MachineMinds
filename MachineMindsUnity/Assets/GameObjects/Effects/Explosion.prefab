@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionTime: 0.3
+  soundEffectSoundPlayer: {fileID: 8261018674817749069}
 --- !u!82 &8261018674817749069
 AudioSource:
   m_ObjectHideFlags: 0

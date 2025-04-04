@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Pathfinding;
+using UnityEngine.Rendering;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -52,6 +53,11 @@ public class EnemyBehavior : MonoBehaviour
     public int stealthBonusDamage = 2;
     public int redirectBonusDamage = 4;
 
+    private void volumeAdjustments(){
+        if (enemyShootSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
+            enemyShootSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume") * 0.75f;
+        }
+    }
     public void AffectSpeed(float newMultiplier)
     {
         enemyMoveSpeedMultiplier = newMultiplier;
@@ -318,6 +324,8 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        volumeAdjustments();
+
         if (isBoss)
         {
             if (levelManager)

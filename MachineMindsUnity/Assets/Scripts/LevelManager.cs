@@ -128,6 +128,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    private void volumeAdjustments(){
+        if (PlayerPrefs.HasKey("MusicVolume")){
+            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
+        }
+
+        if (PlayerPrefs.HasKey("SoundEffectVolume")){
+            playerSoundEffects_Gun.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+            playerSoundEffects_Boost.volume = PlayerPrefs.GetFloat("SoundEffectVolume") * 0.75f;
+        }
+    }
+
     private string[] getFileData(string key)
     {
         if (PlayerPrefs.HasKey(key))
@@ -347,7 +358,6 @@ public class LevelManager : MonoBehaviour
         bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 1f);
         bossUIBarText.text = "Boss Health";
     }
-
 
 
     private void goNextLevel()
@@ -674,6 +684,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        volumeAdjustments();
         // We already have a debug for this but going to keep it for Debugging the actual build
         levelDifficultyUI.text = "Current Difficulty: " + currentDifficulty + "";
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)

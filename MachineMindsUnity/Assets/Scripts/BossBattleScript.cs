@@ -46,6 +46,13 @@ public class BossBattleScript : MonoBehaviour{
         currentAlivePlayer = parameters[1];
     }
 
+    private void volumeAdjustments(){
+        if (PlayerPrefs.HasKey("SoundEffectVolume")){
+            bossSoundEffects_Lazer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+            bossSoundEffects_Gun.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
+    }
+
     public void SetDifficultyLevel(int newDifficultyLevel)
     {
         currentDifficulty = newDifficultyLevel;
@@ -108,6 +115,7 @@ public class BossBattleScript : MonoBehaviour{
     bool notUpdated = false;
     // Update is called once per frame
     void Update(){
+        volumeAdjustments();
         if(!notUpdated){
             notUpdated = true;
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });

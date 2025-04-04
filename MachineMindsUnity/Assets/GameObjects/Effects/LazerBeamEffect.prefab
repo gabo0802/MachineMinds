@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397e84fbc33cfb043b464656d3c635bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundEffectSoundPlayer: {fileID: -6851450646608886830}
 --- !u!82 &-6851450646608886830
 AudioSource:
   m_ObjectHideFlags: 0

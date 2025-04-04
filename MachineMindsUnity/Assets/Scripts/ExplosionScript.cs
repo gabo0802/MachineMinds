@@ -6,10 +6,16 @@ public class ExplosionScript : MonoBehaviour{
 
     private float explosionRadiusMax = 0f;
 
+    public AudioSource soundEffectSoundPlayer;
+
+    private void volumeAdjustments(){
+        if (soundEffectSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
+            soundEffectSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
+    } 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
-
     }
 
     void setExplosionMaxRadius(float newRadius){
@@ -18,6 +24,8 @@ public class ExplosionScript : MonoBehaviour{
 
     // Update is called once per frame
     void Update(){
+        volumeAdjustments();
+
         if(explosionTimer >= explosionTime){
             Destroy(gameObject);
         }else{

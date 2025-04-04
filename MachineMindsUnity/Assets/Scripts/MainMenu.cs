@@ -12,12 +12,19 @@ using System.IO;
 public class GameManager : MonoBehaviour
 {
     public Button loadGameButton;
-     public GameObject controlsMenuPrefab;
-    
+    public GameObject controlsMenuPrefab;
+    public GameObject optionsMenuPrefab;
+
     private string filePath = "GameState";
     private int lastLevelNumber = 1;
 
+    public AudioSource musicPlayer;
 
+    private void volumeAdjustments(){
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
+            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume");
+        }
+    }
     public void PlayGame()
     {
         string content = "3\n0\n0\n1\n0\nfalse";
@@ -56,6 +63,15 @@ public class GameManager : MonoBehaviour
     public void LoadControls()
     {
         Instantiate(controlsMenuPrefab);
+    }
+
+    public void LoadOptions()
+    {
+        Instantiate(optionsMenuPrefab);
+    }
+
+    void Update(){
+        volumeAdjustments();
     }
 
 }

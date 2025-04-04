@@ -321,7 +321,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6791865899800518020}
-  - {fileID: 8730937659028517264}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4544303629167170832
@@ -377,6 +376,7 @@ MonoBehaviour:
   - Did you know? Each level you have a limited amount of bullets. Use them wisely.
   - Avoid water and spikes. Both will instantly kill you.
   - Did you know? The more you spam bullets the longer you have to wait to reload.
+  musicPlayer: {fileID: 2811204466715011485}
 --- !u!1 &5104665268324966757
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,11 +403,11 @@ Transform:
   m_GameObject: {fileID: 5104665268324966757}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 648.76904, y: 540.76013, z: 3.593025}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -99.71463, y: 201.55449, z: 2.9262924}
+  m_LocalScale: {x: 0.83472455, y: 0.83472455, z: 0.83472455}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3001314140948248649}
+  m_Father: {fileID: 6791865899800518020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &2811204466715011485
 AudioSource:
@@ -544,6 +544,7 @@ RectTransform:
   - {fileID: 8268221915466298043}
   - {fileID: 7032981108791416243}
   - {fileID: 5247046157685350186}
+  - {fileID: 8730937659028517264}
   m_Father: {fileID: 3001314140948248649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -22,6 +22,13 @@ public class BeforeLevelObjectScript : MonoBehaviour
     public TMPro.TextMeshProUGUI hintUI;
     public string[] allHints;
 
+    public AudioSource musicPlayer;
+
+    private void volumeAdjustments(){
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
+            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
+        }
+    }
     private void UpdateLivesUI()
     {
         // Load New Sprites
@@ -110,6 +117,7 @@ public class BeforeLevelObjectScript : MonoBehaviour
 
     void Start()
     {   
+        volumeAdjustments();
         hintUI.text = allHints[(int)Random.Range(0, allHints.Length)];
         StartCoroutine(Timer(3));
     }
