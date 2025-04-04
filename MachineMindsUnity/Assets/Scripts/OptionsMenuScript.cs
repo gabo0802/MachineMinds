@@ -27,8 +27,11 @@ public class OptionsMenuScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void onVolumeAdjustment(){
+    public void onMusicVolumeAdjustment(){
         PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
+    }
+
+    public void onSoundEffectVolumeAdjust(){
         PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectVolumeSlider.value);
     }
 }

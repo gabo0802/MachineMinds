@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void volumeAdjustments(){
         if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
-            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume");
+            musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.5f;
         }
     }
     public void PlayGame()

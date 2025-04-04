@@ -1597,7 +1597,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6483598636137635195}
         m_TargetAssemblyTypeName: OptionsMenuScript, Assembly-CSharp
-        m_MethodName: onVolumeAdjustment
+        m_MethodName: onMusicVolumeAdjustment
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2063,7 +2063,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6483598636137635195}
         m_TargetAssemblyTypeName: OptionsMenuScript, Assembly-CSharp
-        m_MethodName: onVolumeAdjustment
+        m_MethodName: onSoundEffectVolumeAdjust
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
