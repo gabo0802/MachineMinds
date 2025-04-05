@@ -14,7 +14,7 @@ public class OptionsMenuScript : MonoBehaviour
     {   
         resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
         
-        if (PlayerPrefs.HasKey("isFullScreen")){
+        if (PlayerPrefs.HasKey("WindowFullScreen")){
             isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
         }
 
