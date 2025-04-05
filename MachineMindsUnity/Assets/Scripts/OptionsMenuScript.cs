@@ -7,9 +7,17 @@ public class OptionsMenuScript : MonoBehaviour
     
     public UnityEngine.UI.Slider musicVolumeSlider;
     public UnityEngine.UI.Slider soundEffectVolumeSlider;
+    public TMPro.TMP_Dropdown resolutionChanging;
+    public UnityEngine.UI.Toggle isFullScreen;
 
     void Start()
-    {
+    {   
+        resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
+        
+        if (PlayerPrefs.HasKey("isFullScreen")){
+            isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
+        }
+
         if (PlayerPrefs.HasKey("MusicVolume")){
             musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         }else{
@@ -33,5 +41,16 @@ public class OptionsMenuScript : MonoBehaviour
 
     public void onSoundEffectVolumeAdjust(){
         PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectVolumeSlider.value);
+    }
+
+    public void onResolutionAdjustment(){
+        string resolutionString = resolutionChanging.options[resolutionChanging.value].text;
+        int width = System.Int32.Parse(resolutionString.Split(" x ")[0]);
+        int height = System.Int32.Parse(resolutionString.Split(" x ")[1]);
+
+        int isFullScreenInt = isFullScreen.isOn ? 1 : 0;
+        PlayerPrefs.SetInt("WindowFullScreen", isFullScreenInt);
+
+        Screen.SetResolution(width, height, isFullScreen.isOn);
     }
 }
