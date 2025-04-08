@@ -64,7 +64,7 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
 
     void OnGUI(){
         Event e = Event.current;
-        if (currentKeyIndex != -1 && e.isKey){   
+        if (!currentConfirmationWindowObject && currentKeyIndex != -1 && e.isKey){   
              try{
                 string keyCodeString = Event.current.keyCode + "";
                 PlayerPrefs.SetString(playerPrefsKeyMatch[currentKeyIndex], keyCodeString);
@@ -72,8 +72,8 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
                     keyCodeString = keyCodeString.Substring(0, 3);
                 }
                 keyChangeInputs[currentKeyIndex].text = keyCodeString;
-                currentConfirmationWindowObject = (GameObject) Instantiate(confirmationWindowObject);
                 currentKeyIndex = -1;
+                currentConfirmationWindowObject = (GameObject) Instantiate(confirmationWindowObject);
             }catch(System.Exception){
                 keyChangeInputs[currentKeyIndex].text = "err";
             }
