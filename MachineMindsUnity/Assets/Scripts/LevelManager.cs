@@ -239,9 +239,9 @@ public class LevelManager : MonoBehaviour
         KeyCode shootKey = PlayerPrefs.HasKey("KeyShoot") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyShoot")): KeyCode.Space;
         bool pressedShootKey = (Input.GetKeyDown(shootKey) || Input.GetMouseButtonDown(0));
 
-        if (currentBulletsInMagazine > 0)
+        if (currentBulletsInMagazine > 0 || playerIsInvincible)
         {
-            if (pressedShootKey && currentPlayerBullets > 0)
+            if (pressedShootKey && (currentPlayerBullets > 0 || playerIsInvincible))
             {
                 playerSoundEffects_Gun.clip = gunShotSound;
                 playerSoundEffects_Gun.Play();
@@ -285,8 +285,11 @@ public class LevelManager : MonoBehaviour
             }
         }
         
-
-        ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
+        if(playerIsInvincible){
+            ammoUI.text = "∞ / ∞";
+        }else{
+            ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
+        }
     }
 
     private void tryBoostPlayer()
