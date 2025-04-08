@@ -483,7 +483,7 @@ public class LevelManager : MonoBehaviour
         currentPlayerLives -= 1;
         
         if(currentLevelNumber % numberLevelsCheckpoint == 1){
-            PlayerPrefs.SetInt("CheckpointLevelDeaths", PlayerPrefs.GetInt("FirstLevelDeaths") + 1);
+            PlayerPrefs.SetInt("CheckpointLevelDeaths", PlayerPrefs.GetInt("CheckpointLevelDeaths") + 1);
         }
 
         if (currentPlayerLives > 0)
