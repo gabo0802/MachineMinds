@@ -22,13 +22,19 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
     public TMPro.TextMeshProUGUI[] keyChangeInputs;
     public string[] playerPrefsKeyMatch;
     public string[] defaultKeyCode;
+    public GameObject confirmationWindowObject;
+    private GameObject currentConfirmationWindowObject;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start(){
         for(int i = 0; i < keyChangeInputs.Length; i++){
             if(PlayerPrefs.HasKey(playerPrefsKeyMatch[i])){
-                keyChangeInputs[i].text = PlayerPrefs.GetString(playerPrefsKeyMatch[i]);
+                string keyCodeString = PlayerPrefs.GetString(playerPrefsKeyMatch[i]);
+                if(i != 4 && i != 5 && keyCodeString.Length > 3){
+                    keyCodeString = keyCodeString.Substring(0, 3);
+                }
+                keyChangeInputs[i].text = keyCodeString;
             }else{
                 keyChangeInputs[i].text = defaultKeyCode[i];
             }
@@ -52,7 +58,11 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
              try{
                 string keyCodeString = Event.current.keyCode + "";
                 PlayerPrefs.SetString(playerPrefsKeyMatch[currentKeyIndex], keyCodeString);
+                if(currentKeyIndex != 4 && currentKeyIndex != 5 && keyCodeString.Length > 3){
+                    keyCodeString = keyCodeString.Substring(0, 3);
+                }
                 keyChangeInputs[currentKeyIndex].text = keyCodeString;
+                currentConfirmationWindowObject = (GameObject) Instantiate(confirmationWindowObject);
                 currentKeyIndex = -1;
             }catch(System.Exception){
                 keyChangeInputs[currentKeyIndex].text = "err";
@@ -62,7 +72,7 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
 
     void Update(){
         KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
-        if (Input.GetKeyDown(pauseKey))
+        if (!currentConfirmationWindowObject && Input.GetKeyDown(pauseKey))
         {
             Destroy(gameObject);
         }

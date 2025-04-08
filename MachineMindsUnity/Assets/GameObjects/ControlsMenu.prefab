@@ -1412,6 +1412,7 @@ MonoBehaviour:
   - Left Shift
   - Space
   - Esc
+  confirmationWindowObject: {fileID: 4227258372502546876, guid: 5b3f881751d3a7545a621b663dee5a88, type: 3}
 --- !u!1 &4560114758894759816
 GameObject:
   m_ObjectHideFlags: 0
