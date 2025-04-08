@@ -60,12 +60,12 @@ public class LevelManager : MonoBehaviour
 
     //Player Shooting Variables:
     public TMPro.TextMeshProUGUI ammoUI = null;
-    
+
     private int maxBulletsInMagazine = 5;
     private float bulletReloadTime = 0.5f;
     private float bulletReloadTimer = 0.5f;
     private int currentBulletsInMagazine;
-    
+
     public int totalPlayerBullets = 10;
     private int currentPlayerBullets;
 
@@ -112,7 +112,8 @@ public class LevelManager : MonoBehaviour
     private bool playerIsInvincible = false;
 
     //Functions:
-    private void testLevelEnd(){
+    private void testLevelEnd()
+    {
         if (Application.isEditor)
         {
             Debug.Log("Quitting game in editor");
@@ -131,12 +132,15 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void volumeAdjustments(){
-        if (PlayerPrefs.HasKey("MusicVolume")){
+    private void volumeAdjustments()
+    {
+        if (PlayerPrefs.HasKey("MusicVolume"))
+        {
             musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
         }
 
-        if (PlayerPrefs.HasKey("SoundEffectVolume")){
+        if (PlayerPrefs.HasKey("SoundEffectVolume"))
+        {
             playerSoundEffects_Gun.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
             playerSoundEffects_Boost.volume = PlayerPrefs.GetFloat("SoundEffectVolume") * 0.75f;
         }
@@ -235,8 +239,8 @@ public class LevelManager : MonoBehaviour
     }
 
     private void tryPlayerShoot()
-    {   
-        KeyCode shootKey = PlayerPrefs.HasKey("KeyShoot") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyShoot")): KeyCode.Space;
+    {
+        KeyCode shootKey = PlayerPrefs.HasKey("KeyShoot") ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyShoot")) : KeyCode.Space;
         bool pressedShootKey = (Input.GetKeyDown(shootKey) || Input.GetMouseButtonDown(0));
 
         if (currentBulletsInMagazine > 0)
@@ -267,31 +271,33 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        float magRefillTime = currentBulletsInMagazine == 0 ? 5f: bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
+        float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
 
-        if(pressedShootKey){
+        if (pressedShootKey)
+        {
             Debug.LogWarning("magRefillTime: " + magRefillTime);
         }
 
-        if(currentBulletsInMagazine < maxBulletsInMagazine){
+        if (currentBulletsInMagazine < maxBulletsInMagazine)
+        {
             if (bulletReloadTimer >= magRefillTime && currentPlayerBullets > 0)
             {
                 bulletReloadTimer = 0;
                 currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
             }
             else
-            {   
+            {
                 bulletReloadTimer += Time.deltaTime;
             }
         }
-        
+
 
         ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
     }
 
     private void tryBoostPlayer()
     {
-        KeyCode boostKey = PlayerPrefs.HasKey("KeyBoost") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyBoost")): KeyCode.LeftShift;
+        KeyCode boostKey = PlayerPrefs.HasKey("KeyBoost") ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyBoost")) : KeyCode.LeftShift;
         if (playerBoostTimer > 0 && Input.GetKey(boostKey) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
         {
             if (!playerSoundEffects_Boost.isPlaying)
@@ -303,7 +309,7 @@ public class LevelManager : MonoBehaviour
 
         }
         else
-            {
+        {
             playerSoundEffects_Boost.Stop();
             currentAlivePlayer.SendMessage("AffectBoostSpeed", 1f);
 
@@ -481,8 +487,9 @@ public class LevelManager : MonoBehaviour
     private void onPlayerDeath()
     {
         currentPlayerLives -= 1;
-        
-        if(currentLevelNumber % numberLevelsCheckpoint == 1){
+
+        if (currentLevelNumber % numberLevelsCheckpoint == 1)
+        {
             PlayerPrefs.SetInt("CheckpointLevelDeaths", PlayerPrefs.GetInt("CheckpointLevelDeaths") + 1);
         }
 
@@ -544,18 +551,22 @@ public class LevelManager : MonoBehaviour
     {
         totalEnemiesKilled += 1;
         currentLevelEnemyTotal -= 1;
-        
-        if(playerIsInvincible){
+
+        if (playerIsInvincible)
+        {
             totalPoints = 0;
-            pointsUI.text = "[Super Easy Mode]";
-        }else{
+            pointsUI.text = "Super Easy Mode";
+        }
+        else
+        {
             totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
             pointsUI.text = totalPoints + " pts";
         }
 
         if (currentLevelEnemyTotal <= 0 && currentAlivePlayer)
         {
-            if(!playerIsInvincible){
+            if (!playerIsInvincible)
+            {
                 PlayerPrefs.SetInt("CheckpointLevelDeaths", 0);
             }
             wonLevel = true;
@@ -660,19 +671,25 @@ public class LevelManager : MonoBehaviour
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
-        
+
         playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
-        if(playerIsInvincible){
+        if (playerIsInvincible)
+        {
             currentDifficulty = 1;
-            currentPlayerLives = maxPlayerLives; 
-            pointsUI.text = "[Super Easy Mode]";
-        }else{
+            currentPlayerLives = maxPlayerLives;
+            pointsUI.text = "Super Easy Mode";
+        }
+        else
+        {
             pointsUI.text = totalPoints + " pts";
         }
 
-        if(currentDifficulty < 1){
+        if (currentDifficulty < 1)
+        {
             currentDifficulty = 1;
-        }else if (currentDifficulty > 11){
+        }
+        else if (currentDifficulty > 11)
+        {
             currentDifficulty = 11;
         }
         aiModel = new AIModelInterface();
@@ -698,7 +715,8 @@ public class LevelManager : MonoBehaviour
         bossUIBarText.text = "";
 
         //Show Level Start
-        if(!isTestLevel){
+        if (!isTestLevel)
+        {
             GameObject beforeLevelObject = (GameObject)Instantiate(checkpointMessageObject);
             beforeLevelObject.SendMessageUpwards("setPlayerLives", currentPlayerLives);
             beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[] { currentLevelNumber, currentDifficulty });
@@ -713,8 +731,8 @@ public class LevelManager : MonoBehaviour
         volumeAdjustments();
         // We already have a debug for this but going to keep it for Debugging the actual build
         levelDifficultyUI.text = "Current Difficulty: " + currentDifficulty + "";
-        
-        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")) : KeyCode.Escape;
         if (Input.GetKeyDown(pauseKey) && Time.timeScale != 0f)
         {
             Instantiate(pauseButton);
@@ -764,7 +782,8 @@ public class LevelManager : MonoBehaviour
 
                     if (wonLevel)
                     {
-                        if(!isTestLevel){
+                        if (!isTestLevel)
+                        {
                             bossUIBar.color = new Color(1f, 1f, 1f, 0f);
                             bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
                             bossUIBarText.text = "";
@@ -799,7 +818,9 @@ public class LevelManager : MonoBehaviour
                                     adjustDifficultyThread.Start();
                                 }
                             }
-                        }else{
+                        }
+                        else
+                        {
                             testLevelEnd();
                         }
 
@@ -831,14 +852,15 @@ public class LevelManager : MonoBehaviour
                     }
                 }
                 else
-                {   
+                {
                     playerSoundEffects_Boost.Stop();
                     playerSoundEffects_Gun.Stop();
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                     countdownUI.text = Mathf.Round(playerRespawnTime - currentDeadTime) + "";
                     levelMessageUI.text = "You Lost";
 
-                    if(!isTestLevel){
+                    if (!isTestLevel)
+                    {
                         if (currentPlayerLives - 1 == 0 && currentDeadTime > playerRespawnTime - 0.5 && currentDeadTime < playerRespawnTime)
                         {
                             levelMessageUI.text = "Updating Difficulty Level";
@@ -856,7 +878,9 @@ public class LevelManager : MonoBehaviour
                         {
                             currentDeadTime += Time.deltaTime;
                         }
-                    }else{
+                    }
+                    else
+                    {
                         testLevelEnd();
                     }
                 }
