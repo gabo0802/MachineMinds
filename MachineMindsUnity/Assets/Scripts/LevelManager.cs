@@ -109,6 +109,8 @@ public class LevelManager : MonoBehaviour
 
     public AudioSource playerSoundEffects_Boost;
 
+    private bool playerIsInvincible = false;
+
     //Functions:
     private void testLevelEnd(){
         if (Application.isEditor)
@@ -479,6 +481,10 @@ public class LevelManager : MonoBehaviour
     private void onPlayerDeath()
     {
         currentPlayerLives -= 1;
+        
+        if(currentLevelNumber == 1){
+            PlayerPrefs.SetInt("FirstLevelDeaths", PlayerPrefs.GetInt("FirstLevelDeaths") + 1);
+        }
 
         if (currentPlayerLives > 0)
         {
@@ -538,9 +544,14 @@ public class LevelManager : MonoBehaviour
     {
         totalEnemiesKilled += 1;
         currentLevelEnemyTotal -= 1;
-        totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
-
-        pointsUI.text = totalPoints + " pts";
+        
+        if(playerIsInvincible){
+            totalPoints = 0;
+            pointsUI.text = "[Super Easy Mode]";
+        }else{
+            totalPoints += (enemyPointWorth * Mathf.Pow(difficultyMultiplier, currentDifficulty - 1));
+            pointsUI.text = totalPoints + " pts";
+        }
 
         if (currentLevelEnemyTotal <= 0 && currentAlivePlayer)
         {
@@ -646,6 +657,15 @@ public class LevelManager : MonoBehaviour
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
+        
+        playerIsInvincible = (PlayerPrefs.GetInt("FirstLevelDeaths") > 5);
+        if(playerIsInvincible){
+            currentDifficulty = 1;
+            pointsUI.text = "[Super Easy Mode]";
+        }else{
+            pointsUI.text = totalPoints + " pts";
+        }
+
         if(currentDifficulty < 1){
             currentDifficulty = 1;
         }else if (currentDifficulty > 11){
@@ -663,7 +683,6 @@ public class LevelManager : MonoBehaviour
 
         findAllLevelObjects();
 
-        pointsUI.text = totalPoints + " pts";
         ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
         countdownUI.text = "";
         levelMessageUI.text = "";
