@@ -18,7 +18,8 @@ public class PauseMenuScript : MonoBehaviour
 
     void Update()
     {
-        if (!additionalMenu && Input.GetKeyDown(KeyCode.Escape))
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+        if (!additionalMenu && Input.GetKeyDown(pauseKey))
         {
             QuitPause();
         }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -234,8 +233,9 @@ public class LevelManager : MonoBehaviour
     }
 
     private void tryPlayerShoot()
-    {
-        bool pressedShootKey = (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0));
+    {   
+        KeyCode shootKey = PlayerPrefs.HasKey("KeyShoot") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyShoot")): KeyCode.Space;
+        bool pressedShootKey = (Input.GetKeyDown(shootKey) || Input.GetMouseButtonDown(0));
 
         if (currentBulletsInMagazine > 0)
         {
@@ -289,7 +289,8 @@ public class LevelManager : MonoBehaviour
 
     private void tryBoostPlayer()
     {
-        if (playerBoostTimer > 0 && Input.GetKey(KeyCode.LeftShift) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
+        KeyCode boostKey = PlayerPrefs.HasKey("KeyBoost") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyBoost")): KeyCode.LeftShift;
+        if (playerBoostTimer > 0 && Input.GetKey(boostKey) && (currentAlivePlayer.GetComponent<Rigidbody2D>().linearVelocity.magnitude > 0))
         {
             if (!playerSoundEffects_Boost.isPlaying)
             {
@@ -689,7 +690,9 @@ public class LevelManager : MonoBehaviour
         volumeAdjustments();
         // We already have a debug for this but going to keep it for Debugging the actual build
         levelDifficultyUI.text = "Current Difficulty: " + currentDifficulty + "";
-        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale != 0f)
+        
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+        if (Input.GetKeyDown(pauseKey) && Time.timeScale != 0f)
         {
             Instantiate(pauseButton);
         }

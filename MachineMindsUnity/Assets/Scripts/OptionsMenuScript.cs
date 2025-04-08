@@ -53,4 +53,12 @@ public class OptionsMenuScript : MonoBehaviour
 
         Screen.SetResolution(width, height, isFullScreen.isOn);
     }
+
+    void Update(){
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+        if (Input.GetKeyDown(pauseKey))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
