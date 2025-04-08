@@ -271,23 +271,25 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
+        if(!playerIsInvincible){
+            float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
 
-        if (pressedShootKey)
-        {
-            Debug.LogWarning("magRefillTime: " + magRefillTime);
-        }
-
-        if (currentBulletsInMagazine < maxBulletsInMagazine)
-        {
-            if (bulletReloadTimer >= magRefillTime && currentPlayerBullets > 0)
+            if (pressedShootKey)
             {
-                bulletReloadTimer = 0;
-                currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+                Debug.LogWarning("magRefillTime: " + magRefillTime);
             }
-            else
+
+            if (currentBulletsInMagazine < maxBulletsInMagazine)
             {
-                bulletReloadTimer += Time.deltaTime;
+                if (bulletReloadTimer >= magRefillTime && currentPlayerBullets > 0)
+                {
+                    bulletReloadTimer = 0;
+                    currentBulletsInMagazine = maxBulletsInMagazine < currentPlayerBullets ? maxBulletsInMagazine : currentPlayerBullets;
+                }
+                else
+                {
+                    bulletReloadTimer += Time.deltaTime;
+                }
             }
         }
         
