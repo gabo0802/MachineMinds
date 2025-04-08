@@ -50,6 +50,16 @@ public class ControlsMenuScriptMenuScript : MonoBehaviour
         currentKeyIndex = keyIndex;
     }
 
+    public void resetAllKeys(){
+        for(int i = 0; i < keyChangeInputs.Length; i++){
+            if(PlayerPrefs.HasKey(playerPrefsKeyMatch[i])){
+                PlayerPrefs.DeleteKey(playerPrefsKeyMatch[i]);
+            }
+            
+            keyChangeInputs[i].text = defaultKeyCode[i];
+        }
+    }
+
     // Update is called once per frame
 
     void OnGUI(){
