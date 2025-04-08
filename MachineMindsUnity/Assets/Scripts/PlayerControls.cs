@@ -226,7 +226,7 @@ public class PlayerControls : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if(PlayerPrefs.GetInt("FirstLevelDeaths") > 5){
+        if(PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5){
             godMode = true;
         }
         layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer

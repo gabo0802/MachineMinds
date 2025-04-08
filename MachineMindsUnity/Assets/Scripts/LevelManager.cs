@@ -482,8 +482,8 @@ public class LevelManager : MonoBehaviour
     {
         currentPlayerLives -= 1;
         
-        if(currentLevelNumber == 1){
-            PlayerPrefs.SetInt("FirstLevelDeaths", PlayerPrefs.GetInt("FirstLevelDeaths") + 1);
+        if(currentLevelNumber % numberLevelsCheckpoint == 1){
+            PlayerPrefs.SetInt("CheckpointLevelDeaths", PlayerPrefs.GetInt("FirstLevelDeaths") + 1);
         }
 
         if (currentPlayerLives > 0)
@@ -658,7 +658,7 @@ public class LevelManager : MonoBehaviour
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
         
-        playerIsInvincible = (PlayerPrefs.GetInt("FirstLevelDeaths") > 5);
+        playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
         if(playerIsInvincible){
             currentDifficulty = 1;
             pointsUI.text = "[Super Easy Mode]";
