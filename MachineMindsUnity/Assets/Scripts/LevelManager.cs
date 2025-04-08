@@ -367,6 +367,8 @@ public class LevelManager : MonoBehaviour
 
     private void goNextLevel()
     {
+        PlayerPrefs.SetInt("CheckpointLevelDeaths", 0);
+
         writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
