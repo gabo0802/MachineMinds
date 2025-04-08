@@ -367,8 +367,6 @@ public class LevelManager : MonoBehaviour
 
     private void goNextLevel()
     {
-        PlayerPrefs.SetInt("CheckpointLevelDeaths", 0);
-
         writeFileData(saveKey, new string[]{
             "" + currentPlayerLives, //currentPlayerLives
             "" + totalPoints, //totalPoints
@@ -557,6 +555,9 @@ public class LevelManager : MonoBehaviour
 
         if (currentLevelEnemyTotal <= 0 && currentAlivePlayer)
         {
+            if(!playerIsInvincible){
+                PlayerPrefs.SetInt("CheckpointLevelDeaths", 0);
+            }
             wonLevel = true;
         }
     }
