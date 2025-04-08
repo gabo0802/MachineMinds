@@ -664,6 +664,7 @@ public class LevelManager : MonoBehaviour
         playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
         if(playerIsInvincible){
             currentDifficulty = 1;
+            currentPlayerLives = maxPlayerLives; 
             pointsUI.text = "[Super Easy Mode]";
         }else{
             pointsUI.text = totalPoints + " pts";
