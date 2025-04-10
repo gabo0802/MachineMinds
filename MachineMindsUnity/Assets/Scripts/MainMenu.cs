@@ -20,8 +20,10 @@ public class GameManager : MonoBehaviour
 
     public AudioSource musicPlayer;
 
-    private void volumeAdjustments(){
-        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
+    public void volumeAdjustments()
+    {  // Changed to public
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume"))
+        {
             musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.5f;
         }
     }
@@ -70,7 +72,8 @@ public class GameManager : MonoBehaviour
         Instantiate(optionsMenuPrefab);
     }
 
-    void Update(){
+    void Update()
+    {
         volumeAdjustments();
     }
 
