@@ -13,6 +13,7 @@ public class PauseMenuScript : MonoBehaviour
         private GameObject additionalMenu;
     void Start()
     {
+        Cursor.visible = true;
         Time.timeScale = 0f;
     }
 
@@ -44,6 +45,7 @@ public class PauseMenuScript : MonoBehaviour
 
     private void QuitPause()
     {
+        Cursor.visible = false;
         Time.timeScale = 1f;
         Destroy(gameObject);
     }
