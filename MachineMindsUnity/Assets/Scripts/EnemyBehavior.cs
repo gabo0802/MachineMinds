@@ -58,7 +58,12 @@ public class EnemyBehavior : MonoBehaviour
         if (enemyShootSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
             enemyShootSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
         }
+
+        if (enemyHitSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
+            enemyHitSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
     }
+    
     public void AffectSpeed(float newMultiplier)
     {
         enemyMoveSpeedMultiplier = newMultiplier;

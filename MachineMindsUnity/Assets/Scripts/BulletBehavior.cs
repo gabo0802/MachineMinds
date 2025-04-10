@@ -26,6 +26,12 @@ public class BulletBehavior : MonoBehaviour
 
     public AudioSource bounceBounceSoundPlayer;
 
+     private void volumeAdjustments(){
+        if (PlayerPrefs.HasKey("SoundEffectVolume")){
+            bounceBounceSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
+    }
+
     public void SetTarget(GameObject newTarget)
     {
         targetPlayer = newTarget;
@@ -71,6 +77,7 @@ public class BulletBehavior : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
         rb.linearVelocity = newDirection * bulletSpeed; // Apply new velocity
         if(bounceBounceSoundPlayer){
+            volumeAdjustments();
             bounceBounceSoundPlayer.Play();
         }
         bounceCap--;
