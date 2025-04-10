@@ -26,7 +26,7 @@ public class PlayerControls : MonoBehaviour
     private bool pressS = false;
     private bool pressD = false;
     public float wallHitGlitchDistance = 0.225f;
-
+    public GameObject playerDeathObject;
     public void UpPress()
     {
         pressW = true;
@@ -205,6 +205,10 @@ public class PlayerControls : MonoBehaviour
         //Debug.Log(gameObject.name + " got hit be explosion");
 
         if(!godMode){
+            if(playerDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(playerDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
+            }
             Destroy(gameObject);
         }
     }
@@ -219,6 +223,10 @@ public class PlayerControls : MonoBehaviour
         }
 
         if(!godMode){
+            if(playerDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(playerDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
+            }
             Destroy(gameObject);
         }
     }
