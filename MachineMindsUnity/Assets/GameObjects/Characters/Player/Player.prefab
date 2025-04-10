@@ -306,6 +306,7 @@ MonoBehaviour:
   bulletShootDistance: 0.5
   useTankControlMovement: 0
   wallHitGlitchDistance: 0.225
+  playerDeathObject: {fileID: 801812182257050566, guid: c872206fc654a9345865b6025ab84980, type: 3}
 --- !u!1 &4003085438632798142
 GameObject:
   m_ObjectHideFlags: 0
