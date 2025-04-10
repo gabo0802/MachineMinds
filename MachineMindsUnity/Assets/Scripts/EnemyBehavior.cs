@@ -50,7 +50,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject[] enemyHealthBarComponents;
     public AudioSource enemyShootSoundPlayer;
     public AudioSource enemyHitSoundPlayer;
-
+    public GameObject enemyDeathObject;
     public int stealthBonusDamage = 2;
     public int redirectBonusDamage = 4;
 
@@ -92,6 +92,11 @@ public class EnemyBehavior : MonoBehaviour
             if (levelManager)
             {
                 levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
+            }
+
+            if(enemyDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(enemyDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
             }
             Destroy(gameObject);
         }
@@ -162,6 +167,11 @@ public class EnemyBehavior : MonoBehaviour
             if (levelManager)
             {
                 levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
+            }
+
+            if(enemyDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(enemyDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
             }
             Destroy(gameObject);
         }
