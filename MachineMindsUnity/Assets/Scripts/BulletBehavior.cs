@@ -24,6 +24,8 @@ public class BulletBehavior : MonoBehaviour
 
     public float bulletDiameter = 0f;
 
+    public AudioSource bounceBounceSoundPlayer;
+
     public void SetTarget(GameObject newTarget)
     {
         targetPlayer = newTarget;
@@ -68,6 +70,9 @@ public class BulletBehavior : MonoBehaviour
         float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0, 0, angle);
         rb.linearVelocity = newDirection * bulletSpeed; // Apply new velocity
+        if(bounceBounceSoundPlayer){
+            bounceBounceSoundPlayer.Play();
+        }
         bounceCap--;
     }
 

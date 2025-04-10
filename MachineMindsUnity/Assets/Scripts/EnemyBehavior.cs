@@ -49,6 +49,7 @@ public class EnemyBehavior : MonoBehaviour
 
     public GameObject[] enemyHealthBarComponents;
     public AudioSource enemyShootSoundPlayer;
+    public AudioSource enemyHitSoundPlayer;
 
     public int stealthBonusDamage = 2;
     public int redirectBonusDamage = 4;
@@ -98,6 +99,10 @@ public class EnemyBehavior : MonoBehaviour
 
     void OnBulletHit(GameObject bullet)
     {   
+        if(enemyHitSoundPlayer){
+            enemyHitSoundPlayer.Play();
+        }
+        
         if (bullet)
         {   
             if(!bullet.name.ToLower().Contains("player")){
