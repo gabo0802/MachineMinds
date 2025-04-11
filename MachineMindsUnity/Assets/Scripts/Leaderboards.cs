@@ -9,6 +9,10 @@ public class Leaderboards : MonoBehaviour
     private const int MAX_ENTRIES = 10;
     public TMPro.TextMeshProUGUI leaderboardText;
 
+    public TMPro.TextMeshProUGUI rankList;
+    public TMPro.TextMeshProUGUI scoreList;
+    public TMPro.TextMeshProUGUI dateList;
+
     void Start()
     {
         StartCoroutine(LoadLeaderboards());
@@ -34,12 +38,19 @@ public class Leaderboards : MonoBehaviour
 
     private void DisplayLeaderboards(List<LeaderboardEntry> entries)
     {
-        leaderboardText.text = "Rank - Score - Date\n";
+        leaderboardText.text = "";
+        rankList.text = "";
+        scoreList.text = "";
+        dateList.text = "";
+
         foreach (var entry in entries)
         {
             if (entry.rank <= MAX_ENTRIES)
             {
-                leaderboardText.text += $"{entry.rank} - {entry.score} - {entry.date}\n";
+                // leaderboardText.text += $"{entry.rank} - {entry.score} - {entry.date}\n";
+                rankList.text += $"{entry.rank}\n";
+                scoreList.text += $"{entry.score}\n";
+                dateList.text += $"{entry.date}\n";
             }
         }
     }

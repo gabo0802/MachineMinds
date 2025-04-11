@@ -269,7 +269,7 @@ public static class SaveSystem
 
     public static void SaveToLeaderboards(float score)
     {
-        string json = $"{{\"score\":{score},\"date\":\"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}\"}}";
+        string json = $"{{\"score\":{score},\"date\":\"{DateTime.UtcNow.ToString("yyyy-MM-dd")}\"}}";
 
         if (IsWebGLPlatform())
         {
