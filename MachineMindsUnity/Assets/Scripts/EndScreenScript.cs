@@ -8,18 +8,26 @@ using UnityEditor;
 public class EndScreenScript : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI finalPointsUI = null;
+    public GameObject leaderboardsPrefab;
     private const string SAVE_KEY = "GameState";
 
     public AudioSource musicPlayer;
 
-    private void volumeAdjustments(){
-        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
+    private void volumeAdjustments()
+    {
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume"))
+        {
             musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
         }
     }
     public void MainMenuButton()
     {
         SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
+
+    public void LeaderboardsButton()
+    {
+        Instantiate(leaderboardsPrefab);
     }
 
     public void QuitGame()
@@ -43,7 +51,7 @@ public class EndScreenScript : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
         volumeAdjustments();
         if (SaveSystem.FileExists(SAVE_KEY))
         {
