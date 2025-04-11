@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Helper MonoBehaviour class to handle Firebase operations that require coroutines.
 /// </summary>
 public class SaveSystemHelper : MonoBehaviour
 {
+    public bool leaderboardsLoaded { get; private set; }
+    public List<LeaderboardEntry> leaderboardEntries { get; private set; }
+
 #if UNITY_WEBGL && !UNITY_EDITOR
     [System.Runtime.InteropServices.DllImport("__Internal")]
     private static extern void AddDocument(string collectionPath, string value, string objectName, string callback, string fallback);
@@ -22,6 +26,7 @@ public class SaveSystemHelper : MonoBehaviour
 
     private const string SAVE_COLLECTION = "player-saves";
     private const string TRAINING_COLLECTION = "ai-training-data";
+    private const string LEADERBOARDS_COLLECTION = "leaderboards";
 
     /// <summary>
     /// Gets the singleton instance of SaveSystemHelper, creating it if necessary.
@@ -60,6 +65,27 @@ public class SaveSystemHelper : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         StartCoroutine(TryFirebaseAddOperation("ai-training-data", jsonData));
 #endif
+    }
+
+    public void SendLeaderboardScore(string jsonData)
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        StartCoroutine(TryFirebaseAddOperation(LEADERBOARDS_COLLECTION, jsonData));
+#endif
+    }
+
+    public void OnLeaderboardsLoaded(string jsonData)
+    {
+        leaderboardsLoaded = true;
+        // Parse the JSON data and convert to LeaderboardEntry objects
+        leaderboardEntries = JsonUtility.FromJson<List<LeaderboardEntry>>(jsonData);
+    }
+
+    public void OnLeaderboardsError(string error)
+    {
+        leaderboardsLoaded = true;
+        leaderboardEntries = new List<LeaderboardEntry>();
+        Debug.LogError($"Failed to load leaderboards: {error}");
     }
 
 #if UNITY_WEBGL && !UNITY_EDITOR

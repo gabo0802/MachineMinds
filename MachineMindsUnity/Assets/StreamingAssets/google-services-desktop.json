@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1084994424065",
+    "project_id": "machinemindsunity",
+    "storage_bucket": "machinemindsunity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084994424065:android:9e267a6a6a1f33f6135f00",
+        "android_client_info": {
+          "package_name": "com.vgbstudios.machineminds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGnGRlwfxZEmqiiT9EMEbxwFN3YZ7Ui0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

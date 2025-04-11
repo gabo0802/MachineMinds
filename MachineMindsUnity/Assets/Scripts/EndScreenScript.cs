@@ -56,12 +56,14 @@ public class EndScreenScript : MonoBehaviour
         if (SaveSystem.FileExists(SAVE_KEY))
         {
             string saveFileData = SaveSystem.ReadAllText(SAVE_KEY);
-
             string[] fileArray = saveFileData.Split('\n');
             string totalPoints = fileArray[1];
 
             finalPointsUI.text = "Final Score: " + totalPoints;
-            //test comment
+
+            // Save score to leaderboards
+            float score = float.Parse(totalPoints);
+            SaveSystem.SaveToLeaderboards(score);
         }
     }
 }
