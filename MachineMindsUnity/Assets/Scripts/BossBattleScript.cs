@@ -39,6 +39,7 @@ public class BossBattleScript : MonoBehaviour{
 
     public AudioSource bossSoundEffects_Lazer;
     public AudioSource bossSoundEffects_Gun;
+    public AudioSource bossSoundEffects_Hit;
 
     public void SetGameObjects(GameObject[] parameters)
     {
@@ -50,6 +51,7 @@ public class BossBattleScript : MonoBehaviour{
         if (PlayerPrefs.HasKey("SoundEffectVolume")){
             bossSoundEffects_Lazer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
             bossSoundEffects_Gun.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+            bossSoundEffects_Hit.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
         }
     }
 
@@ -75,7 +77,8 @@ public class BossBattleScript : MonoBehaviour{
 
         if(!isInvulerable){
             currentEnemyHealth -= 1;
-
+            bossSoundEffects_Hit.Play();
+            
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
 
             if (currentEnemyHealth <= 0){
