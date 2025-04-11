@@ -10212,63 +10212,6 @@ Sprite:
   m_Bones: []
   m_ScriptableObjects: []
   m_SpriteID: 
---- !u!1001 &308372687
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6279392409009837609, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_Name
-      value: StrongEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -18.096287
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5485214
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6798315737942583264, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ea759c48819404142b35d9a7239eadc5, type: 3}
 --- !u!1001 &366876468
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11007,6 +10950,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
+  wallExplosionObject: {fileID: 0}
+  destroyWallSoundPlayer: {fileID: 0}
 --- !u!66 &423978661
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -12199,6 +12144,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
+  wallExplosionObject: {fileID: 0}
+  destroyWallSoundPlayer: {fileID: 0}
 --- !u!66 &1037194411
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -17960,6 +17907,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 1
   isExplodable: 0
+  wallExplosionObject: {fileID: 0}
+  destroyWallSoundPlayer: {fileID: 0}
 --- !u!114 &1706599036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18341,6 +18290,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDestroyable: 0
   isExplodable: 0
+  wallExplosionObject: {fileID: 0}
+  destroyWallSoundPlayer: {fileID: 0}
 --- !u!66 &1971873779
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -19293,6 +19244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6465774d8bc5749a30d0bd5d3b4d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialEnterSoundPlayer: {fileID: 0}
   materialType: 0
 --- !u!1001 &2042158541
 PrefabInstance:
@@ -19654,5 +19606,4 @@ SceneRoots:
   - {fileID: 173128325}
   - {fileID: 484430335}
   - {fileID: 1250722493}
-  - {fileID: 308372687}
   - {fileID: 512595163}
