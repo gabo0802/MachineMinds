@@ -254,7 +254,7 @@ public class PlayerControls : MonoBehaviour
                     Color.red);
 
             for(int i = 0; i < totalParticles; i++){
-                reticleObjectParticles[i].transform.position = cannonHead.transform.position + (cannonHead.transform.up * (i + 1) * (distanceToReticle / 4));
+                reticleObjectParticles[i].transform.position = cannonHead.transform.position + (cannonHead.transform.up * (i + 1) * (distanceToReticle / (totalParticles + 1)));
                 reticleObjectParticles[i].transform.rotation = reticleObject.transform.rotation;
             }  
         }
