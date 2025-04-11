@@ -894,7 +894,7 @@ MonoBehaviour:
   cannonHead: {fileID: 801905346945509414}
   tireThreads: {fileID: 0}
   tireThreadCreateInterval: 0.5
-  maxEnemyHealth: 2
+  maxEnemyHealth: 3
   enemyMoveSpeed: 0.75
   enemyBullet: {fileID: 8642936227962931598, guid: 462042516cdf1054383ad5ffaef5bb97, type: 3}
   enemyShootInterval: 1.5
