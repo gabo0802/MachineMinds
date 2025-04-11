@@ -3,6 +3,7 @@ using UnityEngine;
 public class SpeedAffectingMaterialScript : MonoBehaviour
 {
     private float speedAffect = 1f; // > 1f = speed boost; < 1f = speed reduction
+    public AudioSource materialEnterSoundPlayer;
 
     public enum MaterialType
     {
@@ -26,6 +27,16 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
                 break;
         }
     }
+
+    void PlayMaterialSound(){
+        if(materialEnterSoundPlayer){
+            if (PlayerPrefs.HasKey("SoundEffectVolume")){
+                materialEnterSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume") * 0.8f;
+            }
+            materialEnterSoundPlayer.Play();
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("changing speed of something");
@@ -34,6 +45,7 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
         {
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
             other.transform.SendMessage("AffectSpeed", speedAffect);
+            PlayMaterialSound();
         }
     }
 
@@ -45,6 +57,7 @@ public class SpeedAffectingMaterialScript : MonoBehaviour
         {
             //if(other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy"){
             other.transform.SendMessage("AffectSpeed", 1f);
+            PlayMaterialSound();
         }
     }
 

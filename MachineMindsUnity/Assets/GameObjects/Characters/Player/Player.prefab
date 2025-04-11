@@ -307,6 +307,11 @@ MonoBehaviour:
   useTankControlMovement: 0
   wallHitGlitchDistance: 0.225
   playerDeathObject: {fileID: 801812182257050566, guid: c872206fc654a9345865b6025ab84980, type: 3}
+  reticleObjectParticles:
+  - {fileID: 2626068454361645639}
+  - {fileID: 6063000213212288480}
+  - {fileID: 8934033811868731913}
+  reticleObject: {fileID: 9196043880134888983}
 --- !u!1 &4003085438632798142
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,13 +715,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 904756473341347058, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3457891234972543876, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4323323559911810857, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+--- !u!1 &2626068454361645639 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5823112095713898390, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6063000213212288480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2349304864807958577, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8690409520597947855 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 875100942053324830, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8934033811868731913 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1099549745704642520, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9196043880134888983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 801812182257050566, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
   m_PrefabInstance: {fileID: 8412287330758127057}
   m_PrefabAsset: {fileID: 0}

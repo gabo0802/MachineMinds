@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -231,6 +232,34 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    public GameObject[] reticleObjectParticles;
+    public GameObject reticleObject;
+    void UpdateReticle(){
+        float distanceToReticle = Vector3.Distance(cannonHead.transform.position, reticleObject.transform.position);
+        int totalParticles = reticleObjectParticles.Length;
+        RaycastHit2D reticleParticleMaxDistance = Physics2D.Raycast(cannonHead.transform.position + (0.5f * cannonHead.transform.up), cannonHead.transform.up, distanceToReticle - 0.5f, layerMask);
+        
+
+        if(reticleParticleMaxDistance){
+            Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * 0.5f),
+                    cannonHead.transform.position + (cannonHead.transform.up * 0.5f) + (cannonHead.transform.up * reticleParticleMaxDistance.distance),
+                    Color.green);
+
+            for(int i = 0; i < totalParticles; i++){
+                reticleObjectParticles[i].transform.position = reticleObject.transform.position;
+            }
+        }else{
+            Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * 0.5f),
+                    cannonHead.transform.position + (cannonHead.transform.up * 0.5f) + (cannonHead.transform.up * (distanceToReticle - 0.5f)),
+                    Color.red);
+
+            for(int i = 0; i < totalParticles; i++){
+                reticleObjectParticles[i].transform.position = cannonHead.transform.position + (cannonHead.transform.up * (i + 1) * (distanceToReticle / 4));
+                reticleObjectParticles[i].transform.rotation = reticleObject.transform.rotation;
+            }  
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -249,6 +278,8 @@ public class PlayerControls : MonoBehaviour
             //Move Cannon to Mouse Position
             Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             cannonHead.transform.up = mouseScreenPosition - (Vector2)cannonHead.transform.position;
+
+            UpdateReticle();
 
             //Player Movement:
             if (useTankControlMovement)
