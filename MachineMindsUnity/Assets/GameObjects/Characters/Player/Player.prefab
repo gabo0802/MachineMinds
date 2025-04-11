@@ -311,6 +311,8 @@ MonoBehaviour:
   - {fileID: 2626068454361645639}
   - {fileID: 6063000213212288480}
   - {fileID: 8934033811868731913}
+  - {fileID: 4750455313310626276}
+  - {fileID: 7031969304120352359}
   reticleObject: {fileID: 9196043880134888983}
 --- !u!1 &4003085438632798142
 GameObject:
@@ -725,9 +727,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5823112095713898390, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
   m_PrefabInstance: {fileID: 8412287330758127057}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4750455313310626276 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3842541565350534197, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6063000213212288480 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2349304864807958577, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
+  m_PrefabInstance: {fileID: 8412287330758127057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7031969304120352359 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1524714845701682102, guid: 58d49ecaca9b7644094e1335ab9a30cb, type: 3}
   m_PrefabInstance: {fileID: 8412287330758127057}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8690409520597947855 stripped
