@@ -51,7 +51,8 @@ public class EndScreenScript : MonoBehaviour
     }
 
     void Start()
-    {
+    {   
+        Cursor.visible = true;
         volumeAdjustments();
         if (SaveSystem.FileExists(SAVE_KEY))
         {
