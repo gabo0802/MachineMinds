@@ -911,7 +911,7 @@ MonoBehaviour:
   enemyShootSoundPlayer: {fileID: 8785516601097405724}
   enemyHitSoundPlayer: {fileID: 8549888849849462633}
   enemyDeathObject: {fileID: 801812182257050566, guid: ce207958008d1694fb53816a5b1af37a, type: 3}
-  stealthBonusDamage: 2
+  stealthBonusDamage: 3
   redirectBonusDamage: 4
 --- !u!50 &7701055470618375241
 Rigidbody2D:
