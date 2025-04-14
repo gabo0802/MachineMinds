@@ -115,6 +115,18 @@ public class LevelManager : MonoBehaviour
     private bool playerIsInvincible = false;
 
     //Functions:
+
+    private void forceDifficultyDecrease(){
+        if(!PlayerPrefs.HasKey("TotalDeathsSinceLastCheckpoint")){
+            PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", 0);
+        }
+
+        if(PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") > 6){
+            Debug.LogWarning("Forced Difficulty Decrease");
+            currentDifficulty -= 1; 
+            //currentDifficulty -= (PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") / 6); 
+        }
+    }
     private void testLevelEnd()
     {
         if (Application.isEditor)
@@ -277,10 +289,10 @@ public class LevelManager : MonoBehaviour
         if(!playerIsInvincible){
             float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
 
-            if (pressedShootKey)
+            /*if (pressedShootKey)
             {
                 Debug.LogWarning("magRefillTime: " + magRefillTime);
-            }
+            }*/
 
             if (currentBulletsInMagazine < maxBulletsInMagazine)
             {
@@ -487,6 +499,10 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            if((currentLevelNumber + 1) % numberLevelsCheckpoint == 1){
+                PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", 0);
+            }
+            
             SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
 
         }
@@ -495,6 +511,9 @@ public class LevelManager : MonoBehaviour
     private void onPlayerDeath()
     {
         currentPlayerLives -= 1;
+        if((currentLevelNumber + 1) % numberLevelsCheckpoint == 1){
+             PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") + 1);
+        }
 
         if (currentLevelNumber % numberLevelsCheckpoint == 1)
         {
@@ -679,6 +698,8 @@ public class LevelManager : MonoBehaviour
         fuelBarSizeMuliplier /= timePlayerCanBoost;
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
+
+        forceDifficultyDecrease();
 
         playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
         if (playerIsInvincible)
