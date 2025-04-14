@@ -117,14 +117,14 @@ public class LevelManager : MonoBehaviour
     //Functions:
 
     private void forceDifficultyDecrease(){
-        if(!PlayerPrefs.HasKey("TotalDeathsSinceLastCheckpoint")){
-            PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", 0);
+        if(!PlayerPrefs.HasKey("TotalDeathsSinceNewCheckpoint")){
+            PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
         }
 
-        if(PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") > 6){
+        if(PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6){
             Debug.LogWarning("Forced Difficulty Decrease");
             currentDifficulty -= 1; 
-            //currentDifficulty -= (PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") / 6); 
+            //currentDifficulty -= (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") / 6); 
         }
     }
     private void testLevelEnd()
@@ -500,7 +500,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             if((currentLevelNumber + 1) % numberLevelsCheckpoint == 1){
-                PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", 0);
+                PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
             }
             
             SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
@@ -511,9 +511,7 @@ public class LevelManager : MonoBehaviour
     private void onPlayerDeath()
     {
         currentPlayerLives -= 1;
-        if((currentLevelNumber + 1) % numberLevelsCheckpoint == 1){
-             PlayerPrefs.SetInt("TotalDeathsSinceLastCheckpoint", PlayerPrefs.GetInt("TotalDeathsSinceLastCheckpoint") + 1);
-        }
+        PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") + 1);
 
         if (currentLevelNumber % numberLevelsCheckpoint == 1)
         {
