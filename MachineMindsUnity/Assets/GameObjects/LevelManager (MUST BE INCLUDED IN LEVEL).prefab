@@ -1048,6 +1048,8 @@ MonoBehaviour:
   gunShotSound: {fileID: 8300000, guid: e43b15f7aa51b784bb84ad95ba8c9cbe, type: 3}
   gunEmptySound: {fileID: 8300000, guid: b1f2dc46c26673e40939b92c275b64af, type: 3}
   gunJammedSound: {fileID: 8300000, guid: 7e5cca77827ec49469a9f4675f2b8ba8, type: 3}
+  winMusic: {fileID: 8300000, guid: 78f4a2cdd5725f441a78905c0f3f4eee, type: 3}
+  lossMusic: {fileID: 8300000, guid: b6f08d011076e964d9c41da1c988eacd, type: 3}
   playerSoundEffects_Boost: {fileID: 2439316181113643297}
 --- !u!1 &4945128392221643693
 GameObject:

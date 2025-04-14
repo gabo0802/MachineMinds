@@ -107,6 +107,9 @@ public class LevelManager : MonoBehaviour
     public AudioClip gunEmptySound;
     public AudioClip gunJammedSound;
 
+    public AudioClip winMusic;
+    public AudioClip lossMusic;
+
     public AudioSource playerSoundEffects_Boost;
 
     private bool playerIsInvincible = false;
@@ -787,8 +790,16 @@ public class LevelManager : MonoBehaviour
 
                     if (wonLevel)
                     {
+                       
                         if (!isTestLevel)
                         {
+                            if(musicPlayer.clip != winMusic){
+                                musicPlayer.Stop();
+                                musicPlayer.clip = winMusic;
+                                musicPlayer.loop = false;
+                                musicPlayer.Play();
+                            }
+
                             bossUIBar.color = new Color(1f, 1f, 1f, 0f);
                             bossUIBarPercent.color = new Color(0.5f, 0f, 0f, 0f);
                             bossUIBarText.text = "";
@@ -858,6 +869,13 @@ public class LevelManager : MonoBehaviour
                 }
                 else
                 {
+                    if(musicPlayer.clip != lossMusic){
+                        musicPlayer.Stop();
+                        musicPlayer.clip = lossMusic;
+                        musicPlayer.loop = false;
+                        musicPlayer.Play();
+                    }
+
                     playerSoundEffects_Boost.Stop();
                     playerSoundEffects_Gun.Stop();
                     backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);

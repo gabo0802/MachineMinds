@@ -67,8 +67,8 @@ public class EnemyBehavior : MonoBehaviour
     
     private void onDetectPlayer(){
         if(enemyDetectPlayerEffectObject){
-            GameObject detectObj = (GameObject) Instantiate(enemyDetectPlayerEffectObject, enemyHealthBarComponents[0].transform.position, enemyHealthBarComponents[0].transform.rotation);
-            detectObj.transform.SetParent(enemyHealthBarComponents[0].transform);
+            GameObject detectObj = (GameObject) Instantiate(enemyDetectPlayerEffectObject, enemyHealthBarComponents[1].transform.position, enemyHealthBarComponents[1].transform.rotation);
+            detectObj.transform.SetParent(enemyHealthBarComponents[1].transform);
         }
     }
 
