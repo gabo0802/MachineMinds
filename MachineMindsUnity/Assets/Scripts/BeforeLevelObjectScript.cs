@@ -101,7 +101,7 @@ public class BeforeLevelObjectScript : MonoBehaviour
         currentDifficulty = levelParameters[1];
 
         bool isEasyMode = PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5;
-        levelDifficultyUI.text = isEasyMode ? "[Super Easy Mode]" : "Current Difficulty: " + currentDifficulty;
+        levelDifficultyUI.text = isEasyMode ? "[Super Easy Mode]" : currentDifficulty == 11 ? "[Max Difficulty]": "Current Difficulty: " + currentDifficulty;
     }
 
     void setIsCheckpoint(bool isCheckpoint)

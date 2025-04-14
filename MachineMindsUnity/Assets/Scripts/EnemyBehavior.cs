@@ -117,10 +117,6 @@ public class EnemyBehavior : MonoBehaviour
 
     void OnBulletHit(GameObject bullet)
     {   
-        if(enemyHitSoundPlayer){
-            enemyHitSoundPlayer.Play();
-        }
-        
         if (bullet)
         {   
             if(!bullet.name.ToLower().Contains("player")){
@@ -142,9 +138,16 @@ public class EnemyBehavior : MonoBehaviour
             }
 
             currentEnemyHealth -= stealthBonusDamage;
+            enemyHitSoundPlayer.pitch = 1.2f;
         }else{
             currentEnemyHealth -= 1;
+            enemyHitSoundPlayer.pitch = 1f;
         }
+
+        if(enemyHitSoundPlayer){
+            enemyHitSoundPlayer.Play();
+        }
+        
         
         if (isBoss)
         {
