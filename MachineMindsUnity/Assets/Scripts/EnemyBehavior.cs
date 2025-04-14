@@ -51,6 +51,7 @@ public class EnemyBehavior : MonoBehaviour
     public AudioSource enemyShootSoundPlayer;
     public AudioSource enemyHitSoundPlayer;
     public GameObject enemyDeathObject;
+    public GameObject enemyDetectPlayerEffectObject;
     public int stealthBonusDamage = 2;
     public int redirectBonusDamage = 4;
 
@@ -64,6 +65,13 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
     
+    private void onDetectPlayer(){
+        if(enemyDetectPlayerEffectObject){
+            GameObject detectObj = (GameObject) Instantiate(enemyDetectPlayerEffectObject, enemyHealthBarComponents[0].transform.position, enemyHealthBarComponents[0].transform.rotation);
+            detectObj.transform.SetParent(enemyHealthBarComponents[0].transform);
+        }
+    }
+
     public void AffectSpeed(float newMultiplier)
     {
         enemyMoveSpeedMultiplier = newMultiplier;
@@ -129,6 +137,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             else
             {
+                onDetectPlayer();
                 currentTarget = currentAlivePlayer;
             }
 
@@ -227,10 +236,12 @@ public class EnemyBehavior : MonoBehaviour
         if (lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
         {
             currentTarget = currentAlivePlayer;
+            onDetectPlayer();
             cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
         else if (lookForPlayerRay2 && lookForPlayerRay2.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
         {
+            onDetectPlayer();
             currentTarget = currentAlivePlayer;
             cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
