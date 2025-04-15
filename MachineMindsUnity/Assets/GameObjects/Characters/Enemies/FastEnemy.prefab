@@ -408,9 +408,9 @@ MonoBehaviour:
   tireThreads: {fileID: 0}
   tireThreadCreateInterval: 0.5
   maxEnemyHealth: 1
-  enemyMoveSpeed: 5
+  enemyMoveSpeed: 4
   enemyBullet: {fileID: 4939650420335017065, guid: 8c99883ec96191d43960cd26858bfcff, type: 3}
-  enemyShootInterval: 2
+  enemyShootInterval: 0.75
   bulletShotSpawnOffset: 0
   shootIfCannotSeePlayer: 0
   pointsWorth: 100
