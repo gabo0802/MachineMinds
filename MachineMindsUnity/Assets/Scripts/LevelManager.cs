@@ -62,8 +62,8 @@ public class LevelManager : MonoBehaviour
     public TMPro.TextMeshProUGUI ammoUI = null;
 
     private int maxBulletsInMagazine = 5;
-    private float bulletReloadTime = 0.5f;
-    private float bulletReloadTimer = 0.5f;
+    private float bulletReloadTime = 0.20f;
+    private float bulletReloadTimer = 0.20f;
     private int currentBulletsInMagazine;
 
     public int totalPlayerBullets = 10;
