@@ -369,9 +369,9 @@ MonoBehaviour:
   m_Content: {fileID: 8283721098821692148}
   m_Horizontal: 1
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 3536789659122824258}
@@ -504,7 +504,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8470473827084726925}
   m_HandleRect: {fileID: 2391099617365592324}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

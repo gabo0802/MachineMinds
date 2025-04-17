@@ -47,13 +47,12 @@ public class Leaderboards : MonoBehaviour
         {
             if (entry.rank <= MAX_ENTRIES)
             {
-                // leaderboardText.text += $"{entry.rank} - {entry.score} - {entry.date}\n";
-                rankList.text += $"{entry.rank}\n";
-                scoreList.text += $"{entry.score}\n";
-                dateList.text += $"{entry.date}\n";
+                leaderboardText.text += $"{entry.rank}\t{entry.score}\t{entry.date}\n";
+                
             }
         }
     }
+
 
     public void exitMenu()
     {
