@@ -6,7 +6,7 @@ using TMPro;
 
 public class Leaderboards : MonoBehaviour
 {
-    private const int MAX_ENTRIES = 10;
+    private const int MAX_ENTRIES = 5;
     public TMPro.TextMeshProUGUI leaderboardText;
 
     public TMPro.TextMeshProUGUI rankList;
