@@ -17,6 +17,15 @@ public class LazerBeamScript : MonoBehaviour
             soundEffectSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
         }
     }
+
+    /// <summary>
+    /// Unity Start method (no initialization required).
+    /// </summary>
+    void Start()
+    {
+        // No setup needed
+    }
+
     /// <summary>
     /// Unity Update: adjusts volume each frame.
     /// </summary>
