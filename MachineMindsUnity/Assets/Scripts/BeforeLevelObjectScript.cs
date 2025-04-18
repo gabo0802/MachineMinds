@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Manages the pre-level UI elements such as level info, difficulty,
-/// player lives display, and hint text, then auto-continues after a delay.
-/// </summary>
 public class BeforeLevelObjectScript : MonoBehaviour
 {
     private const int levelsPerCheckpoint = 5;
@@ -20,72 +16,99 @@ public class BeforeLevelObjectScript : MonoBehaviour
 
     public UnityEngine.UI.Image[] playerHearts;
     private int currentPlayerLives = 3;
-    public const string spritePath = "DynamicSprites/heart_empty";
-    public const string spritePathFull = "DynamicSprites/heart_full";
+    public const string spritePath = "DynamicSprites/heart_empty"; // Path inside Resources folder
+    public const string spritePathFull = "DynamicSprites/heart_full"; // Path inside Resources folder
 
     public TMPro.TextMeshProUGUI hintUI;
     public string[] allHints;
 
     public AudioSource musicPlayer;
 
-    /// <summary>
-    /// Adjusts the music volume based on saved player preferences.
-    /// </summary>
-    private void volumeAdjustments()
-    {
-        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume"))
-        {
+    private void volumeAdjustments(){
+        if (musicPlayer && PlayerPrefs.HasKey("MusicVolume")){
             musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
         }
     }
-
-    /// <summary>
-    /// Updates the UI hearts to reflect the current number of player lives.
-    /// Loads heart sprites from Resources and assigns full/empty accordingly.
-    /// </summary>
     private void UpdateLivesUI()
     {
-        // ... (body omitted for brevity)
+        // Load New Sprites
+        Texture2D emptyTexture = Resources.Load<Texture2D>(spritePath);
+        Texture2D fullTexture = Resources.Load<Texture2D>(spritePathFull);
+
+        // Check if textures loaded properly
+        if (emptyTexture == null || fullTexture == null)
+        {
+            Debug.LogError($"Failed to load textures! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+
+        Sprite emptyHeart = Sprite.Create(emptyTexture, new Rect(0, 0, emptyTexture.width, emptyTexture.height), new Vector2(0.5f, 0.5f));
+        Sprite fullHeart = Sprite.Create(fullTexture, new Rect(0, 0, fullTexture.width, fullTexture.height), new Vector2(0.5f, 0.5f));
+        if (emptyHeart == null || fullHeart == null)
+        {
+            Debug.LogError($"Failed to load sprites! Check paths: {spritePath}, {spritePathFull}");
+            return;
+        }
+        else
+        {
+            Debug.Log("Successfully loaded heart sprites!");
+        }
+
+
+        for (int i = 0; i < currentPlayerLives; i++)
+        {
+            playerHearts[i].sprite = fullHeart;
+        }
+
+        for (int i = currentPlayerLives; i < playerHearts.Length; i++)
+        {
+            playerHearts[i].sprite = emptyHeart;
+        }
     }
 
-    /// <summary>
-    /// Handles the Continue button press by resuming time and destroying this UI.
-    /// </summary>
     public void OnContinueButtonPress()
     {
         Time.timeScale = 1f;
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Sets the player's lives count and refreshes the lives UI display.
-    /// </summary>
     void setPlayerLives(int newLives)
     {
         currentPlayerLives = newLives;
         UpdateLivesUI();
     }
 
-    /// <summary>
-    /// Applies level number, background sprite, and difficulty text
-    /// based on provided level parameters array.
-    /// </summary>
     void setLevelParameters(int[] levelParameters)
     {
-        // ... (body omitted for brevity)
+        currentLevelNumber = levelParameters[0];
+
+        if (currentLevelNumber == 10)
+        {
+            levelNumberUI.text = "Level #10 - Boss Battle";
+            currentLevelBackground.sprite = allLevelBackgrounds[4];
+        }
+        else if (currentLevelNumber == 20)
+        {
+            levelNumberUI.text = "Level #20 - Boss Battle";
+            currentLevelBackground.sprite = allLevelBackgrounds[5];
+        }
+        else
+        {
+            levelNumberUI.text = "Level #" + currentLevelNumber;
+            currentLevelBackground.sprite = allLevelBackgrounds[currentLevelNumber == 0 ? 0 : ((currentLevelNumber - 1) / levelsPerCheckpoint)];
+        }
+
+        currentDifficulty = levelParameters[1];
+
+        bool isEasyMode = PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5;
+        levelDifficultyUI.text = isEasyMode ? "[Super Easy Mode]" : currentDifficulty == 11 ? "[Max Difficulty]": "Current Difficulty: " + currentDifficulty;
     }
 
-    /// <summary>
-    /// Updates the checkpoint text to indicate if the current level is a checkpoint.
-    /// </summary>
     void setIsCheckpoint(bool isCheckpoint)
     {
         isCheckpointUI.text = isCheckpoint ? "Checkpoint Reached!" : "";
     }
 
-    /// <summary>
-    /// Coroutine that waits for a set time in real-time, then continues to the game.
-    /// </summary>
     private IEnumerator Timer(float timeInSeconds)
     {
         Debug.Log("Timer start");
@@ -94,13 +117,10 @@ public class BeforeLevelObjectScript : MonoBehaviour
         OnContinueButtonPress();
     }
 
-    /// <summary>
-    /// Unity Start method: adjusts volume, shows random hint, and starts auto-continue timer.
-    /// </summary>
     void Start()
-    {
+    {   
         volumeAdjustments();
-        hintUI.text = allHints[Random.Range(0, allHints.Length)];
+        hintUI.text = allHints[(int)Random.Range(0, allHints.Length)];
         StartCoroutine(Timer(3));
     }
 }

@@ -5,10 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
-/// <summary>
-/// Handles the end-of-game UI: displays final score, manages menu buttons,
-/// volume settings, and saving to leaderboards.
-/// </summary>
 public class EndScreenScript : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI finalPointsUI = null;
@@ -17,9 +13,6 @@ public class EndScreenScript : MonoBehaviour
 
     public AudioSource musicPlayer;
 
-    /// <summary>
-    /// Adjusts the end screen music volume based on saved preferences.
-    /// </summary>
     private void volumeAdjustments()
     {
         if (musicPlayer && PlayerPrefs.HasKey("MusicVolume"))
@@ -27,27 +20,16 @@ public class EndScreenScript : MonoBehaviour
             musicPlayer.volume = PlayerPrefs.GetFloat("MusicVolume") * 0.25f;
         }
     }
-
-    /// <summary>
-    /// Loads the main menu scene (index 0).
-    /// </summary>
     public void MainMenuButton()
     {
         SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
-    /// <summary>
-    /// Instantiates the leaderboards UI prefab.
-    /// </summary>
     public void LeaderboardsButton()
     {
         Instantiate(leaderboardsPrefab);
     }
 
-    /// <summary>
-    /// Quits the game or stops playmode in the editor.
-    /// Handles WebGL limitations and build exit.
-    /// </summary>
     public void QuitGame()
     {
         if (Application.isEditor)
@@ -68,10 +50,6 @@ public class EndScreenScript : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Unity Start: shows cursor, sets volume, reads saved score,
-    /// updates UI, and records score to leaderboards.
-    /// </summary>
     void Start()
     {   
         Cursor.visible = true;

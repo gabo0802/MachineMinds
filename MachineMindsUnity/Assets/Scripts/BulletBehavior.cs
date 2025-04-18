@@ -1,10 +1,6 @@
 using UnityEngine;
 using Pathfinding;
 
-/// <summary>
-/// Handles bullet movement, collision responses (bouncing or exploding),
-/// lifetime management, and optional homing behavior via AIPath.
-/// </summary>
 public class BulletBehavior : MonoBehaviour
 {
     private Rigidbody2D rb;
@@ -17,6 +13,7 @@ public class BulletBehavior : MonoBehaviour
     public float bulletDetectRange = 0.25f;
 
     public bool isBouncy = true;
+
     public bool isExplody = false;
     private float worldScale = 2.0f;
     public float explosionRadius = 20f;
@@ -26,135 +23,143 @@ public class BulletBehavior : MonoBehaviour
     public GameObject targetPlayer;
 
     public float bulletDiameter = 0f;
+
     public AudioSource bounceBounceSoundPlayer;
 
-    /// <summary>
-    /// Adjusts sound effect volume based on player preferences.
-    /// </summary>
-    private void volumeAdjustments()
-    {
-        if (PlayerPrefs.HasKey("SoundEffectVolume"))
-        {
+     private void volumeAdjustments(){
+        if (PlayerPrefs.HasKey("SoundEffectVolume")){
             bounceBounceSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
         }
     }
 
-    /// <summary>
-    /// Assigns the target player for homing and caches the AIPath component.
-    /// </summary>
     public void SetTarget(GameObject newTarget)
     {
         targetPlayer = newTarget;
         pathFinder = GetComponent<AIPath>();
     }
 
-    /// <summary>
-    /// Handles collision logic when bullet hits another bullet or object.
-    /// If explosive, creates explosion effect and notifies nearby objects.
-    /// Then destroys this bullet.
-    /// </summary>
+
     void OnBulletHit(GameObject bullet)
     {
-        if (bullet) Destroy(bullet);
+        if (bullet)
+        {
+            Destroy(bullet);
+        }
 
         if (isExplody)
         {
+            Destroy(bullet);
+
             Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-            GameObject expl = Instantiate(explosionObject, transform.position, transform.rotation);
-            expl.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
-            foreach (var col in allExplodedObjects)
+            
+            GameObject currentExplosionObject = (GameObject)Instantiate(explosionObject, transform.position, transform.rotation);
+            currentExplosionObject.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
+
+            foreach (Collider2D currentExplodedObject in allExplodedObjects)
             {
-                col.transform.SendMessageUpwards("OnExplosionHit");
+                currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
             }
         }
 
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Receives explosion messages from other objects and logs the hit.
-    /// </summary>
     void OnExplosionHit()
     {
-        Debug.Log(gameObject.name + " got hit by explosion");
+        Debug.Log(gameObject.name + " got hit be explosion");
     }
 
-    /// <summary>
-    /// Calculates bounce reflection, repositions bullet, applies new velocity,
-    /// plays bounce sound, and decrements bounce count.
-    /// </summary>
     void BounceBullet(RaycastHit2D hit, Vector2 moveDirection)
     {
-        transform.position = hit.point + hit.normal * 0.05f;
-        Vector2 newDir = Vector2.Reflect(moveDirection, hit.normal);
-        float angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg - 90f;
+        transform.position = hit.point + hit.normal * 0.05f; // Move slightly away
+        Vector2 newDirection = Vector2.Reflect(moveDirection, hit.normal);
+        float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        rb.linearVelocity = newDir * bulletSpeed;
-        if (bounceBounceSoundPlayer)
-        {
+        rb.linearVelocity = newDirection * bulletSpeed; // Apply new velocity
+        if(bounceBounceSoundPlayer){
             volumeAdjustments();
             bounceBounceSoundPlayer.Play();
         }
         bounceCap--;
     }
 
-    /// <summary>
-    /// Initializes components and default bullet diameter.
-    /// </summary>
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         pathFinder = GetComponent<AIPath>();
 
         if (bulletDiameter == 0f)
+        {
             bulletDiameter = transform.localScale.x;
+        }
     }
 
-    /// <summary>
-    /// Empty Update stub (no per-frame logic here).
-    /// </summary>
-    void Update() { }
+    // Update is called once per frame
+    void Update()
+    {
 
-    /// <summary>
-    /// Physics update: moves or homing, detects collisions via CircleCast,
-    /// handles bounce or destroy logic, and tracks lifetime expiry.
-    /// </summary>
+    }
+
+    // Use FixedUpdate for physics calculations
     void FixedUpdate()
     {
-        Vector2 moveDir = transform.up;
-        float dist = bulletSpeed * Time.fixedDeltaTime;
-        int mask = ~LayerMask.GetMask("InteractableGround");
+        Vector2 moveDirection = transform.up;
+        float moveDistance = bulletSpeed * Time.fixedDeltaTime;
+
+        // Raycast ahead to check if a collision will happen before moving
+        int layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
+
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Bullets"), LayerMask.NameToLayer("InteractableGround"), true);
 
+        float bulletOffset = 0.1f;
+
         RaycastHit2D hit = Physics2D.CircleCast(
-            transform.position + transform.up * (bulletDiameter + 0.1f),
-            bulletDiameter / 2,
-            moveDir,
-            dist,
-            mask);
+            transform.position + (transform.up * (bulletDiameter + bulletOffset)),
+            (bulletDiameter / 2),
+            moveDirection,
+            moveDistance,
+            layerMask);
+
+        Debug.DrawLine(transform.position + (transform.up * (bulletDiameter + bulletOffset)),
+        transform.position + (transform.up * moveDistance), Color.green);
+
 
         if (hit)
         {
             hit.transform.SendMessageUpwards("OnBulletHit", gameObject);
+
             if (isExplody)
             {
-                // Explosion repeat logic for detection radius
-                Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-                GameObject expl = Instantiate(explosionObject, transform.position, transform.rotation);
-                expl.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
-                foreach (var col in cols)
-                    col.transform.SendMessageUpwards("OnExplosionHit");
+                Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+                GameObject currentExplosionObject = (GameObject)Instantiate(explosionObject, transform.position, transform.rotation);
+                currentExplosionObject.SendMessageUpwards("setExplosionMaxRadius", explosionRadius * worldScale);
+
+                Debug.DrawLine(transform.position - new Vector3(explosionRadius, 0, 0), transform.position + new Vector3(explosionRadius, 0, 0), Color.red, 2.5f);
+                Debug.DrawLine(transform.position - new Vector3(0, explosionRadius, 0), transform.position + new Vector3(0, explosionRadius, 0), Color.red, 2.5f);
+
+
+                foreach (Collider2D currentExplodedObject in allExplodedObjects)
+                {
+                    currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
+                }
+            }
+            if (isBouncy)
+            {
+                BounceBullet(hit, moveDirection);
+            }
+            else
+            {
+                Destroy(gameObject);
             }
 
-            if (isBouncy)
-                BounceBullet(hit, moveDir);
-            else
-                Destroy(gameObject);
         }
         else
         {
             if (!pathFinder)
-                rb.linearVelocity = moveDir * bulletSpeed;
+            {
+                rb.linearVelocity = moveDirection * bulletSpeed; // Normal movement
+            }
             else
             {
                 pathFinder.maxSpeed = bulletSpeed;
@@ -162,10 +167,16 @@ public class BulletBehavior : MonoBehaviour
             }
         }
 
-        // Destroy bullet if over lifetime or out of bounces
+        // Bullet Lifetime
         if (bulletLifeTimer >= bulletLifeTime || bounceCap <= 0)
+        {
             Destroy(gameObject);
+        }
         else
+        {
             bulletLifeTimer += Time.deltaTime;
+        }
     }
+
+
 }
