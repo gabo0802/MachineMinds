@@ -1,64 +1,84 @@
-
 using UnityEngine;
 
+/// <summary>
+/// Manages the Options menu, including screen resolution, fullscreen toggle,
+/// and volume settings for music and sound effects.
+/// </summary>
 public class OptionsMenuScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    
     public UnityEngine.UI.Slider musicVolumeSlider;
     public UnityEngine.UI.Slider soundEffectVolumeSlider;
     public TMPro.TMP_Dropdown resolutionChanging;
     public UnityEngine.UI.Toggle isFullScreen;
 
+    /// <summary>
+    /// Initializes UI elements with current resolution, fullscreen state,
+    /// and saved volume preferences.
+    /// </summary>
     void Start()
     {   
         resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
         
-        if (PlayerPrefs.HasKey("WindowFullScreen")){
-            isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
-        }
+        if (PlayerPrefs.HasKey("WindowFullScreen"))
+            isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1;
 
-        if (PlayerPrefs.HasKey("MusicVolume")){
-            musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        }else{
-            musicVolumeSlider.value = 1f;
-        }
+        musicVolumeSlider.value = PlayerPrefs.HasKey("MusicVolume")
+            ? PlayerPrefs.GetFloat("MusicVolume")
+            : 1f;
 
-        if (PlayerPrefs.HasKey("SoundEffectVolume")){
-            soundEffectVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectVolume");
-        }else{
-            soundEffectVolumeSlider.value = 1f;
-        }
+        soundEffectVolumeSlider.value = PlayerPrefs.HasKey("SoundEffectVolume")
+            ? PlayerPrefs.GetFloat("SoundEffectVolume")
+            : 1f;
     }
 
-    public void onExitButtonPress(){
+    /// <summary>
+    /// Closes the Options menu when the Exit button is pressed.
+    /// </summary>
+    public void onExitButtonPress()
+    {
         Destroy(gameObject);
     }
 
-    public void onMusicVolumeAdjustment(){
+    /// <summary>
+    /// Saves the adjusted music volume to PlayerPrefs.
+    /// </summary>
+    public void onMusicVolumeAdjustment()
+    {
         PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
     }
 
-    public void onSoundEffectVolumeAdjust(){
+    /// <summary>
+    /// Saves the adjusted sound effect volume to PlayerPrefs.
+    /// </summary>
+    public void onSoundEffectVolumeAdjust()
+    {
         PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectVolumeSlider.value);
     }
 
-    public void onResolutionAdjustment(){
+    /// <summary>
+    /// Updates screen resolution and fullscreen state based on user selection,
+    /// and saves preferences.
+    /// </summary>
+    public void onResolutionAdjustment()
+    {
         string resolutionString = resolutionChanging.options[resolutionChanging.value].text;
-        int width = System.Int32.Parse(resolutionString.Split(" x ")[0]);
-        int height = System.Int32.Parse(resolutionString.Split(" x ")[1]);
+        int width = int.Parse(resolutionString.Split(" x ")[0]);
+        int height = int.Parse(resolutionString.Split(" x ")[1]);
 
-        int isFullScreenInt = isFullScreen.isOn ? 1 : 0;
-        PlayerPrefs.SetInt("WindowFullScreen", isFullScreenInt);
-
+        PlayerPrefs.SetInt("WindowFullScreen", isFullScreen.isOn ? 1 : 0);
         Screen.SetResolution(width, height, isFullScreen.isOn);
     }
 
-    void Update(){
-        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+    /// <summary>
+    /// Listens for the pause key to close the Options menu.
+    /// </summary>
+    void Update()
+    {
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause")
+            ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause"))
+            : KeyCode.Escape;
+
         if (Input.GetKeyDown(pauseKey))
-        {
             Destroy(gameObject);
-        }
     }
 }
