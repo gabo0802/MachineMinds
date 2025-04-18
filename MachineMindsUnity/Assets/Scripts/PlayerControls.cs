@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles player input, movement (tank or free style), shooting, and death behavior.
+/// </summary>
 public class PlayerControls : MonoBehaviour
 {
     public bool godMode = false;
@@ -28,30 +31,48 @@ public class PlayerControls : MonoBehaviour
     private bool pressD = false;
     public float wallHitGlitchDistance = 0.225f;
     public GameObject playerDeathObject;
+
+    /// <summary>
+    /// Called when Up input is pressed for tank controls.
+    /// </summary>
+
     public void UpPress()
     {
         pressW = true;
         pressS = false;
     }
 
+
+    /// <summary>
+    /// Called when Down input is pressed for tank controls.
+    /// </summary>
     public void DownPress()
     {
         pressW = false;
         pressS = true;
     }
 
+    /// <summary>
+    /// Called when Left input is pressed for tank controls.
+    /// </summary>
     public void LeftPress()
     {
         pressA = true;
         pressD = false;
     }
 
+    /// <summary>
+    /// Called when Right input is pressed for tank controls.
+    /// </summary>
     public void RightPress()
     {
         pressA = false;
         pressD = true;
     }
 
+    /// <summary>
+    /// Called to stop all tank control movement inputs.
+    /// </summary>
     public void StopPress()
     {
         pressW = false;
@@ -60,6 +81,9 @@ public class PlayerControls : MonoBehaviour
         pressD = false;
     }
 
+    /// <summary>
+    /// Instantiates a bullet if no wall is blocking the firing position.
+    /// </summary>
     public void ShootBullet()
     {
         bool shootWallGlitchPrevention = false;
@@ -79,12 +103,17 @@ public class PlayerControls : MonoBehaviour
             Instantiate(playerBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShootDistance), cannonHead.transform.rotation);
         }
     }
-
+    /// <summary>
+    /// Sets base movement speed multiplier.
+    /// </summary>
     public void AffectSpeed(float newMultiplier)
     {
         playerMoveSpeedMultiplier = newMultiplier;
     }
 
+    /// <summary>
+    /// Sets boost movement speed multiplier.
+    /// </summary>
     public void AffectBoostSpeed(float newMultiplier)
     {
         playerMoveSpeedBoostMultiplier = newMultiplier;
@@ -93,6 +122,9 @@ public class PlayerControls : MonoBehaviour
     private const float slipperyIceSpeed = 5f;
     private const float slideMultiplier = 0.25f;
 
+    /// <summary>
+    /// Handles player movement using tank-style controls.
+    /// </summary>
     private void tankControlMovement()
     {
         KeyCode upKey = PlayerPrefs.HasKey("KeyMovementUp") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyMovementUp")): KeyCode.Space;
@@ -133,6 +165,9 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles player movement using free-style controls.
+    /// </summary>
     private void normalControlMovement()
     {   
         KeyCode upKey = PlayerPrefs.HasKey("KeyMovementUp") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyMovementUp")): KeyCode.W;
@@ -200,7 +235,9 @@ public class PlayerControls : MonoBehaviour
             playerBody.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
         }
     }
-
+    /// <summary>
+    /// Called when an explosion hits the player; handles death unless godMode.
+    /// </summary>
     void OnExplosionHit()
     {
         //Debug.Log(gameObject.name + " got hit be explosion");
@@ -213,7 +250,9 @@ public class PlayerControls : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    /// <summary>
+    /// Called when a bullet hits the player; handles death unless godMode.
+    /// </summary>
     void OnBulletHit(GameObject bullet)
     {
         //Debug.Log("Player Bullet Hit" + bulletType);
@@ -234,6 +273,10 @@ public class PlayerControls : MonoBehaviour
 
     public GameObject[] reticleObjectParticles;
     public GameObject reticleObject;
+
+    /// <summary>
+    /// Updates aiming reticle particle positions based on line-of-sight.
+    /// </summary>
     void UpdateReticle(){
         float distanceToReticle = Vector3.Distance(cannonHead.transform.position, reticleObject.transform.position);
         int totalParticles = reticleObjectParticles.Length;
@@ -261,6 +304,9 @@ public class PlayerControls : MonoBehaviour
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// <summary>
+    /// Unity Start: initializes godMode, layer mask, and Rigidbody.
+    /// </summary>
     void Start()
     {
         if(PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5){
@@ -271,6 +317,9 @@ public class PlayerControls : MonoBehaviour
     }
 
     // Update is called once per frame
+    /// <summary>
+    /// Unity Update: rotates cannon, updates reticle, and moves player.
+    /// </summary>
     void Update()
     {
         if (gameObject && Time.timeScale != 0f)
