@@ -1,49 +1,29 @@
 using UnityEngine;
 
-/// <summary>
-/// Controls laser beam behavior: applies volume settings and handles collision triggers to damage targets.
-/// </summary>
 public class LazerBeamScript : MonoBehaviour
 {
     public AudioSource soundEffectSoundPlayer;
 
-    /// <summary>
-    /// Applies saved sound effect volume to the laser beam audio source.
-    /// </summary>
-    private void volumeAdjustments()
-    {
-        if (soundEffectSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume"))
-        {
+    private void volumeAdjustments(){
+        if (soundEffectSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
             soundEffectSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
         }
+    } 
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start(){
     }
 
-    /// <summary>
-    /// Unity Start method (no initialization required).
-    /// </summary>
-    void Start()
-    {
-        // No setup needed
-    }
-
-    /// <summary>
-    /// Unity Update: adjusts volume each frame.
-    /// </summary>
-    void Update()
-    {
+    // Update is called once per frame
+    void Update(){
         volumeAdjustments();
     }
 
-    /// <summary>
-    /// Handles trigger collisions: sends an OnBulletHit message to any non-boss, non-wall object.
-    /// </summary>
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        string nameLower = other.transform.name.ToLower();
-        if (!nameLower.Contains("boss") && !nameLower.Contains("wall"))
-        {
+    void OnTriggerEnter2D(Collider2D other){
+        if(!other.transform.name.ToLower().Contains("boss") && !other.transform.name.ToLower().Contains("wall") ){
             GameObject tempGameObject = new GameObject();
             other.transform.SendMessage("OnBulletHit", tempGameObject);
         }
     }
+
 }

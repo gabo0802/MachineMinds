@@ -1,100 +1,125 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Provides pause menu functionality for difficulty feedback and progression.
-/// </summary>
 public class PauseScript : MonoBehaviour
 {
     private string saveFilePath = "GameState";
+
     private string aiTrainingFilePath = "GameData";
+
     private string[] fileData;
     private int currentDifficulty = 1;
     private int nextLevel = 1;
     private const int maxDifficulty = 10;
 
+
     public TMPro.TextMeshProUGUI contextMessage;
 
-    /// <summary>
-    /// Reads and returns lines of saved data from PlayerPrefs for the given key.
-    /// </summary>
+
+    //Functions:
     private string[] getFileData(string filePath)
     {
         if (PlayerPrefs.HasKey(filePath))
-            return PlayerPrefs.GetString(filePath).Split('\n');
+        {
+            string saveFileData = PlayerPrefs.GetString(filePath);
+            return saveFileData.Split('\n');
+        }
         return new string[0];
     }
 
-    /// <summary>
-    /// Writes or appends an array of lines to a PlayerPrefs key.
-    /// </summary>
     private void writeFileData(string filePath, string[] newFileData, bool overwriteExistingFileData)
     {
-        string content = overwriteExistingFileData ? "" : PlayerPrefs.GetString(filePath) + (PlayerPrefs.GetString(filePath).EndsWith("\n") ? "" : "\n");
-        content += string.Join("\n", newFileData);
+        string content = "";
+        
+        if (!overwriteExistingFileData && PlayerPrefs.HasKey(filePath))
+        {
+            content = PlayerPrefs.GetString(filePath);
+            if (!content.EndsWith("\n") && content.Length > 0)
+            {
+                content += "\n";
+            }
+        }
+        
+        for (int i = 0; i < newFileData.Length; i++)
+        {
+            content += newFileData[i];
+            if (i < newFileData.Length - 1)
+            {
+                content += "\n";
+            }
+        }
+        
         PlayerPrefs.SetString(filePath, content);
         PlayerPrefs.Save();
     }
 
-    /// <summary>
-    /// Saves AI training data with a capped difficulty adjustment.
-    /// </summary>
     private void saveAITrainingData(int newDifficulty)
     {
-        // Ensures difficulty remains within valid range and logs training data
-        newDifficulty = Mathf.Clamp(newDifficulty, 1, maxDifficulty);
+        if (newDifficulty < 1)
+        {
+            newDifficulty = 1;
+        }
+        else if (newDifficulty > maxDifficulty)
+        {
+            newDifficulty = maxDifficulty;
+        }
+
         if (!PlayerPrefs.HasKey(aiTrainingFilePath))
         {
             writeFileData(aiTrainingFilePath, new string[]{
                 "currentPlayerLives,totalPoints,totalEnemiesKilled,currentDifficulty,playerLifeTimer,levelsBeat,newDifficulty",
-                string.Join(",", fileData) + "," + newDifficulty
+                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+"," +fileData[4]+","+fileData[5]+","+newDifficulty
             }, true);
         }
         else
         {
-            writeFileData(aiTrainingFilePath, new string[]{ string.Join(",", fileData) + "," + newDifficulty }, false);
+            writeFileData(aiTrainingFilePath, new string[]{
+                fileData[0]+","+fileData[1]+","+fileData[2]+","+fileData[3]+","+fileData[4]+","+fileData[5]+","+newDifficulty
+            }, false);
         }
     }
 
-    /// <summary>
-    /// Updates saved game difficulty by writing new difficulty into the save file.
-    /// </summary>
     private void adjustDifficulty(int newDifficulty)
     {
         string[] currentFileData = getFileData(saveFilePath);
-        if (currentFileData.Length < 4) return; // Not enough data
-        newDifficulty = Mathf.Clamp(newDifficulty, 1, maxDifficulty);
+
+        // Ensure we have enough data in the file
+        if (currentFileData.Length < 4)
+        {
+            Debug.LogWarning("Save file does not contain enough data");
+            return;
+        }
+
+        if (newDifficulty < 1)
+        {
+            newDifficulty = 1;
+        }
+        else if (newDifficulty > maxDifficulty)
+        {
+            newDifficulty = maxDifficulty;
+        }
+
         writeFileData(saveFilePath, new string[]{
-            currentFileData[0],
-            currentFileData[1],
-            currentFileData[2],
-            newDifficulty.ToString(),
-            currentFileData[3],
-            "true"
+            currentFileData[0], //currentPlayerLives
+            currentFileData[1], //totalPoints
+            currentFileData[2], //totalEnemiesKilled
+            newDifficulty + "",  //currentDifficulty
+            currentFileData[3],  //playerLifeTimer
+            true + "" //isTrainingMode
         }, true);
     }
 
-    /// <summary>
-    /// Sets the index of the next level to load after feedback.
-    /// </summary>
     public void SetNextLevel(int newNextLevel)
     {
         nextLevel = newNextLevel;
     }
 
-    /// <summary>
-    /// Initializes internal file data and current difficulty level.
-    /// </summary>
     public void SetFileData(string[] newFileData)
     {
         fileData = newFileData;
-        currentDifficulty = int.Parse(fileData[3]);
+        currentDifficulty = System.Int32.Parse(fileData[3]);
     }
 
-    /// <summary>
-    /// Called when player indicates the difficulty was too easy.
-    /// Saves AI data, adjusts game difficulty upward, and loads the next level.
-    /// </summary>
     public void TooEasyAdjustment()
     {
         saveAITrainingData(currentDifficulty + 1);
@@ -103,10 +128,6 @@ public class PauseScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Called when player indicates the difficulty was just right.
-    /// Saves AI data without adjusting difficulty and proceeds.
-    /// </summary>
     public void JustRightAdjustment()
     {
         saveAITrainingData(currentDifficulty);
@@ -114,10 +135,6 @@ public class PauseScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Called when player indicates the difficulty was too hard.
-    /// Saves AI data, adjusts game difficulty downward, and loads the next level.
-    /// </summary>
     public void TooHardAdjustment()
     {
         saveAITrainingData(currentDifficulty - 1);
@@ -126,9 +143,6 @@ public class PauseScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Unity Start: updates the displayed context message with current difficulty.
-    /// </summary>
     void Start()
     {
         contextMessage.text = "Current Difficulty Level: " + currentDifficulty;
