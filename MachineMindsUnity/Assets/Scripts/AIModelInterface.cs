@@ -14,12 +14,17 @@ public class AIModelInterface : MonoBehaviour
     private int predictedDifficulty = -101;
 
     // Call this method whenever you need to get a prediction
+    /// <summary>
+    /// Invokes the external Python model and returns the predicted difficulty adjustment.
+    /// </summary>
     public int GetPredictedDifficulty()
     {
         RunPythonModel();
         return predictedDifficulty;
     }
-
+    /// 
+    /// Determines the correct Python executable path based on the current platform and build.
+    /// 
     private string GetPythonPath()
     {
 #if UNITY_EDITOR
@@ -44,6 +49,7 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_WEBGL
         UnityEngine.Debug.Log("ERROR, Python path not supported on WebGL yet, must boot up a back end for it");
         return "";
+    
 #else
         UnityEngine.Debug.Log("Setting python path on other platform");
         //UnityEngine.Debug.Log(Path.Combine(Application.streamingAssetsPath, "AI\\in_game_env\\Scripts\\python"));
@@ -51,7 +57,9 @@ public class AIModelInterface : MonoBehaviour
 #endif
 #endif
     }
-
+    /// <summary>
+    /// Returns the file path to the Python script (run_model.py) in StreamingAssets.
+    /// </summary>
     private string GetScriptPath()
     {
 #if UNITY_EDITOR_WIN
@@ -61,6 +69,7 @@ public class AIModelInterface : MonoBehaviour
 #elif UNITY_STANDALONE_WIN
     UnityEngine.Debug.Log("Path 2: [" + Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py") + "]");
     return Path.Combine(Application.streamingAssetsPath, "AI\\run_model.py");
+    
 #elif UNITY_STANDALONE_OSX
     return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #elif UNITY_STANDALONE_WEBGL
@@ -72,7 +81,9 @@ public class AIModelInterface : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Spawns a Python process, runs the ML model script with parameters, and updates the prediction.
+    /// </summary>
     private void RunPythonModel()
     {
         // Create process
