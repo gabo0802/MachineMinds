@@ -1,8 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Controls a visual flying missile effect: scales, rotates, and moves toward a target,
+/// spawns reticle, and triggers an explosion on arrival.
+/// </summary>
 public class FlyingMissileEffectScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public Vector3 targetPosition = Vector3.zero;
     private float totalDistanceToTarget;
     private float currentDistanceFromTarget;
@@ -18,87 +21,88 @@ public class FlyingMissileEffectScript : MonoBehaviour
     private float sizeChangeScale = 0.02f;
     private float speedScale = 0.05f;
 
-
+    /// <summary>
+    /// Sets the missile's target position, instantiates reticle,
+    /// and initializes scaling factors based on distance.
+    /// </summary>
     void setTargetPosition(Vector3 newPosition)
     {
         targetPosition = newPosition;
-
-        currentReticle = Instantiate(targetReticle, targetPosition, new Quaternion(0, 0, 0, 0));
-
+        currentReticle = Instantiate(targetReticle, targetPosition, Quaternion.identity);
         totalDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
         transform.up = targetPosition - transform.position;
         angleChangeScale /= totalDistanceToTarget;
         sizeChangeScale /= totalDistanceToTarget;
     }
 
+    /// <summary>
+    /// Adjusts the speed scaling factor for missile movement.
+    /// </summary>
     void setSpeedScale(float newSpeed)
     {
         speedScale = newSpeed;
     }
 
+    /// <summary>
+    /// Adjusts the angle change speed, factoring in distance.
+    /// </summary>
     void setAngleChangeSpeed(float newSpeed)
     {
-        angleChangeScale = newSpeed;
-        angleChangeScale /= totalDistanceToTarget;
+        angleChangeScale = newSpeed / totalDistanceToTarget;
     }
 
+    /// <summary>
+    /// Unity Start (unused placeholder for potential initialization).
+    /// </summary>
     void Start()
     {
-        /*targetPosition = new Vector3(Random.Range(-20, 0), Random.Range(-5, 5), 0);
-        //targetPosition = (Vector3)((Vector2) Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        currentReticle = Instantiate(targetReticle, targetPosition, new Quaternion(0, 0, 0, 0));
-
-        totalDistanceToTarget = Vector3.Distance(transform.position, targetPosition);
-        transform.up = targetPosition - transform.position;
-        angleChangeScale /= totalDistanceToTarget;
-        sizeChangeScale /= totalDistanceToTarget;*/
+        // Initialization handled in setTargetPosition
     }
 
+    /// <summary>
+    /// Called when missile reaches its path end: spawns explosion,
+    /// notifies nearby objects, and cleans up reticle and missile.
+    /// </summary>
     void EndOfPath()
     {
-        Collider2D[] allExplodedObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-        GameObject currentExplosionObject = (GameObject)Instantiate(explosionObject, transform.position, transform.rotation);
-        currentExplosionObject.transform.localScale = new Vector3(explosionRadius * worldScale, explosionRadius * worldScale, 1);
-
-        Debug.DrawLine(transform.position - new Vector3(explosionRadius, 0, 0), transform.position + new Vector3(explosionRadius, 0, 0), Color.red, 2.5f);
-        Debug.DrawLine(transform.position - new Vector3(0, explosionRadius, 0), transform.position + new Vector3(0, explosionRadius, 0), Color.red, 2.5f);
-
-
-        foreach (Collider2D currentExplodedObject in allExplodedObjects)
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+        GameObject explosion = Instantiate(explosionObject, transform.position, transform.rotation);
+        explosion.transform.localScale = new Vector3(explosionRadius * worldScale,
+                                                    explosionRadius * worldScale,
+                                                    1);
+        foreach (Collider2D col in hitObjects)
         {
-            currentExplodedObject.transform.SendMessageUpwards("OnExplosionHit");
+            col.transform.SendMessageUpwards("OnExplosionHit");
         }
     }
 
-    void OnExplosionHit()
-    {
-        return;
-    }
+    /// <summary>
+    /// Receives explosion hit messages (no action required here).
+    /// </summary>
+    void OnExplosionHit() { }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Updates missile scaling, rotation, movement each frame,
+    /// and triggers end-of-path logic when target reached.
+    /// </summary>
     void Update()
     {
         currentDistanceFromTarget = Vector3.Distance(transform.position, targetPosition);
-        float sizeChangeScaleWeighted = sizeChangeScale * Time.deltaTime * 500f;
-        float speedScaleWeighted = speedScale * Time.deltaTime * 500f;
-        float angleChangeScaleWeighted = angleChangeScale * Time.deltaTime * 500f;
+
+        float sizeDelta = sizeChangeScale * Time.deltaTime * 500f;
+        float speedDelta = speedScale * Time.deltaTime * 500f;
+        float angleDelta = angleChangeScale * Time.deltaTime * 500f;
 
         if (currentDistanceFromTarget > totalDistanceToTarget / 2)
         {
-            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x + sizeChangeScaleWeighted,
-                                                missileObject.transform.localScale.y + sizeChangeScaleWeighted,
-                                                missileObject.transform.localScale.z + sizeChangeScaleWeighted);
-
-            transform.position += transform.up * speedScaleWeighted;
+            missileObject.transform.localScale += Vector3.one * sizeDelta;
+            transform.position += transform.up * speedDelta;
         }
         else if (currentDistanceFromTarget > 0.1f)
         {
-            missileObject.transform.Rotate(angleChangeScaleWeighted, 0, 0);
-
-            missileObject.transform.localScale = new Vector3(missileObject.transform.localScale.x - sizeChangeScaleWeighted,
-                                                missileObject.transform.localScale.y - sizeChangeScaleWeighted,
-                                                missileObject.transform.localScale.z - sizeChangeScaleWeighted);
-            transform.position += transform.up * speedScaleWeighted;
+            missileObject.transform.Rotate(angleDelta, 0, 0);
+            missileObject.transform.localScale -= Vector3.one * sizeDelta;
+            transform.position += transform.up * speedDelta;
         }
         else
         {
