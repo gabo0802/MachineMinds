@@ -89,7 +89,7 @@ public class BulletBehavior : MonoBehaviour
         Vector2 newDir = Vector2.Reflect(moveDirection, hit.normal);
         float angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        rb.velocity = newDir * bulletSpeed;
+        rb.linearVelocity = newDir * bulletSpeed;
         if (bounceBounceSoundPlayer)
         {
             volumeAdjustments();
@@ -154,7 +154,7 @@ public class BulletBehavior : MonoBehaviour
         else
         {
             if (!pathFinder)
-                rb.velocity = moveDir * bulletSpeed;
+                rb.linearVelocity = moveDir * bulletSpeed;
             else
             {
                 pathFinder.maxSpeed = bulletSpeed;

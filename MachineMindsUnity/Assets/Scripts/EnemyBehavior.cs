@@ -3,18 +3,14 @@ using UnityEngine;
 using Pathfinding;
 using UnityEngine.Rendering;
 
-/// <summary>
-/// Governs enemy AI: patrol and targeting behaviors, health scaling,
-/// shooting mechanics, and hit/explosion responses based on difficulty.
-/// </summary>
 public class EnemyBehavior : MonoBehaviour
 {
-    private const float difficultyScaleHealth = 1.15f;
-    private const float difficultyScaleFireRate = 1.12f;
-
+    private const float difficultyScaleHealth = 1.15f; //15% increases
+    private const float difficultyScaleFireRate = 1.12f; //12% increases
     private Rigidbody2D rb;
+    int layerMask;
+
     private AIPath path;
-    private int layerMask;
 
     private Vector2 patrolDestination;
     private Vector2 lastPosition;
@@ -22,11 +18,13 @@ public class EnemyBehavior : MonoBehaviour
     private float stuckCheckInterval = 0.5f;
 
     public GameObject cannonHead;
+    private float turretRotationSpeedMultiplier = 1f;
+
     public GameObject tireThreads;
     public float tireThreadCreateInterval = 0.5f;
     private float tireThreadCreateTimer = 0f;
 
-    public int maxEnemyHealth;
+    public int maxEnemyHealth; //# bullets they can survive
     private int defaultEnemyHealth;
     private int currentEnemyHealth;
 
@@ -42,6 +40,7 @@ public class EnemyBehavior : MonoBehaviour
     public float pointsWorth = 100;
     public int currentDifficulty = 1;
     private GameObject levelManager;
+
     private GameObject currentAlivePlayer;
     private const string playerName = "player";
 
@@ -56,224 +55,269 @@ public class EnemyBehavior : MonoBehaviour
     public int stealthBonusDamage = 2;
     public int redirectBonusDamage = 4;
 
-    /// <summary>
-    /// Applies saved sound effect volume to shooting and hit audio sources.
-    /// </summary>
-    private void volumeAdjustments()
-    {
-        if (enemyShootSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume"))
+    private void volumeAdjustments(){
+        if (enemyShootSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
             enemyShootSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
 
-        if (enemyHitSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume"))
+        if (enemyHitSoundPlayer && PlayerPrefs.HasKey("SoundEffectVolume")){
             enemyHitSoundPlayer.volume = PlayerPrefs.GetFloat("SoundEffectVolume");
+        }
     }
-
-    /// <summary>
-    /// Instantiates a detect-player effect when the enemy spots the player.
-    /// </summary>
-    private void onDetectPlayer()
-    {
-        if (enemyDetectPlayerEffectObject)
-        {
-            var detectObj = Instantiate(
-                enemyDetectPlayerEffectObject,
-                enemyHealthBarComponents[1].transform.position,
-                enemyHealthBarComponents[1].transform.rotation);
+    
+    private void onDetectPlayer(){
+        if(enemyDetectPlayerEffectObject){
+            GameObject detectObj = (GameObject) Instantiate(enemyDetectPlayerEffectObject, enemyHealthBarComponents[1].transform.position, enemyHealthBarComponents[1].transform.rotation);
             detectObj.transform.SetParent(enemyHealthBarComponents[1].transform);
         }
     }
 
-    /// <summary>
-    /// Modifies movement speed multiplier (e.g., for slow or boost effects).
-    /// </summary>
     public void AffectSpeed(float newMultiplier)
     {
         enemyMoveSpeedMultiplier = newMultiplier;
     }
 
-    /// <summary>
-    /// Receives references for level manager and player to coordinate events.
-    /// </summary>
     public void SetGameObjects(GameObject[] parameters)
     {
         levelManager = parameters[0];
         currentAlivePlayer = parameters[1];
     }
 
-    /// <summary>
-    /// Scales max health according to difficulty level.
-    /// </summary>
     public void SetDifficultyLevel(int newDifficultyLevel)
     {
         currentDifficulty = newDifficultyLevel;
-        if (maxEnemyHealth == defaultEnemyHealth)
-        {
-            maxEnemyHealth = (int)(maxEnemyHealth * MathF.Pow(difficultyScaleHealth, currentDifficulty - 1));
+
+        if(maxEnemyHealth == defaultEnemyHealth){
+            maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
             currentEnemyHealth = maxEnemyHealth;
         }
         Debug.Log("Current Health Difficulty: " + currentEnemyHealth);
     }
 
-    /// <summary>
-    /// Handles being hit by an explosion: reduces health and triggers death logic.
-    /// </summary>
     void OnExplosionHit()
     {
-        currentEnemyHealth -= 1;
+        //Debug.Log(gameObject.name + " got hit be explosion");
+
+        currentEnemyHealth -= 1; //could make explosions instant kills?
+
         if (currentEnemyHealth <= 0)
         {
-            levelManager?.transform.SendMessage("OnEnemyDeath", pointsWorth);
-            if (enemyDeathObject)
+            if (levelManager)
             {
-                var deathObj = Instantiate(enemyDeathObject, transform.position, transform.rotation);
-                deathObj.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
+                levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
+            }
+
+            if(enemyDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(enemyDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
             }
             Destroy(gameObject);
         }
     }
 
-    /// <summary>
-    /// Processes bullet hits: applies damage, plays sounds, updates health bar, and handles death.
-    /// </summary>
     void OnBulletHit(GameObject bullet)
-    {
+    {   
         if (bullet)
-        {
-            if (!bullet.name.ToLower().Contains("player"))
+        {   
+            if(!bullet.name.ToLower().Contains("player")){
                 currentEnemyHealth -= redirectBonusDamage;
+            }
             Destroy(bullet);
         }
 
         if (!currentTarget)
-        {
-            patrolDestination = enemyMoveSpeed > 0f ?
-                (Vector2)currentAlivePlayer.transform.position : patrolDestination;
-            onDetectPlayer();
+        {   
+            if (enemyMoveSpeed > 0f)
+            {
+                patrolDestination = (Vector2)currentAlivePlayer.transform.position;
+            }
+            else
+            {
+                onDetectPlayer();
+                currentTarget = currentAlivePlayer;
+            }
+
             currentEnemyHealth -= stealthBonusDamage;
             enemyHitSoundPlayer.pitch = 1.2f;
-        }
-        else
-        {
+        }else{
             currentEnemyHealth -= 1;
             enemyHitSoundPlayer.pitch = 1f;
         }
 
-        enemyHitSoundPlayer?.Play();
-        UpdateHealthBar();
-
-        if (currentEnemyHealth <= 0)
-        {
-            levelManager?.transform.SendMessage("OnEnemyDeath", pointsWorth);
-            if (enemyDeathObject)
-            {
-                var deathObj = Instantiate(enemyDeathObject, transform.position, transform.rotation);
-                deathObj.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
-            }
-            Destroy(gameObject);
+        if(enemyHitSoundPlayer){
+            enemyHitSoundPlayer.Play();
         }
-    }
-
-    /// <summary>
-    /// Adjusts the visual health bar based on current health ratio.
-    /// </summary>
-    private void UpdateHealthBar()
-    {
+        
+        
         if (isBoss)
         {
             levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
         }
         else if (enemyHealthBarComponents.Length == 3)
         {
-            float ratio = (float)currentEnemyHealth / maxEnemyHealth;
-            var bar = enemyHealthBarComponents[0].transform;
-            bar.localScale = new Vector3(1.5f * ratio, bar.localScale.y, bar.localScale.z);
-            bar.localRotation = Quaternion.identity;
+            float xScaleNew = 1.5f * ((float)currentEnemyHealth / (float)maxEnemyHealth);
+            Vector3 originalScale = enemyHealthBarComponents[0].transform.localScale;
+
+            // Set the new scale
+            enemyHealthBarComponents[0].transform.localScale = new Vector3(xScaleNew, originalScale.y, originalScale.z);
+
+            // Ensure both bars have identical local rotation relative to their parent
+            enemyHealthBarComponents[0].transform.localRotation = Quaternion.identity;
             enemyHealthBarComponents[1].transform.localRotation = Quaternion.identity;
-            bar.localPosition = new Vector3((1.5f / (maxEnemyHealth * 2f)) * (currentEnemyHealth - maxEnemyHealth),
-                                           bar.localPosition.y,
-                                           bar.localPosition.z);
-            enemyHealthBarComponents[0].GetComponent<SpriteRenderer>().color = Color.green;
-            enemyHealthBarComponents[1].GetComponent<SpriteRenderer>().color = Color.red;
+
+            float xPositionNew = (1.5f / (maxEnemyHealth * 2f)) * (currentEnemyHealth - maxEnemyHealth);
+
+            // Make sure both bars are at the same height/z-position
+            float yPos = enemyHealthBarComponents[1].transform.localPosition.y;
+            enemyHealthBarComponents[0].transform.localPosition = new Vector3(
+                xPositionNew,
+                yPos,
+                enemyHealthBarComponents[0].transform.localPosition.z
+            );
+
+            enemyHealthBarComponents[0].GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 1);
+            enemyHealthBarComponents[1].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
+        }
+
+        if (currentEnemyHealth <= 0)
+        {
+            if (levelManager)
+            {
+                levelManager.transform.SendMessage("OnEnemyDeath", pointsWorth);
+            }
+
+            if(enemyDeathObject){
+                GameObject currentEnemyDeathObject = (GameObject)Instantiate(enemyDeathObject, transform.position, transform.rotation);
+                currentEnemyDeathObject.SendMessageUpwards("setExplosionMaxRadius", transform.localScale.magnitude * 2f);
+            }
+            Destroy(gameObject);
         }
     }
 
-    /// <summary>
-    /// Prevents AI pathfinding from getting stuck by rotating or choosing new patrol points.
-    /// </summary>
     private void PathFindingStuckFix(bool isPatrolling)
     {
         if (stuckCheckTimer <= 0)
         {
-            var latestPosition = (Vector2)transform.position;
+            Vector2 latestPosition = (Vector2)transform.position;
             stuckCheckTimer = stuckCheckInterval;
+
             if (Vector2.Distance(latestPosition, lastPosition) <= 0.01f)
             {
                 if (isPatrolling)
+                {
                     patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
+                }
                 else
+                {
+                    //Debug.Log("Stuck");
                     transform.Rotate(0, 0, 180f);
+                    //rb.AddForce(-transform.up * 5000f);
+                }
             }
+
             lastPosition = latestPosition;
         }
+
         stuckCheckTimer -= Time.deltaTime;
     }
 
-    /// <summary>
-    /// Executes turret rotation and patrol movement, transitioning to player detection.
-    /// </summary>
+
+    private float currentAngle;
+    private float turnTimer;
+
     private void PatrolBehavior()
     {
-        float speed = 60f * turretRotationSpeedMultiplier;
-        cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * speed, 160) - 80);
-        var ray = Physics2D.Raycast(cannonHead.transform.position + cannonHead.transform.up * bulletShotSpawnOffset,
-                                    cannonHead.transform.up, Mathf.Infinity, layerMask);
-        if (ray && ray.transform.gameObject.name.Equals(currentAlivePlayer.name, StringComparison.OrdinalIgnoreCase))
+        float rotationSpeed = 60f * turretRotationSpeedMultiplier;
+        cannonHead.transform.localEulerAngles = new Vector3(0, 0, Mathf.PingPong(Time.time * rotationSpeed, 160) - 80); //(-80, 80)
+
+        RaycastHit2D lookForPlayerRay = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+        RaycastHit2D lookForPlayerRay2 = Physics2D.Raycast(transform.position + (transform.up * bulletShotSpawnOffset), transform.up, Mathf.Infinity, layerMask);
+
+        Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.position + (cannonHead.transform.up * 100f), Color.white);
+        Debug.DrawLine(transform.position, transform.position + (transform.up * 100f), Color.blue);
+
+        if (lookForPlayerRay && lookForPlayerRay.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
         {
             currentTarget = currentAlivePlayer;
             onDetectPlayer();
-            cannonHead.transform.localEulerAngles = Vector3.zero;
+            cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
         }
+        else if (lookForPlayerRay2 && lookForPlayerRay2.transform.gameObject.name.Equals(currentAlivePlayer.transform.gameObject.name))
+        {
+            onDetectPlayer();
+            currentTarget = currentAlivePlayer;
+            cannonHead.transform.localEulerAngles = new Vector3(0, 0, 0);
+        }
+
         if (!currentTarget && enemyMoveSpeed > 0f)
         {
+            //path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
             path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;
             if (Vector2.Distance(transform.position, patrolDestination) <= 2f)
+            {
                 patrolDestination = new Vector2(UnityEngine.Random.Range(-21, -4), UnityEngine.Random.Range(-3, 4));
+            }
             PathFindingStuckFix(true);
             path.destination = patrolDestination;
         }
     }
 
-    /// <summary>
-    /// Rotates turret toward player, manages slowing/slippery mechanics, and handles shooting logic.
-    /// </summary>
+    private const float slipperyIceSpeed = 5f;
     private void TargetPlayerBehavior()
     {
         cannonHead.transform.up = currentTarget.transform.position - transform.position;
-        cannonHead.transform.rotation = Quaternion.Euler(0, 0, cannonHead.transform.eulerAngles.z);
-        var scan = Physics2D.Raycast(cannonHead.transform.position + cannonHead.transform.up * bulletShotSpawnOffset,
-                                     cannonHead.transform.up, Mathf.Infinity, layerMask);
-        var canSee = scan && scan.transform.gameObject.name.ToLower().Contains(playerName);
-        path.maxSpeed = canSee ? 0.01f : enemyMoveSpeed * enemyMoveSpeedMultiplier;
-        if (!canSee || shootIfCannotSeePlayer)
-            path.destination = currentTarget.transform.position;
-        PathFindingStuckFix(false);
+        cannonHead.transform.rotation = Quaternion.Euler(new Vector3(0, 0, cannonHead.transform.eulerAngles.z));
 
-        if (enemyShootTimer >= enemyShootInterval / MathF.Pow(difficultyScaleFireRate, currentDifficulty - 1))
+        RaycastHit2D scanAhead = Physics2D.Raycast(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.up, Mathf.Infinity, layerMask);
+
+        if (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName) && enemyMoveSpeedMultiplier != slipperyIceSpeed)
         {
-            if (canSee || shootIfCannotSeePlayer)
+            if (enemyMoveSpeed > 0f)
             {
-                if (enemyBullet)
-                {
-                    var bullet = Instantiate(enemyBullet,
-                                              cannonHead.transform.position + cannonHead.transform.up * bulletShotSpawnOffset,
-                                              cannonHead.transform.rotation);
-                    bullet.SendMessageUpwards("SetTarget", currentAlivePlayer);
+                path.maxSpeed = 0.01f;
+            }
+        }
+        else
+        {
+            if (enemyMoveSpeed > 0f)
+            {
+                //path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier * Mathf.Pow(difficultyScale, currentDifficulty - 1);
+                path.maxSpeed = enemyMoveSpeed * enemyMoveSpeedMultiplier;                
+                path.destination = currentTarget.transform.position;
+            }
+
+            PathFindingStuckFix(false);
+        }
+
+        if (enemyShootTimer >= enemyShootInterval / Mathf.Pow(difficultyScaleFireRate, currentDifficulty - 1))
+        {
+            //Debug.Log(hit.transform.gameObject.name);
+            if (shootIfCannotSeePlayer || (scanAhead && scanAhead.transform.gameObject.name.ToLower().Contains(playerName)))
+            {   
+                if(enemyBullet){
+                    GameObject currentBullet = currentBullet = (GameObject)Instantiate(enemyBullet, cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset), cannonHead.transform.rotation);
+                    currentBullet.SendMessageUpwards("SetTarget", currentAlivePlayer);
+
+                    Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                    cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
+                    Color.green, enemyShootInterval / 2);
                     enemyShootTimer = 0f;
                     enemyShootSoundPlayer.Play();
                 }
             }
+            else if (scanAhead)
+            {
+                Debug.Log(scanAhead.transform.gameObject.name);
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * scanAhead.distance),
+                Color.red, enemyShootInterval / 2);
+                enemyShootTimer = enemyShootInterval / (currentDifficulty * 2f);
+            }
             else
             {
+                Debug.DrawLine(cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset),
+                cannonHead.transform.position + (cannonHead.transform.up * bulletShotSpawnOffset) + (cannonHead.transform.up * 100f),
+                Color.white, enemyShootInterval / 2);
                 enemyShootTimer = enemyShootInterval / (currentDifficulty * 2f);
             }
         }
@@ -283,36 +327,50 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Unity Start: initializes health, pathfinder, rigidbody, and spawn offsets.
-    /// </summary>
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         defaultEnemyHealth = maxEnemyHealth;
-        layerMask = ~LayerMask.GetMask("InteractableGround");
-        currentDifficulty = Math.Max(currentDifficulty, 1);
-        maxEnemyHealth = Math.Max(maxEnemyHealth, 1);
+        layerMask = ~LayerMask.GetMask("InteractableGround"); // Ignores "NoBounce" layer
+
+        if (currentDifficulty < 1)
+        {
+            currentDifficulty = 1;
+        }
+
+        if (maxEnemyHealth < 1)
+        {
+            maxEnemyHealth = 1;
+        }
+
         bulletShotSpawnOffset += (transform.localScale.magnitude / 2) + 0.1f;
-        maxEnemyHealth = (int)(maxEnemyHealth * MathF.Pow(difficultyScaleHealth, currentDifficulty - 1));
+        maxEnemyHealth = (int)(maxEnemyHealth * Mathf.Pow(difficultyScaleHealth, currentDifficulty - 1));
         currentEnemyHealth = maxEnemyHealth;
+        //Debug.Log("Current Health: " + currentEnemyHealth);
         rb = GetComponent<Rigidbody2D>();
         path = GetComponent<AIPath>();
-        lastPosition = transform.position;
-        patrolDestination = transform.position;
+
+        lastPosition = (Vector2)transform.position;
+        patrolDestination = (Vector2)transform.position;
     }
 
-    /// <summary>
-    /// Unity Update: handles volume, health bar rotation, trail spawning, and selects behavior mode.
-    /// </summary>
+
+    // Update is called once per frame
     void Update()
     {
         volumeAdjustments();
+
         if (isBoss)
-            levelManager?.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
+        {
+            if (levelManager)
+            {
+                levelManager.transform.SendMessage("updateBossHealhBar", new int[] { currentEnemyHealth, maxEnemyHealth });
+            }
+        }
 
         if (tireThreads)
         {
-            if (path.maxSpeed > 0.01f && tireThreadCreateTimer <= 0)
+            if (path.maxSpeed > 0.01f && tireThreadCreateTimer < 0)
             {
                 tireThreadCreateTimer = tireThreadCreateInterval;
                 Instantiate(tireThreads, transform.position, transform.rotation);
@@ -325,20 +383,27 @@ public class EnemyBehavior : MonoBehaviour
 
         if (!currentAlivePlayer)
         {
+            //Player is Dead
             path.maxSpeed = 0f;
             path.destination = transform.position;
             transform.Rotate(0, 0, 1f);
+
         }
         else if (!currentTarget)
         {
+            //Patrol Behavior
             PatrolBehavior();
         }
         else
         {
+            //Target Player Behavior
             TargetPlayerBehavior();
         }
 
         if (enemyHealthBarComponents.Length == 3)
+        {
             enemyHealthBarComponents[2].transform.rotation = Quaternion.Euler(0, 0, -transform.rotation.z);
+        }
     }
+
 }
