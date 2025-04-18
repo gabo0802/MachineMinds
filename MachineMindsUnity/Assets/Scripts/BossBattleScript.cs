@@ -30,13 +30,11 @@ public class BossBattleScript : MonoBehaviour
     public GameObject missileObject;
     public int numMissiles = 5;
     public float enemyMissileShootInterval = 5f;
-    private float enemyShootTimer = 0f;
 
     public GameObject lazerBeamObject;
     public GameObject lazerBeamObjectHarmless;
     public float enemyLazerShootInterval = 5f;
     public float enemyLazerShootDuration = 5f;
-    private float enemyShootTimer2 = 0f;
     private GameObject currentLazerBeam;
     public float rotationSpeed = 50f;
     private int spinDirection = 1;
