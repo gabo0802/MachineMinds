@@ -6,7 +6,7 @@ using TMPro;
 
 public class Leaderboards : MonoBehaviour
 {
-    private const int MAX_ENTRIES = 5;
+    private const int MAX_ENTRIES = 10;
     public TMPro.TextMeshProUGUI leaderboardText;
 
     public TMPro.TextMeshProUGUI rankList;
@@ -37,21 +37,27 @@ public class Leaderboards : MonoBehaviour
     }
 
     private void DisplayLeaderboards(List<LeaderboardEntry> entries)
-    {
-        leaderboardText.text = "";
-        rankList.text = "";
-        scoreList.text = "";
-        dateList.text = "";
+{
+    leaderboardText.text = "";
+    rankList.text    = "";
+    scoreList.text   = "";
+    dateList.text    = "";
 
-        foreach (var entry in entries)
-        {
-            if (entry.rank <= MAX_ENTRIES)
-            {
-                leaderboardText.text += $"{entry.rank}\t{entry.score}\t{entry.date}\n";
-                
-            }
-        }
+    foreach (var entry in entries)
+    {
+        if (entry.rank > MAX_ENTRIES) 
+            continue;
+
+        int scoreInt = Mathf.RoundToInt(entry.score);
+
+        string scoreStr = scoreInt < 1_000_000
+            ? scoreInt.ToString("D7")
+            : scoreInt.ToString();
+            
+        leaderboardText.text += $"      {entry.rank}\t\t   {scoreStr}\t   {entry.date}\n";
+        
     }
+}
 
 
     public void exitMenu()

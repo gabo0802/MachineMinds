@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class OptionsMenuScript : MonoBehaviour
@@ -61,4 +60,4 @@ public class OptionsMenuScript : MonoBehaviour
             Destroy(gameObject);
         }
     }
-}
+} 
