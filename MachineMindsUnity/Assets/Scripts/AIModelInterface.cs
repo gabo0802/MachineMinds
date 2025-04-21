@@ -1,6 +1,10 @@
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Runtime.InteropServices;
+using System.Collections;
+using System.Threading;
 
 public class AIModelInterface : MonoBehaviour
 {
@@ -11,13 +15,193 @@ public class AIModelInterface : MonoBehaviour
     public float playerLifeTimer = 0;
     public int totalEnemiesKilled = 0;
     public float totalPoints = 0;
-    private int predictedDifficulty = -101;
+    public int predictedDifficulty = -101;
 
-    // Call this method whenever you need to get a prediction
+    [System.Serializable]
+    private class ModelRequest
+    {
+        public int currentDifficulty;
+        public int currentPlayerLives;
+        public int levelsBeat;
+        public float playerLifeTimer;
+        public int totalEnemiesKilled;
+        public float totalPoints;
+    }
+
+    [System.Serializable]
+    private class ModelResponse
+    {
+        public int prediction;
+    }
+
+    // Legacy method for backwards compatibility
     public int GetPredictedDifficulty()
     {
-        RunPythonModel();
+#if UNITY_WEBGL || UNITY_EDITOR
+        // For WebGL and Editor, use synchronous web request (not recommended but kept for compatibility)
+        string jsonString = JsonUtility.ToJson(new ModelRequest
+        {
+            currentDifficulty = this.currentDifficulty,
+            currentPlayerLives = this.currentPlayerLives,
+            levelsBeat = this.levelsBeat,
+            playerLifeTimer = this.playerLifeTimer,
+            totalEnemiesKilled = this.totalEnemiesKilled,
+            totalPoints = this.totalPoints
+        });
+
+        using (UnityWebRequest request = new UnityWebRequest("https://machinemindsbackend.onrender.com/predict", "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonString);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            
+            request.SendWebRequest();
+
+            // Wait for completion (synchronously)
+            while (!request.isDone) { }
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                var response = JsonUtility.FromJson<ModelResponse>(request.downloadHandler.text);
+                predictedDifficulty = response.prediction;
+            }
+            else
+            {
+                UnityEngine.Debug.LogError($"Request failed: {request.error}");
+                predictedDifficulty = -101;
+            }
+        }
+#else
+        // Original Python implementation for standalone builds
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = GetPythonPath(),
+            Arguments = $"-W ignore \"{GetScriptPath()}\" {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
+        };
+
+        using (Process process = new Process { StartInfo = startInfo })
+        {
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            process.WaitForExit();
+
+            if (string.IsNullOrEmpty(error))
+            {
+                if (int.TryParse(output.Trim(), out int result))
+                {
+                    predictedDifficulty = result;
+                    UnityEngine.Debug.Log($"Predicted difficulty change: {predictedDifficulty}");
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError($"Failed to parse model output: {output}");
+                    predictedDifficulty = -101;
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.LogError($"Python error: {error}");
+                predictedDifficulty = -101;
+            }
+        }
+#endif
         return predictedDifficulty;
+    }
+
+    // Modern async method (recommended for new implementations)
+    public System.Collections.IEnumerator GetPredictedDifficultyCoroutine()
+    {
+#if UNITY_WEBGL || UNITY_EDITOR
+        var requestData = new ModelRequest
+        {
+            currentDifficulty = this.currentDifficulty,
+            currentPlayerLives = this.currentPlayerLives,
+            levelsBeat = this.levelsBeat,
+            playerLifeTimer = this.playerLifeTimer,
+            totalEnemiesKilled = this.totalEnemiesKilled,
+            totalPoints = this.totalPoints
+        };
+
+        string jsonData = JsonUtility.ToJson(requestData, true);
+        UnityEngine.Debug.Log($"Sending request with data: {jsonData}");
+
+        using (UnityWebRequest request = new UnityWebRequest("https://machinemindsbackend.onrender.com/predict", "POST"))
+        {
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                var response = JsonUtility.FromJson<ModelResponse>(request.downloadHandler.text);
+                predictedDifficulty = response.prediction;
+            }
+            else
+            {
+                UnityEngine.Debug.LogError($"Request failed: {request.error}");
+                predictedDifficulty = -101;
+            }
+        }
+#else
+        // Run Python process asynchronously
+        yield return new WaitForEndOfFrame();
+
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = GetPythonPath(),
+            Arguments = $"-W ignore \"{GetScriptPath()}\" {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
+        };
+
+        using (Process process = new Process { StartInfo = startInfo })
+        {
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            process.WaitForExit();
+
+            if (string.IsNullOrEmpty(error) && int.TryParse(output.Trim(), out int result))
+            {
+                predictedDifficulty = result;
+            }
+            else
+            {
+                UnityEngine.Debug.LogError($"Python error: {error}");
+                predictedDifficulty = -101;
+            }
+        }
+#endif
+    }
+    public IEnumerator GetPredictedDifficultyCoroutine(System.Action<int> callback)
+    {
+        yield return GetPredictedDifficultyCoroutine(); // reuse existing coroutine
+
+        if (callback != null)
+        {
+            callback(predictedDifficulty);
+        }
+    }
+
+    // Helper method for modern async usage
+    public void GetPredictedDifficultyAsync(System.Action<int> callback)
+    {
+        StartCoroutine(GetPredictedDifficultyCoroutine(callback));
     }
 
     private string GetPythonPath()
@@ -69,52 +253,5 @@ public class AIModelInterface : MonoBehaviour
 #else
         return Path.Combine(Application.streamingAssetsPath, "AI/run_model.py");
 #endif
-    }
-
-
-
-    private void RunPythonModel()
-    {
-        // Create process
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = GetPythonPath(),
-            Arguments = $"-W ignore \"{GetScriptPath()}\" {currentDifficulty} {currentPlayerLives} {levelsBeat} {playerLifeTimer} {totalEnemiesKilled} {totalPoints}",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true
-        };
-
-        UnityEngine.Debug.Log(currentDifficulty + " " + currentPlayerLives + " " + levelsBeat + " " + playerLifeTimer + " " + totalEnemiesKilled + " " + totalPoints);
-
-        // Execute process and get output
-        using (Process process = new Process { StartInfo = startInfo })
-        {
-            process.Start();
-
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-            process.WaitForExit();
-
-            if (string.IsNullOrEmpty(error))
-            {
-                // Parse the output to get the predicted difficulty
-                if (int.TryParse(output.Trim(), out int result))
-                {
-                    predictedDifficulty = result;
-                    UnityEngine.Debug.Log($"Predicted difficulty change: {predictedDifficulty}");
-                }
-                else
-                {
-                    UnityEngine.Debug.LogError($"Failed to parse model output: {output}");
-                }
-            }
-            else
-            {
-                UnityEngine.Debug.LogError($"Python error: {error}");
-            }
-        }
     }
 }

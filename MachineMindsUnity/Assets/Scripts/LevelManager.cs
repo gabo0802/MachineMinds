@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -116,14 +115,17 @@ public class LevelManager : MonoBehaviour
 
     //Functions:
 
-    private void forceDifficultyDecrease(){
-        if(!PlayerPrefs.HasKey("TotalDeathsSinceNewCheckpoint")){
+    private void forceDifficultyDecrease()
+    {
+        if (!PlayerPrefs.HasKey("TotalDeathsSinceNewCheckpoint"))
+        {
             PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
         }
 
-        if(PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6){
+        if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6)
+        {
             Debug.LogWarning("Forced Difficulty Decrease");
-            currentDifficulty -= 1; 
+            currentDifficulty -= 1;
             //currentDifficulty -= (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") / 6); 
         }
     }
@@ -286,7 +288,8 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-        if(!playerIsInvincible){
+        if (!playerIsInvincible)
+        {
             float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
 
             /*if (pressedShootKey)
@@ -307,10 +310,13 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
-        
-        if(playerIsInvincible){
+
+        if (playerIsInvincible)
+        {
             ammoUI.text = "∞ / ∞";
-        }else{
+        }
+        else
+        {
             ammoUI.text = currentPlayerBullets + " / " + totalPlayerBullets;
         }
     }
@@ -499,10 +505,11 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if((currentLevelNumber + 1) % numberLevelsCheckpoint == 1){
+            if ((currentLevelNumber + 1) % numberLevelsCheckpoint == 1)
+            {
                 PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
             }
-            
+
             SceneManager.LoadScene(currentLevelNumber + 1, LoadSceneMode.Single);
 
         }
@@ -629,21 +636,27 @@ public class LevelManager : MonoBehaviour
     {
         aiModel.currentDifficulty = currentDifficulty;
         aiModel.currentPlayerLives = currentPlayerLives;
-        //aiModel.levelsBeat = wonLevel ? currentLevelNumber : currentLevelNumber - 1;
         aiModel.levelsBeat = currentLevelNumber;
         aiModel.playerLifeTimer = playerLifeTimer;
         aiModel.totalEnemiesKilled = totalEnemiesKilled;
         aiModel.totalPoints = totalPoints;
 
-        int predictedDifficulyChangeValue = aiModel.GetPredictedDifficulty();
+        StartCoroutine(AdjustDifficultyCoroutine());
+        adjustmentInProgress = false;
+    }
 
-        if (predictedDifficulyChangeValue == -101)
+
+    private System.Collections.IEnumerator AdjustDifficultyCoroutine()
+    {
+        yield return StartCoroutine(aiModel.GetPredictedDifficultyCoroutine());
+
+        if (aiModel.predictedDifficulty == -101)
         {
             Debug.Log("Issue With Script");
         }
         else
         {
-            currentDifficulty += predictedDifficulyChangeValue;
+            currentDifficulty += aiModel.predictedDifficulty;
             Debug.Log($"New Difficulty level in Level Manager: {currentDifficulty}");
         }
     }
@@ -809,10 +822,11 @@ public class LevelManager : MonoBehaviour
 
                     if (wonLevel)
                     {
-                       
+
                         if (!isTestLevel)
                         {
-                            if(musicPlayer.clip != winMusic){
+                            if (musicPlayer.clip != winMusic)
+                            {
                                 musicPlayer.Stop();
                                 musicPlayer.clip = winMusic;
                                 musicPlayer.loop = false;
@@ -826,32 +840,11 @@ public class LevelManager : MonoBehaviour
                             countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                             levelMessageUI.text = "You Won";
                             Debug.Log("Attempting to Adjust diffuculty.");
-                            if (!adjustmentInProgress && !updatedDifficulty)
+                            if (!adjustmentInProgress && !updatedDifficulty && !isTrainingMode)
                             {
-                                Debug.Log("Entering diffuculty adjustment thread.");
                                 adjustmentInProgress = true;
                                 updatedDifficulty = true;
-                                adjustDifficultyThread = new Thread(() =>
-                                {
-                                    try
-                                    {
-                                        Debug.Log("Acquiring mutex and adjusting difficulty.");
-                                        adjustmentMutex.WaitOne();
-                                        adjustGameDifficulty();
-                                    }
-                                    finally
-                                    {
-                                        Debug.Log("Releasing mutex and setting flags.");
-                                        adjustmentMutex.ReleaseMutex();
-                                        adjustmentInProgress = false;
-                                        updatedDifficulty = true;
-                                    }
-                                });
-
-                                if (!isTrainingMode)
-                                {
-                                    adjustDifficultyThread.Start();
-                                }
+                                adjustGameDifficulty();
                             }
                         }
                         else
@@ -888,7 +881,8 @@ public class LevelManager : MonoBehaviour
                 }
                 else
                 {
-                    if(musicPlayer.clip != lossMusic){
+                    if (musicPlayer.clip != lossMusic)
+                    {
                         musicPlayer.Stop();
                         musicPlayer.clip = lossMusic;
                         musicPlayer.loop = false;
