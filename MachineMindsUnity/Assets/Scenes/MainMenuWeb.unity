@@ -225,7 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadGameButton: {fileID: 0}
   controlsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
-  optionsMenuPrefab: {fileID: 0}
+  optionsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
   musicPlayer: {fileID: 0}
 --- !u!4 &172098588
 Transform:
