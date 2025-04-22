@@ -1238,7 +1238,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finalPointsUI: {fileID: 1059090629}
-  leaderboardsPrefab: {fileID: 0}
+  leaderboardsPrefab: {fileID: 4227258372502546876, guid: be33ec88d5991443aad38dc021d782c7, type: 3}
+  leaderboardsNamePrefab: {fileID: 4227258372502546876, guid: 406e180389b27fe49b5e22e51888be60, type: 3}
   musicPlayer: {fileID: 0}
 --- !u!4 &1770193896
 Transform:
