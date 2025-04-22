@@ -37,7 +37,7 @@ public class AIModelInterface : MonoBehaviour
     // Legacy method for backwards compatibility
     public int GetPredictedDifficulty()
     {
-#if UNITY_WEBGL || UNITY_EDITOR
+#if UNITY_WEBGL
         // For WebGL and Editor, use synchronous web request (not recommended but kept for compatibility)
         string jsonString = JsonUtility.ToJson(new ModelRequest
         {

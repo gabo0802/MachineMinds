@@ -122,11 +122,29 @@ public class LevelManager : MonoBehaviour
             PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
         }
 
-        if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6)
+        if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 12)
+        {
+            playerIsInvincible = true;
+        }
+        else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 9)
+        {
+            if(currentDifficulty > 3){
+                currentDifficulty = 3;
+            }else{
+                currentDifficulty -= 1;
+            }
+        }
+        else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6)
+        {
+            if(currentDifficulty > 5){
+                currentDifficulty = 5;
+            }else{
+                currentDifficulty -= 1;
+            }
+        }else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 3)
         {
             Debug.LogWarning("Forced Difficulty Decrease");
             currentDifficulty -= 1;
-            //currentDifficulty -= (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") / 6); 
         }
     }
     private void testLevelEnd()
@@ -554,6 +572,7 @@ public class LevelManager : MonoBehaviour
 
     private void goBackToCheckpointLevel()
     {
+        difficultyAdjustmentHelper();
         int goLevelNumber = currentLevelNumber % numberLevelsCheckpoint != 0 ? (currentLevelNumber - (currentLevelNumber % numberLevelsCheckpoint)) + 1 : currentLevelNumber - (numberLevelsCheckpoint - 1);
 
         if (isTrainingMode)
@@ -710,9 +729,9 @@ public class LevelManager : MonoBehaviour
         currentLevelNumber = SceneManager.GetActiveScene().buildIndex;
         LoadGameData();
 
+        playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
         forceDifficultyDecrease();
 
-        playerIsInvincible = (PlayerPrefs.GetInt("CheckpointLevelDeaths") > 5);
         if (playerIsInvincible)
         {
             currentDifficulty = 1;
@@ -762,6 +781,17 @@ public class LevelManager : MonoBehaviour
             beforeLevelObject.SendMessageUpwards("setLevelParameters", new int[] { currentLevelNumber, currentDifficulty });
             beforeLevelObject.SendMessageUpwards("setIsCheckpoint", (currentLevelNumber > 1 && currentLevelNumber % numberLevelsCheckpoint == 1));
             Time.timeScale = 0f;
+        }
+    }
+
+    void difficultyAdjustmentHelper(){
+         Debug.Log("Attempting to Adjust diffuculty.");
+        
+        if (!adjustmentInProgress && !updatedDifficulty && !isTrainingMode)
+        {
+            adjustmentInProgress = true;
+            updatedDifficulty = true;
+            adjustGameDifficulty();
         }
     }
 
@@ -839,13 +869,6 @@ public class LevelManager : MonoBehaviour
                             backgroundImage.color = new Color(0.16f, 0.42f, 0.56f, 1f);
                             countdownUI.text = Mathf.Round(playerCelebrateTime - currentWinTime) + "";
                             levelMessageUI.text = "You Won";
-                            Debug.Log("Attempting to Adjust diffuculty.");
-                            if (!adjustmentInProgress && !updatedDifficulty && !isTrainingMode)
-                            {
-                                adjustmentInProgress = true;
-                                updatedDifficulty = true;
-                                adjustGameDifficulty();
-                            }
                         }
                         else
                         {
@@ -854,6 +877,7 @@ public class LevelManager : MonoBehaviour
 
                         if (currentWinTime > playerCelebrateTime - 0.5 && currentWinTime < playerCelebrateTime)
                         {
+                            difficultyAdjustmentHelper();
                             levelMessageUI.text = "Updating Difficulty Level";
                             countdownUI.text = "";
                             currentWinTime += Time.deltaTime;
