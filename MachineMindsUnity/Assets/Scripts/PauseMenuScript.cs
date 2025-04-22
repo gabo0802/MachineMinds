@@ -38,9 +38,9 @@ public class PauseMenuScript : MonoBehaviour
     public void onOptionsButtonPress()
     {
         #if UNITY_WEBGL
-            additionalMenu = (GameObject) Instantiate(optionsMenuPrefab);
-        #else
             additionalMenu = (GameObject) Instantiate(optionsMenuPrefabWebGL);
+        #else
+            additionalMenu = (GameObject) Instantiate(optionsMenuPrefab);
         #endif
     }
 
