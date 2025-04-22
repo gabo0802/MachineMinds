@@ -224,8 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadGameButton: {fileID: 0}
-  controlsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
-  optionsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
+  controlsMenuPrefab: {fileID: 4227258372502546876, guid: 93e4d1c6047a26f4baab88a8fd71e05e, type: 3}
+  optionsMenuPrefab: {fileID: 4227258372502546876, guid: 2033e9e215a948249926bf216b3ce6ad, type: 3}
   musicPlayer: {fileID: 0}
 --- !u!4 &172098588
 Transform:
@@ -548,7 +548,6 @@ RectTransform:
   m_Children:
   - {fileID: 1608648435}
   - {fileID: 1977826676}
-  - {fileID: 1776156148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1407,11 +1406,11 @@ RectTransform:
   m_Children:
   - {fileID: 1903647}
   - {fileID: 711302550}
-  m_Father: {fileID: 623245751}
+  m_Father: {fileID: 1977826676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.999939, y: -148}
+  m_AnchoredPosition: {x: 0.000047445297, y: -105.39998}
   m_SizeDelta: {x: 210, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1902458188
@@ -1577,6 +1576,7 @@ RectTransform:
   m_Children:
   - {fileID: 182763569}
   - {fileID: 276769630}
+  - {fileID: 1776156148}
   m_Father: {fileID: 623245751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
