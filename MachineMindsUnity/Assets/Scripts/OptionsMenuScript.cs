@@ -11,12 +11,6 @@ public class OptionsMenuScript : MonoBehaviour
 
     void Start()
     {   
-        resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
-        
-        if (PlayerPrefs.HasKey("WindowFullScreen")){
-            isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
-        }
-
         if (PlayerPrefs.HasKey("MusicVolume")){
             musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
         }else{
@@ -28,6 +22,16 @@ public class OptionsMenuScript : MonoBehaviour
         }else{
             soundEffectVolumeSlider.value = 1f;
         }
+
+#if UNITY_WEBGL
+        Debug.log("no resolution options");
+#else
+        resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
+        
+        if (PlayerPrefs.HasKey("WindowFullScreen")){
+            isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
+        }
+#endif
     }
 
     public void onExitButtonPress(){
