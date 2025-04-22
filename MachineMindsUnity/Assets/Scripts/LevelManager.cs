@@ -523,7 +523,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if ((currentLevelNumber + 1) % numberLevelsCheckpoint == 1)
+            if ((currentLevelNumber + 1) % numberLevelsCheckpoint == 1 && currentLevelNumber != 1)
             {
                 PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
             }
