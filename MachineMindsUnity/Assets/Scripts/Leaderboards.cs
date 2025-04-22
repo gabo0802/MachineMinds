@@ -6,7 +6,7 @@ using TMPro;
 
 public class Leaderboards : MonoBehaviour
 {
-    private const int MAX_ENTRIES = 10;
+    private const int MAX_ENTRIES = 1000;
     public TMPro.TextMeshProUGUI leaderboardText;
 
     public TMPro.TextMeshProUGUI rankList;
@@ -48,13 +48,12 @@ public class Leaderboards : MonoBehaviour
         if (entry.rank > MAX_ENTRIES) 
             continue;
 
-        int scoreInt = Mathf.RoundToInt(entry.score);
-
-        string scoreStr = scoreInt < 1_000_000
-            ? scoreInt.ToString("D7")
-            : scoreInt.ToString();
-            
-        leaderboardText.text += $"      {entry.rank}\t\t   {scoreStr}\t   {entry.date}\n";
+        string scoreStr = Mathf.RoundToInt(entry.score) + "";
+        
+        while(scoreStr.Length < ("1000000").Length){
+            scoreStr = "0" + scoreStr;
+        }
+        leaderboardText.text += $"{entry.rank}\t{entry.name.ToUpper()}\t{scoreStr}\t{entry.date}\n";
         
     }
 }
@@ -72,4 +71,5 @@ public class LeaderboardEntry
     public int rank;
     public float score;
     public string date;
+    public string name;
 }

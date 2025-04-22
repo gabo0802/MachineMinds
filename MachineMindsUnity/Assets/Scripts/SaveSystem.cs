@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using System.Runtime.InteropServices;
+using UnityEngine.AI;
 
 /// <summary>
 /// Provides utility methods for handling save/load operations across platforms.
@@ -269,8 +270,9 @@ public static class SaveSystem
 
     public static void SaveToLeaderboards(float score)
     {
-        string json = $"{{\"score\":{score},\"date\":\"{DateTime.UtcNow.ToString("yyyy-MM-dd")}\"}}";
-
+        string json = PlayerPrefs.HasKey("leaderboardName") ? $"{{\"score\":{score},\"date\":\"{DateTime.UtcNow.ToString("yyyy-MM-dd")}\",\"name\":\"{PlayerPrefs.GetString("leaderboardName")}\"}}" :
+        $"{{\"score\":{score},\"date\":\"{DateTime.UtcNow.ToString("yyyy-MM-dd")}\"}}";
+ 
         if (IsWebGLPlatform())
         {
             SaveSystemHelper.Instance.SendLeaderboardScore(json);
@@ -295,7 +297,8 @@ public static class SaveSystem
     {{
         ""fields"": {{
             ""score"": {{ ""doubleValue"": {data.score} }},
-            ""date"": {{ ""stringValue"": ""{data.date}"" }}
+            ""date"": {{ ""stringValue"": ""{data.date}"" }},
+            ""name"": {{ ""stringValue"": ""{data.name}"" }}
         }}
     }}";
 
@@ -324,6 +327,7 @@ public static class SaveSystem
     {
         public float score;
         public string date;
+        public string name;
     }
 
 
@@ -352,11 +356,18 @@ public static class SaveSystem
     {
         ""structuredQuery"": {
             ""from"": [{ ""collectionId"": ""leaderboards"" }],
+            ""where"": {
+                ""fieldFilter"": {
+                    ""field"": { ""fieldPath"": ""score"" },
+                    ""op"": ""GREATER_THAN"",
+                    ""value"": { ""integerValue"" : 0 }
+                }
+            },
             ""orderBy"": [{
                 ""field"": { ""fieldPath"": ""score"" },
                 ""direction"": ""DESCENDING""
             }],
-            ""limit"": 10
+            ""limit"": 1000
         }
     }";
 
@@ -398,6 +409,7 @@ public static class SaveSystem
 
             float score = 0;
             string date = "";
+            string name = "??";
 
             if (fields["score"] != null)
             {
@@ -412,11 +424,16 @@ public static class SaveSystem
                 date = fields["date"]["stringValue"];
             }
 
+            if(fields["name"] != null){
+                name = fields["name"]["stringValue"];
+            }
+
             entries.Add(new LeaderboardEntry
             {
                 rank = rank++,
                 score = score,
-                date = date
+                date = date,
+                name = name
             });
         }
         Debug.Log(entries.Count);
