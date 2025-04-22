@@ -3,50 +3,61 @@ using UnityEngine;
 public class OptionsMenuScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    
+
     public UnityEngine.UI.Slider musicVolumeSlider;
     public UnityEngine.UI.Slider soundEffectVolumeSlider;
     public TMPro.TMP_Dropdown resolutionChanging;
     public UnityEngine.UI.Toggle isFullScreen;
 
     void Start()
-    {   
-        if (PlayerPrefs.HasKey("MusicVolume")){
+    {
+        if (PlayerPrefs.HasKey("MusicVolume"))
+        {
             musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        }else{
+        }
+        else
+        {
             musicVolumeSlider.value = 1f;
         }
 
-        if (PlayerPrefs.HasKey("SoundEffectVolume")){
+        if (PlayerPrefs.HasKey("SoundEffectVolume"))
+        {
             soundEffectVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectVolume");
-        }else{
+        }
+        else
+        {
             soundEffectVolumeSlider.value = 1f;
         }
 
 #if UNITY_WEBGL
-        Debug.log("no resolution options");
+        UnityEngine.Debug.Log("no resolution options");
 #else
         resolutionChanging.options[0].text = Screen.currentResolution.width + " x " + Screen.currentResolution.height;
-        
-        if (PlayerPrefs.HasKey("WindowFullScreen")){
+
+        if (PlayerPrefs.HasKey("WindowFullScreen"))
+        {
             isFullScreen.isOn = PlayerPrefs.GetInt("WindowFullScreen") == 1 ? true : false;
         }
 #endif
     }
 
-    public void onExitButtonPress(){
+    public void onExitButtonPress()
+    {
         Destroy(gameObject);
     }
 
-    public void onMusicVolumeAdjustment(){
+    public void onMusicVolumeAdjustment()
+    {
         PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
     }
 
-    public void onSoundEffectVolumeAdjust(){
+    public void onSoundEffectVolumeAdjust()
+    {
         PlayerPrefs.SetFloat("SoundEffectVolume", soundEffectVolumeSlider.value);
     }
 
-    public void onResolutionAdjustment(){
+    public void onResolutionAdjustment()
+    {
         string resolutionString = resolutionChanging.options[resolutionChanging.value].text;
         int width = System.Int32.Parse(resolutionString.Split(" x ")[0]);
         int height = System.Int32.Parse(resolutionString.Split(" x ")[1]);
@@ -57,11 +68,12 @@ public class OptionsMenuScript : MonoBehaviour
         Screen.SetResolution(width, height, isFullScreen.isOn);
     }
 
-    void Update(){
-        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")): KeyCode.Escape;
+    void Update()
+    {
+        KeyCode pauseKey = PlayerPrefs.HasKey("KeyPause") ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyPause")) : KeyCode.Escape;
         if (Input.GetKeyDown(pauseKey))
         {
             Destroy(gameObject);
         }
     }
-} 
+}
