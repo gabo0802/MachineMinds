@@ -522,7 +522,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fdaebf5fdb1b7784c867b5e1c09b9ff7, type: 3}
   m_Resource: {fileID: 8300000, guid: fdaebf5fdb1b7784c867b5e1c09b9ff7, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -733,6 +733,7 @@ MonoBehaviour:
   enemyShootSoundPlayer: {fileID: 5173863988851505300}
   enemyHitSoundPlayer: {fileID: 644775092389781577}
   enemyDeathObject: {fileID: 0}
+  enemyDetectPlayerEffectObject: {fileID: 801812182257050566, guid: 45b93e9f4a0b06c4ba35ddfed4b374b9, type: 3}
   stealthBonusDamage: 1
   redirectBonusDamage: 1
 --- !u!50 &7701055470618375241
