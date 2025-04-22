@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         string content = "3\n0\n0\n1\n0\nfalse";
         SaveSystem.WriteAllText(filePath, content);
+        PlayerPrefs.SetInt("TotalDeathsSinceNewCheckpoint", 0);
         PlayerPrefs.SetInt("CheckpointLevelDeaths", 0);
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }

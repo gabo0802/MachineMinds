@@ -61,8 +61,9 @@ public class LevelManager : MonoBehaviour
     public TMPro.TextMeshProUGUI ammoUI = null;
 
     private int maxBulletsInMagazine = 5;
-    private float bulletReloadTime = 0.1f;
-    private float bulletReloadTimer = 0.1f;
+    private float partialMagReloadTime = 0.3f;
+    private float entireMagReloadTime = 3f;
+    private float bulletReloadTimer = 0f;
     private int currentBulletsInMagazine;
 
     public int totalPlayerBullets = 10;
@@ -308,7 +309,7 @@ public class LevelManager : MonoBehaviour
 
         if (!playerIsInvincible)
         {
-            float magRefillTime = currentBulletsInMagazine == 0 ? 5f : bulletReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
+            float magRefillTime = currentBulletsInMagazine == 0 ? entireMagReloadTime : partialMagReloadTime * Mathf.Pow(1.75f, (maxBulletsInMagazine - currentBulletsInMagazine - 1));
 
             /*if (pressedShootKey)
             {
