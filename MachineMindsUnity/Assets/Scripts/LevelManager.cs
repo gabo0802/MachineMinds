@@ -61,8 +61,8 @@ public class LevelManager : MonoBehaviour
     public TMPro.TextMeshProUGUI ammoUI = null;
 
     private int maxBulletsInMagazine = 5;
-    private float bulletReloadTime = 0.1f;
-    private float bulletReloadTimer = 0.1f;
+    private float bulletReloadTime = 0.25f;
+    private float bulletReloadTimer = 0.25f;
     private int currentBulletsInMagazine;
 
     public int totalPlayerBullets = 10;
@@ -128,20 +128,27 @@ public class LevelManager : MonoBehaviour
         }
         else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 9)
         {
-            if(currentDifficulty > 3){
+            if (currentDifficulty > 3)
+            {
                 currentDifficulty = 3;
-            }else{
+            }
+            else
+            {
                 currentDifficulty -= 1;
             }
         }
         else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 6)
         {
-            if(currentDifficulty > 5){
+            if (currentDifficulty > 5)
+            {
                 currentDifficulty = 5;
-            }else{
+            }
+            else
+            {
                 currentDifficulty -= 1;
             }
-        }else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 3)
+        }
+        else if (PlayerPrefs.GetInt("TotalDeathsSinceNewCheckpoint") > 3)
         {
             Debug.LogWarning("Forced Difficulty Decrease");
             currentDifficulty -= 1;
@@ -784,9 +791,10 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void difficultyAdjustmentHelper(){
-         Debug.Log("Attempting to Adjust diffuculty.");
-        
+    void difficultyAdjustmentHelper()
+    {
+        Debug.Log("Attempting to Adjust diffuculty.");
+
         if (!adjustmentInProgress && !updatedDifficulty && !isTrainingMode)
         {
             adjustmentInProgress = true;
