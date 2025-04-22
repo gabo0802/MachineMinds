@@ -282,6 +282,11 @@ public class LevelManager : MonoBehaviour
         SaveSystem.SaveGameState(maxPlayerLives, 0, 0, currentDifficulty, 0, isTrainingMode);
     }
 
+    private void BackToCheckpointGameData()
+    {
+        SaveSystem.SaveGameState(maxPlayerLives, totalPoints / 4f, 0, currentDifficulty, 0, isTrainingMode);
+    }
+
     private void tryPlayerShoot()
     {
         KeyCode shootKey = PlayerPrefs.HasKey("KeyShoot") ? (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("KeyShoot")) : KeyCode.Space;
@@ -597,12 +602,12 @@ public class LevelManager : MonoBehaviour
             });
 
             activeSurvey.SendMessage("SetNextLevel", goLevelNumber);
-            NewGameData();
+            BackToCheckpointGameData();
         }
         else
         {
             adjustGameDifficulty();
-            NewGameData();
+            BackToCheckpointGameData();
             SceneManager.LoadScene(goLevelNumber, LoadSceneMode.Single);
         }
     }
