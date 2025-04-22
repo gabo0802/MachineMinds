@@ -10,7 +10,9 @@ public class PauseMenuScript : MonoBehaviour
     
     public GameObject controlsMenuPrefab;
     public GameObject optionsMenuPrefab;
-        private GameObject additionalMenu;
+    public GameObject optionsMenuPrefabWebGL;
+
+    private GameObject additionalMenu;
     void Start()
     {
         Cursor.visible = true;
@@ -35,7 +37,11 @@ public class PauseMenuScript : MonoBehaviour
 
     public void onOptionsButtonPress()
     {
-        additionalMenu = (GameObject) Instantiate(optionsMenuPrefab);
+        #if UNITY_WEBGL
+            additionalMenu = (GameObject) Instantiate(optionsMenuPrefab);
+        #else
+            additionalMenu = (GameObject) Instantiate(optionsMenuPrefabWebGL);
+        #endif
     }
 
     public void onControlsButtonPress()

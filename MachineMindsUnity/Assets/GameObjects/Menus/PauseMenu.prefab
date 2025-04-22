@@ -720,6 +720,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controlsMenuPrefab: {fileID: 4227258372502546876, guid: 93e4d1c6047a26f4baab88a8fd71e05e, type: 3}
   optionsMenuPrefab: {fileID: 4227258372502546876, guid: 2c58b84806600c04da90822596b1fcbb, type: 3}
+  optionsMenuPrefabWebGL: {fileID: 4227258372502546876, guid: 2033e9e215a948249926bf216b3ce6ad, type: 3}
 --- !u!1 &5255807499174678197
 GameObject:
   m_ObjectHideFlags: 0
