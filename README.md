@@ -89,7 +89,7 @@ The trained model dynamically adjusts difficulty by approximately 20% per level,
 ## Platform Support
 
 ### WebGL
-- Browser-playable build  
+- Browser-playable build: See Demo: https://gabo0802.itch.io/machine-minds-demo
 - JavaScript interface for ML communication  
 
 ### Desktop (Windows / macOS)
